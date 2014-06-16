@@ -1,6 +1,6 @@
 ### Sublime Dependents
 
-Sublime Text 3 plugin for finding modules that depend on the current module.
+Sublime Text 3 plugin for finding JavaScript modules that depend on the current JavaScript module.
 
 Current scope: AMD and CommonJS applications
 
