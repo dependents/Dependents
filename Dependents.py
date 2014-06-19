@@ -31,14 +31,18 @@ class DependentsThread(threading.Thread):
     def run(self):
         filename = self.view.file_name()
 
+        if filename.find(self.window.root) == -1:
+            print('Dependents: ' + filename + ' is not in the root directory')
+            return
+
+        # The part of the path before the root
         self.path = path = filename[:filename.index(self.window.root)]
 
         cmd = ["/usr/local/bin/node", path + "node_modules/dependents/bin/dependents.js", filename, path + "public/assets/js"]
         dependents = Popen(cmd, stdout=PIPE).communicate()[0]
         self.dependents = dependents.decode('utf-8').split('\n')
-        self.dependents = [dependent for dependent in self.dependents if dependent]
-
-        self.dependents = list(map(lambda dep: dep[dep.index(self.window.root):], self.dependents))
+        # We want the filepath minus the root and its trailing slash
+        self.dependents = [dependent[dependent.index(self.window.root) + len(self.window.root) + 1:] for dependent in self.dependents if dependent]
 
         def show_quick_panel():
             if not self.dependents:
@@ -62,7 +66,8 @@ class DependentsThread(threading.Thread):
             return
 
         dependent = self.dependents[picked]
-        filename = self.path + dependent
+        # We removed the root originally when populating the dependents list
+        filename = self.path + self.window.root + '/' + dependent
 
         def open_file():
             self.window.open_file(filename)
