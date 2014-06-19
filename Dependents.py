@@ -51,7 +51,10 @@ class DependentsThread(threading.Thread):
 
             self.window.show_quick_panel(self.dependents, self.on_done)
 
-        sublime.set_timeout(show_quick_panel, 10)
+        if len(self.dependents) == 1:
+            self.open_file(self.dependents[0])
+        else:
+            sublime.set_timeout(show_quick_panel, 10)
 
     def on_done(self, picked):
         """
@@ -66,13 +69,16 @@ class DependentsThread(threading.Thread):
             return
 
         dependent = self.dependents[picked]
+        self.open_file(dependent)
+
+    def open_file(self, dependent):
         # We removed the root originally when populating the dependents list
         filename = self.path + self.window.root + '/' + dependent
 
-        def open_file():
+        def open():
             self.window.open_file(filename)
 
-        sublime.set_timeout(open_file, 10)
+        sublime.set_timeout(open, 10)
 
 def show_error(string):
     """
