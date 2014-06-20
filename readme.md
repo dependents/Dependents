@@ -14,7 +14,7 @@ file you want to jump to. **This should be automated.**
 
 You need to have Node.js installed and [node-dependents](https://github.com/mrjoelkemp/node-dependents).
 
-`npm install node-dependents`
+`npm install dependents`
 
 ### Installation
 
