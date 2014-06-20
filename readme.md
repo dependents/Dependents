@@ -12,9 +12,9 @@ file you want to jump to. **This should be automated.**
 
 ### Prerequisite
 
-You need to have Node.js installed and [node-dependents](https://github.com/mrjoelkemp/node-dependents).
+You need to have Node.js installed and the node tool [dependents](https://github.com/mrjoelkemp/node-dependents).
 
-`npm install node-dependents`
+`npm install dependents`
 
 ### Installation
 
@@ -32,7 +32,7 @@ Finally, add the key binding definition below and you're all set!
 #### Key binding
 
 You need to supply the plugin with a `root` which dictates where to look for dependents.
-This value is then sent to [node-dependents](https://github.com/mrjoelkemp/node-dependents).
+This value is then sent to [dependents](https://github.com/mrjoelkemp/dependents).
 
 Add the following to your User defined keyboard bindings: `Preferences` -> `Key Bindings - User`
 
@@ -53,5 +53,6 @@ Use the `keys` value above, `cmd + option + up`, to trigger finding the dependen
 
 * If dependents are found, you'll see them in a quick panel (i.e., dropdown).
  * You can select any of the items in the panel to jump to that file
+ * If there's only one dependent, you'll be taken to that dependent file directly.
 * If no dependents are found a popup will be shown
 
