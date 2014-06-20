@@ -1,8 +1,8 @@
 import sublime, sublime_plugin
 import subprocess
 import threading
+import os
 from subprocess import Popen, PIPE
-
 
 class DependentsCommand(sublime_plugin.WindowCommand):
   def run(self, root=''):
@@ -38,23 +38,28 @@ class DependentsThread(threading.Thread):
         # The part of the path before the root
         self.path = path = filename[:filename.index(self.window.root)]
 
+        if (not os.path.exists(self.path + "/node_modules/dependents")):
+            show_error('\nYou need to install the node tool "dependents" \n\nRun "npm install dependents" in your terminal')
+            return
+
         cmd = ["/usr/local/bin/node", path + "node_modules/dependents/bin/dependents.js", filename, path + "public/assets/js"]
         dependents = Popen(cmd, stdout=PIPE).communicate()[0]
         self.dependents = dependents.decode('utf-8').split('\n')
+
         # We want the filepath minus the root and its trailing slash
         self.dependents = [dependent[dependent.index(self.window.root) + len(self.window.root) + 1:] for dependent in self.dependents if dependent]
-
-        def show_quick_panel():
-            if not self.dependents:
-                show_error('Can\'t find any file that depends on this file')
-                return
-
-            self.window.show_quick_panel(self.dependents, self.on_done)
 
         if len(self.dependents) == 1:
             self.open_file(self.dependents[0])
         else:
-            sublime.set_timeout(show_quick_panel, 10)
+            sublime.set_timeout(self.show_quick_panel, 10)
+
+    def show_quick_panel(self):
+        if not self.dependents:
+            show_error('\nCan\'t find any file that depends on this file')
+            return
+
+        self.window.show_quick_panel(self.dependents, self.on_done)
 
     def on_done(self, picked):
         """
