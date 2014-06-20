@@ -32,7 +32,7 @@ Finally, add the key binding definition below and you're all set!
 #### Key binding
 
 You need to supply the plugin with a `root` which dictates where to look for dependents.
-This value is then sent to [dependents](https://github.com/mrjoelkemp/dependents).
+This value is then sent to [dependents](https://github.com/mrjoelkemp/node-dependents).
 
 Add the following to your User defined keyboard bindings: `Preferences` -> `Key Bindings - User`
 
