@@ -1,0 +1,7 @@
+In your terminal, please upgrade dependents by running: npm install dependents
+
+Originally, this plugin took a few seconds to get results if your codebase is large (around 1000 JS files or more).
+I just added some parallel processing capabilities to the underlying Node.js tool, dependents, to cut down on the time.
+
+Please upgrade the node tool dependents to get this performance upgrade.
+Since upgrades to the node tool do not affect the sublime text plugin's code, you have to manually upgrade the tool.
