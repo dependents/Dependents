@@ -1,0 +1,9 @@
+Please upgrade the node tool. In your terminal, run:
+
+npm install dependents
+
+---
+
+Changes to node-dependents (v1.0.1):
+
+- Fixed support for dynamic requires.
