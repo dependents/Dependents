@@ -1,6 +1,11 @@
 ### Sublime Dependents
 
-Sublime Text 3 plugin for finding JavaScript modules that depend on the current JavaScript module.
+Sublime Text 3 plugin for navigating JavaScript codebases.
+
+Features:
+
+* Find JavaScript modules that depend on the current JavaScript module.
+* Jump to a dependency
 
 Current scope: AMD and CommonJS applications
 
@@ -41,13 +46,26 @@ Add the following to your User defined keyboard bindings: `Preferences` -> `Key 
   {
     "keys": ["super+alt+up"],
     "command": "dependents",
-    "args": {"root": "public/assets/js"}
+    "args": {
+      "root": "public/assets/js"
+    }
+  },
+  {
+    "keys": ["super+alt+right"],
+    "command": "dependents",
+    "args": {
+      "root": "public/assets/js",
+      "mode": "dependency"
+    }
   }
 ]
-
 ```
 
+* You won't need the opening and closing square brackets ([]) if you have pre-existing key bindings
+
 ### Usage
+
+#### Find the dependents of the current file
 
 Use the `keys` value above, `cmd + option + up`, to trigger finding the dependents.
 
@@ -56,3 +74,7 @@ Use the `keys` value above, `cmd + option + up`, to trigger finding the dependen
  * If there's only one dependent, you'll be taken to that dependent file directly.
 * If no dependents are found a popup will be shown
 
+#### Jump to a dependency
+
+1. Within a JS file, place your cursor over the dependency path you want to go to
+2. Press cmd + option + right (or the key combination you defined) to jump to that file

@@ -1,0 +1,25 @@
+New Feature
+---
+
+Jump to the module under your cursor
+
+How to activate it:
+1. Add the new key binding below to Preferences -> Key Bindings - User
+2. Change the "root" within the key binding if you need to
+3. Within a JS file, place your cursor over the dependency path you want to go to
+4. Press cmd + option + right (or the key combination you defined) to jump to that file
+
+New key binding
+
+Add this as a new key binding in Preferences -> Key Bindings - User:
+
+{
+  "keys": ["super+alt+right"],
+  "command": "dependents",
+  "args": {
+    "root": "public/assets/js",
+    "mode": "dependency"
+  }
+}
+
+This key binding should **not** replace the key binding you have for finding the dependents

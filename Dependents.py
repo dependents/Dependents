@@ -2,16 +2,31 @@ import sublime, sublime_plugin
 import subprocess
 import threading
 import os
+import re
 from subprocess import Popen, PIPE
 
+MODES = {
+    # find/jump-to the module dependent on the current module
+    'DEPENDENTS': 'dependents',
+    # jump-to the module identified by the string under your cursor
+    'DEPENDENCY': 'dependency'
+}
+
 class DependentsCommand(sublime_plugin.WindowCommand):
-  def run(self, root=''):
 
-    self.window.root = root;
+    def run(self, root, mode=MODES['DEPENDENTS']):
+        self.window.root = root;
+        self.window.mode = mode;
+        print('got mode', mode)
+        thread = DependentsThread(self.window)
+        thread.start();
 
-    thread = DependentsThread(self.window)
-    thread.start();
-    ThreadProgress(thread, 'Finding dependents', '')
+        if mode == MODES['DEPENDENTS']:
+            msg = 'Finding dependents'
+        elif mode == MODES['DEPENDENCY']:
+            msg = 'Looking for that file'
+
+        ThreadProgress(thread, msg, '')
 
 class DependentsThread(threading.Thread):
     """
@@ -26,23 +41,35 @@ class DependentsThread(threading.Thread):
 
         self.window = window
         self.view = window.active_view()
+        self.filename = self.view.file_name()
+        # The part of the path before the root
+        self.path = self.filename[:self.filename.index(self.window.root)]
+        # The path of the path after the root
+        self.pathWithinRoot = self.filename[self.filename.index(self.window.root) + len(self.window.root):]
         threading.Thread.__init__(self)
 
     def run(self):
-        filename = self.view.file_name()
+        mode = self.window.mode
 
-        if filename.find(self.window.root) == -1:
-            print('Dependents: ' + filename + ' is not in the root directory')
+        if mode == MODES['DEPENDENTS']:
+            self.find_dependents()
+        elif mode == MODES['DEPENDENCY']:
+            self.find_dependency()
+
+    def find_dependents(self):
+        """
+        Finds the dependents of the current file and jumps to that file or shows a panel of dependent files
+        """
+        if self.filename.find(self.window.root) == -1:
+            print('Dependents: ' + self.filename + ' is not in the root directory')
             return
 
-        # The part of the path before the root
-        self.path = path = filename[:filename.index(self.window.root)]
 
-        if (not os.path.exists(self.path + "/node_modules/dependents")):
+        if not os.path.exists(self.path + '/node_modules/dependents'):
             show_error('\nYou need to install the node tool "dependents" \n\nRun "npm install dependents" in your terminal')
             return
 
-        cmd = ["/usr/local/bin/node", path + "node_modules/dependents/bin/dependents.js", filename, path + "public/assets/js"]
+        cmd = ['/usr/local/bin/node', self.path + 'node_modules/dependents/bin/dependents.js', self.filename, self.path + 'public/assets/js']
         dependents = Popen(cmd, stdout=PIPE).communicate()[0]
         self.dependents = dependents.decode('utf-8').split('\n')
 
@@ -53,6 +80,38 @@ class DependentsThread(threading.Thread):
             self.open_file(self.dependents[0])
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
+
+    def find_dependency(self):
+        """
+        Jumps to the file identified by the string under the cursor
+        """
+        selections = self.view.sel()
+
+        if selections:
+            region = selections[0]
+
+            if region.a == region.b:
+                region = self.view.line(region)
+
+            highlighted = self.view.substr(region).strip()
+            highlighted = re.sub('[\'",]', '', highlighted)
+
+            # Handle relative paths, if any
+            if (highlighted.find('..') == 0 or highlighted.find('.') == 0):
+                fileDir = os.path.dirname(self.pathWithinRoot)
+                highlighted = os.path.normpath(os.path.join(fileDir, highlighted))
+
+                if (highlighted[0] == '/'):
+                    highlighted = highlighted[1:]
+
+            extension = os.path.splitext(highlighted)[1]
+
+            if (not extension):
+                extension = os.path.splitext(self.filename)[1]
+
+            file_to_open = highlighted + extension
+
+            self.open_file(file_to_open)
 
     def show_quick_panel(self):
         if not self.dependents:
@@ -79,6 +138,11 @@ class DependentsThread(threading.Thread):
     def open_file(self, dependent):
         # We removed the root originally when populating the dependents list
         filename = self.path + self.window.root + '/' + dependent
+
+        if not os.path.isfile(filename):
+            print('Dependents: could not open ' + filename)
+            show_error('Can\'t find that file')
+            return
 
         def open():
             self.window.open_file(filename)
