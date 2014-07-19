@@ -1,0 +1,11 @@
+Fixed the click to dependency feature.
+
+Previously the plugin only handled dependency paths on separate lines like:
+
+define([
+  'my/dependency'
+], ...)
+
+Now, the plugin also supports inline paths like:
+
+define(['my/dependency', 'my/other/dependency'], ...)

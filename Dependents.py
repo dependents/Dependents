@@ -13,11 +13,9 @@ MODES = {
 }
 
 class DependentsCommand(sublime_plugin.WindowCommand):
-
     def run(self, root, mode=MODES['DEPENDENTS']):
         self.window.root = root;
         self.window.mode = mode;
-        print('got mode', mode)
         thread = DependentsThread(self.window)
         thread.start();
 
@@ -38,7 +36,6 @@ class DependentsThread(threading.Thread):
             An instance of :class:`sublime.Window` that represents the Sublime
             Text window to show the list of installed packages in.
         """
-
         self.window = window
         self.view = window.active_view()
         self.filename = self.view.file_name()
@@ -63,7 +60,6 @@ class DependentsThread(threading.Thread):
         if self.filename.find(self.window.root) == -1:
             print('Dependents: ' + self.filename + ' is not in the root directory')
             return
-
 
         if not os.path.exists(self.path + '/node_modules/dependents'):
             show_error('\nYou need to install the node tool "dependents" \n\nRun "npm install dependents" in your terminal')
@@ -91,7 +87,23 @@ class DependentsThread(threading.Thread):
             region = selections[0]
 
             if region.a == region.b:
-                region = self.view.line(region)
+                selected_region = self.view.word(region)
+                selected_line = self.view.line(region)
+
+                line = self.view.substr(selected_line)
+                pattern = '[\'"]{1}([^"\']*)[\'"]{1}'
+                strings_on_line = re.findall(pattern, line)
+
+                if not len(strings_on_line):
+                    cant_find_file()
+                    return
+
+                # Get the locations of the strings within the buffer
+                regions = map(lambda string: self.view.find_all(string), strings_on_line)
+                regions = flatten(list(regions))
+                # Get the regions that intersect with the clicked region
+                region = list(filter(lambda r: r.contains(selected_region), regions))
+                region = region[0]
 
             highlighted = self.view.substr(region).strip()
             highlighted = re.sub('[\'",]', '', highlighted)
@@ -128,7 +140,6 @@ class DependentsThread(threading.Thread):
             An integer of the 0-based dependent name index from the presented
             list. -1 means the user cancelled.
         """
-
         if picked == -1:
             return
 
@@ -140,14 +151,16 @@ class DependentsThread(threading.Thread):
         filename = self.path + self.window.root + '/' + dependent
 
         if not os.path.isfile(filename):
-            print('Dependents: could not open ' + filename)
-            show_error('Can\'t find that file')
+            cant_find_file()
             return
 
         def open():
             self.window.open_file(filename)
 
         sublime.set_timeout(open, 10)
+
+def cant_find_file():
+    show_error('Can\'t find that file')
 
 def show_error(string):
     """
@@ -156,8 +169,10 @@ def show_error(string):
     :param string:
         The error to display
     """
-
     sublime.error_message(u'Dependents\n%s' % string)
+
+def flatten(nested):
+        return [item for sublist in nested for item in sublist]
 
 # From wbond/sublime_package_control
 class ThreadProgress():
