@@ -67,31 +67,33 @@ Add the following to your User defined keyboard bindings: `Preferences` -> `Key 
 
 1. Create a new (or modify existing if you have one) .sublime-mousemap file:
 
-Windows - create Default (Windows).sublime-mousemap in %appdata%\Sublime Text 3\Packages\User
-
-Linux - create Default (Linux).sublime-mousemap in ~/.config/sublime-text-3/Packages/User
-
-Mac - create Default (OSX).sublime-mousemap in ~/Library/Application Support/Sublime Text 3/Packages/User
+    > **Windows** - create `Default (Windows).sublime-mousemap` in `%appdata%\Sublime Text 3\Packages\User`
+    >
+    > **Linux** - create `Default (Linux).sublime-mousemap` in `~/.config/sublime-text-3/Packages/User`
+    >
+    > **Mac** - create `Default (OSX).sublime-mousemap` in `~/Library/Application Support/Sublime Text 3/Packages/User`
 
 2. Add the following binding
 
-[
-  {
-    "button": "button1",
-    "count": 1,
-    "modifiers": ["super", "alt"],
-    "press_command": "drag_select",
-    "command": "dependents",
-    "args": {
-      "root": "public/assets/js",
-      "mode": "dependency"
-    }
-  }
-]
+    ```js
+    [
+      {
+        "button": "button1",
+        "count": 1,
+        "modifiers": ["super", "alt"],
+        "press_command": "drag_select",
+        "command": "dependents",
+        "args": {
+          "root": "public/assets/js",
+          "mode": "dependency"
+        }
+      }
+    ]
+    ```
 
-* Note: You do not need the opening/closing square brackets [] if you are modifying an existing .sublime-mousemap file.
+    * Note: You do not need the opening/closing square brackets `[]` if you are modifying an existing `.sublime-mousemap` file.
 
-3. Modify the root according to the location of JS files in your codebase
+3. Modify the `root` according to the location of JS files in your codebase
 
 ### Usage
 
@@ -107,8 +109,8 @@ Use the `keys` value above, `cmd + option + up`, to trigger finding the dependen
 #### Jump to a dependency
 
 1. Within a JS file, place your cursor over the dependency path you want to go to
-2. Press cmd + option + right (or the key combination you defined) to jump to that file
+2. Press `cmd + option + right` (or the key combination you defined) to jump to that file
 
-If you defined the mousemap in the Mouse Binding section:
+Or, if you defined the mousemap in the [Mouse Binding](#mouse-binding) section:
 
-1. hold down CMD + Option and Click on the path of a dependency to jump to that file
+1. hold down `CMD + Option` and click on the path of a dependency to jump to that file

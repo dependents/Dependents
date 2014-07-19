@@ -1,0 +1,2 @@
+Bug fix with passing the root
+Updated readme styling

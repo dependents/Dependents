@@ -13,6 +13,7 @@ MODES = {
 }
 
 class DependentsCommand(sublime_plugin.WindowCommand):
+
     def run(self, root, mode=MODES['DEPENDENTS']):
         self.window.root = root;
         self.window.mode = mode;
@@ -36,6 +37,7 @@ class DependentsThread(threading.Thread):
             An instance of :class:`sublime.Window` that represents the Sublime
             Text window to show the list of installed packages in.
         """
+
         self.window = window
         self.view = window.active_view()
         self.filename = self.view.file_name()
@@ -65,7 +67,7 @@ class DependentsThread(threading.Thread):
             show_error('\nYou need to install the node tool "dependents" \n\nRun "npm install dependents" in your terminal')
             return
 
-        cmd = ['/usr/local/bin/node', self.path + 'node_modules/dependents/bin/dependents.js', self.filename, self.path + 'public/assets/js']
+        cmd = ['/usr/local/bin/node', self.path + 'node_modules/dependents/bin/dependents.js', self.filename, self.path + self.window.root]
         dependents = Popen(cmd, stdout=PIPE).communicate()[0]
         self.dependents = dependents.decode('utf-8').split('\n')
 
@@ -140,6 +142,7 @@ class DependentsThread(threading.Thread):
             An integer of the 0-based dependent name index from the presented
             list. -1 means the user cancelled.
         """
+
         if picked == -1:
             return
 
@@ -169,6 +172,7 @@ def show_error(string):
     :param string:
         The error to display
     """
+
     sublime.error_message(u'Dependents\n%s' % string)
 
 def flatten(nested):
