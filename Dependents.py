@@ -13,10 +13,13 @@ MODES = {
 }
 
 class DependentsCommand(sublime_plugin.WindowCommand):
-
-    def run(self, root, mode=MODES['DEPENDENTS']):
+    """
+    Takes in arguments passed in from the key bindings
+    """
+    def run(self, root, mode=MODES['DEPENDENTS'], config=''):
         self.window.root = root;
         self.window.mode = mode;
+        self.window.config = config;
         thread = DependentsThread(self.window)
         thread.start();
 
@@ -32,12 +35,6 @@ class DependentsThread(threading.Thread):
     A thread to prevent the determination of the dependents from freezing the UI
     """
     def __init__(self, window):
-        """
-        :param window:
-            An instance of :class:`sublime.Window` that represents the Sublime
-            Text window to show the list of installed packages in.
-        """
-
         self.window = window
         self.view = window.active_view()
         self.filename = self.view.file_name()
@@ -67,7 +64,16 @@ class DependentsThread(threading.Thread):
             show_error('\nYou need to install the node tool "dependents" \n\nRun "npm install dependents" in your terminal')
             return
 
-        cmd = ['/usr/local/bin/node', self.path + 'node_modules/dependents/bin/dependents.js', self.filename, self.path + self.window.root]
+        cmd = [
+            '/usr/local/bin/node',
+            self.path + 'node_modules/dependents/bin/dependents.js',
+            self.filename,
+            self.path + self.window.root
+        ]
+
+        if self.window.config:
+            cmd.append(self.window.config)
+
         dependents = Popen(cmd, stdout=PIPE).communicate()[0]
         self.dependents = dependents.decode('utf-8').split('\n')
 
@@ -135,14 +141,6 @@ class DependentsThread(threading.Thread):
         self.window.show_quick_panel(self.dependents, self.on_done)
 
     def on_done(self, picked):
-        """
-        Quick panel user selection handler - opens the selected dependent file
-
-        :param picked:
-            An integer of the 0-based dependent name index from the presented
-            list. -1 means the user cancelled.
-        """
-
         if picked == -1:
             return
 
@@ -166,13 +164,6 @@ def cant_find_file():
     show_error('Can\'t find that file')
 
 def show_error(string):
-    """
-    Displays an error message with a standard header
-
-    :param string:
-        The error to display
-    """
-
     sublime.error_message(u'Dependents\n%s' % string)
 
 def flatten(nested):
@@ -180,19 +171,6 @@ def flatten(nested):
 
 # From wbond/sublime_package_control
 class ThreadProgress():
-    """
-    Animates an indicator, [=   ], in the status area while a thread runs
-
-    :param thread:
-        The thread to track for activity
-
-    :param message:
-        The message to display next to the activity indicator
-
-    :param success_message:
-        The message to display once the thread is complete
-    """
-
     def __init__(self, thread, message, success_message):
         self.thread = thread
         self.message = message
