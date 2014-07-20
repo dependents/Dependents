@@ -111,6 +111,6 @@ Use the `keys` value above, `cmd + option + up`, to trigger finding the dependen
 1. Within a JS file, place your cursor over the dependency path you want to go to
 2. Press `cmd + option + right` (or the key combination you defined) to jump to that file
 
-Or, if you defined the mousemap in the [Mouse Binding](#mouse-binding) section:
+Or, if you defined the mousemap in the [Mouse Binding](https://github.com/mrjoelkemp/sublime-dependents#mouse-binding) section:
 
 1. hold down `CMD + Option` and click on the path of a dependency to jump to that file
