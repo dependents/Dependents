@@ -1,0 +1,12 @@
+{
+  // The base directory that contains all of your
+  // JavaScript files
+  //
+  // Example: 'public/assets/js'
+  "root": "",
+
+  // The location of your requirejs or browserify config
+  //
+  // Example: 'path/to/my/config.js'
+  "config": ""
+}

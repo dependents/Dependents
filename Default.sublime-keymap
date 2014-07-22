@@ -1,0 +1,13 @@
+[
+  // Find the dependents for the current module
+  {
+    "keys": ["super+alt+up"],
+    "command": "dependents"
+  },
+
+  // Jump to a dependency
+  {
+    "keys": ["super+alt+right"],
+    "command": "jumptodependency"
+  }
+]

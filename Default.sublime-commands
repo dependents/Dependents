@@ -1,0 +1,10 @@
+[
+    {
+        "caption": "Dependents: Find the dependents of the current file",
+        "command": "dependents"
+    },
+    {
+        "caption": "Dependents: Jump to dependency under your cursor",
+        "command": "jumptodependency"
+    }
+]

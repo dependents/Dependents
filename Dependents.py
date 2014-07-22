@@ -4,134 +4,84 @@ import threading
 import os
 import re
 from subprocess import Popen, PIPE
-
-MODES = {
-    # find/jump-to the module dependent on the current module
-    'DEPENDENTS': 'dependents',
-    # jump-to the module identified by the string under your cursor
-    'DEPENDENCY': 'dependency'
-}
+from .preconditions import *
+from .thread_progress import ThreadProgress
 
 class DependentsCommand(sublime_plugin.WindowCommand):
-    """
-    Takes in arguments passed in from the key bindings
-    """
-    def run(self, root, mode=MODES['DEPENDENTS'], config=''):
-        self.window.root = root;
-        self.window.mode = mode;
-        self.window.config = config;
-        thread = DependentsThread(self.window)
+    def run(self, root="", mode=""):
+        settings = sublime.load_settings('Dependents.sublime-settings')
+
+        self.window.root    = settings.get('root');
+        self.window.config  = settings.get('config');
+
+        # For legacy implementations that supplied the root via key bindings
+        if not self.window.root and root:
+            settings.set('root', root);
+            self.window.root = root;
+
+        self.view           = self.window.active_view()
+        self.view.filename  = self.view.file_name()
+
+        # The part of the path before the root
+        self.view.path = self.view.filename[:self.view.filename.index(self.window.root)]
+
+        if not met(self.view.path):
+            return
+
+        thread = DependentsThread(self.window, self.view)
         thread.start();
 
-        if mode == MODES['DEPENDENTS']:
-            msg = 'Finding dependents'
-        elif mode == MODES['DEPENDENCY']:
-            msg = 'Looking for that file'
-
-        ThreadProgress(thread, msg, '')
+        ThreadProgress(thread, 'Finding dependents', '')
 
 class DependentsThread(threading.Thread):
     """
     A thread to prevent the determination of the dependents from freezing the UI
     """
-    def __init__(self, window):
+    def __init__(self, window, view):
         self.window = window
-        self.view = window.active_view()
-        self.filename = self.view.file_name()
-        # The part of the path before the root
-        self.path = self.filename[:self.filename.index(self.window.root)]
-        # The path of the path after the root
-        self.pathWithinRoot = self.filename[self.filename.index(self.window.root) + len(self.window.root):]
+        self.view = view
         threading.Thread.__init__(self)
 
     def run(self):
-        mode = self.window.mode
-
-        if mode == MODES['DEPENDENTS']:
-            self.find_dependents()
-        elif mode == MODES['DEPENDENCY']:
-            self.find_dependency()
-
-    def find_dependents(self):
         """
         Finds the dependents of the current file and jumps to that file or shows a panel of dependent files
         """
-        if self.filename.find(self.window.root) == -1:
-            print('Dependents: ' + self.filename + ' is not in the root directory')
-            return
 
-        if not os.path.exists(self.path + '/node_modules/dependents'):
-            show_error('\nYou need to install the node tool "dependents" \n\nRun "npm install dependents" in your terminal')
-            return
-
-        cmd = [
-            '/usr/local/bin/node',
-            self.path + 'node_modules/dependents/bin/dependents.js',
-            self.filename,
-            self.path + self.window.root
-        ]
-
-        if self.window.config:
-            cmd.append(self.window.config)
-
-        dependents = Popen(cmd, stdout=PIPE).communicate()[0]
-        self.dependents = dependents.decode('utf-8').split('\n')
-
-        # We want the filepath minus the root and its trailing slash
-        self.dependents = [dependent[dependent.index(self.window.root) + len(self.window.root) + 1:] for dependent in self.dependents if dependent]
+        self.dependents = self.trim_paths(self.get_dependents())
 
         if len(self.dependents) == 1:
             self.open_file(self.dependents[0])
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
 
-    def find_dependency(self):
+    def get_dependents(self):
         """
-        Jumps to the file identified by the string under the cursor
+        Asks the node tool for the dependents of the current module
         """
-        selections = self.view.sel()
+        cmd = [
+            '/usr/local/bin/node',
+            self.view.path + 'node_modules/dependents/bin/dependents.js',
+            self.view.filename,
+            self.view.path + self.window.root
+        ]
 
-        if selections:
-            region = selections[0]
+        if self.window.config:
+            cmd.append(self.window.config)
 
-            if region.a == region.b:
-                selected_region = self.view.word(region)
-                selected_line = self.view.line(region)
+        dependents = Popen(cmd, stdout=PIPE).communicate()[0]
+        return dependents.decode('utf-8').split('\n')
 
-                line = self.view.substr(selected_line)
-                pattern = '[\'"]{1}([^"\']*)[\'"]{1}'
-                strings_on_line = re.findall(pattern, line)
+    def trim_paths(self, files):
+        """
+        Returns the filepaths for each file minus the root and its trailing slash
+        """
+        trimmed = []
 
-                if not len(strings_on_line):
-                    cant_find_file()
-                    return
+        for f in files:
+            if f:
+                trimmed.append(f[f.index(self.window.root) + len(self.window.root) + 1:])
 
-                # Get the locations of the strings within the buffer
-                regions = map(lambda string: self.view.find_all(string), strings_on_line)
-                regions = flatten(list(regions))
-                # Get the regions that intersect with the clicked region
-                region = list(filter(lambda r: r.contains(selected_region), regions))
-                region = region[0]
-
-            highlighted = self.view.substr(region).strip()
-            highlighted = re.sub('[\'",]', '', highlighted)
-
-            # Handle relative paths, if any
-            if (highlighted.find('..') == 0 or highlighted.find('.') == 0):
-                fileDir = os.path.dirname(self.pathWithinRoot)
-                highlighted = os.path.normpath(os.path.join(fileDir, highlighted))
-
-                if (highlighted[0] == '/'):
-                    highlighted = highlighted[1:]
-
-            extension = os.path.splitext(highlighted)[1]
-
-            if (not extension):
-                extension = os.path.splitext(self.filename)[1]
-
-            file_to_open = highlighted + extension
-
-            self.open_file(file_to_open)
+        return trimmed
 
     def show_quick_panel(self):
         if not self.dependents:
@@ -149,7 +99,7 @@ class DependentsThread(threading.Thread):
 
     def open_file(self, dependent):
         # We removed the root originally when populating the dependents list
-        filename = self.path + self.window.root + '/' + dependent
+        filename = self.view.path + self.window.root + '/' + dependent
 
         if not os.path.isfile(filename):
             cant_find_file()
@@ -165,38 +115,3 @@ def cant_find_file():
 
 def show_error(string):
     sublime.error_message(u'Dependents\n%s' % string)
-
-def flatten(nested):
-        return [item for sublist in nested for item in sublist]
-
-# From wbond/sublime_package_control
-class ThreadProgress():
-    def __init__(self, thread, message, success_message):
-        self.thread = thread
-        self.message = message
-        self.success_message = success_message
-        self.addend = 1
-        self.size = 8
-        sublime.set_timeout(lambda: self.run(0), 100)
-
-    def run(self, i):
-        if not self.thread.is_alive():
-            if hasattr(self.thread, 'result') and not self.thread.result:
-                sublime.status_message('')
-                return
-            sublime.status_message(self.success_message)
-            return
-
-        before = i % self.size
-        after = (self.size - 1) - before
-
-        sublime.status_message('%s [%s=%s]' % \
-            (self.message, ' ' * before, ' ' * after))
-
-        if not after:
-            self.addend = -1
-        if not before:
-            self.addend = 1
-        i += self.addend
-
-        sublime.set_timeout(lambda: self.run(i), 100)

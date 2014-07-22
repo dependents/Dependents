@@ -1,0 +1,58 @@
+Major Cleanup
+---
+
+There were several pain points that have been addressed:
+
+1. You shouldn't have to supply the root for every new feature
+2. You shouldn't have to manually set up key and mouse bindings
+3. Adding new features should require little to no work from the user
+
+Here are the quick changes you need to make to take advantage of this release.
+
+---
+Configuring settings
+---
+
+You need to supply the "root" of your JS codebase (i.e., the location where your JS files reside) only once now.
+
+This should be specified by going to
+
+`Preferences -> Package Settings -> Dependents -> Settings - User`
+
+and adding:
+
+{
+  "root": "public/assets/js"
+}
+
+* Please modify the "root" value according to your codebase.
+
+From now on, new features can simply read that setting.
+
+---
+Default key and mouse bindings
+---
+
+By default, the following key bindings have been supplied:
+
+OSX:
+
+* Find Dependents: `CMD + Option + Up arrow`
+* Jump to dependency: `CMD + Option + Right arrow` or `CMD + Option + Click`
+
+**You can delete the custom bindings that you provided in previous versions.**
+
+---
+No Windows support, yet
+---
+
+Unfortunately, there are a few issues to sort out before
+Windows users can use Dependents. I'm working on it.
+
+---
+Problems or questions?
+---
+
+File an issue on the repo: https://github.com/mrjoelkemp/sublime-dependents/issues
+
+Or contact me directly: https://twitter.com/mrjoelkemp
