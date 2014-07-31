@@ -34,9 +34,9 @@ Install `Dependents` via Package Control.
 Don't see it? Try reinstalling Package Control. Altenatively, add the repository and install it:
 
 1. Package Control -> Add Repository
-2. Enter `https://github.com/mrjoelkemp/sublime-dependents`
+2. Enter `https://github.com/mrjoelkemp/Dependents`
 3. Package Control -> Install Package
-4. Choose sublime-dependents
+4. Choose Dependents
 
 ### Configuring settings
 
