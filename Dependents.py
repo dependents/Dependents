@@ -5,10 +5,15 @@ import os
 import re
 from subprocess import Popen, PIPE
 from .preconditions import *
+from .lock import *
 from .thread_progress import ThreadProgress
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, root="", mode=""):
+        if isLocked():
+            return
+
+        lock()
         settings = sublime.load_settings('Dependents.sublime-settings')
 
         self.window.root    = settings.get('root');
@@ -53,6 +58,8 @@ class DependentsThread(threading.Thread):
             self.open_file(self.dependents[0])
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
+
+        unlock()
 
     def get_dependents(self):
         """

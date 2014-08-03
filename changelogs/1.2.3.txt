@@ -1,0 +1,3 @@
+Please upgrade your version of node-dependents: npm install dependents
+
+This update brings a faster clustering algorithm for codebases >= 500 JS files.
