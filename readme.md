@@ -17,9 +17,9 @@
 * Find JavaScript modules that depend on the current JavaScript module.
 * Jump to a dependency
 
-Currently supporting: AMD modules
+Currently supporting: AMD modules and Mac OSX
 
-Not currently supported but planned: CommonJS modules, Windows OS. Pull requests welcome!
+Not currently supported but planned: CommonJS modules, Windows OS, Linux OS. Pull requests welcome!
 
 ### Prerequisites
 
@@ -34,9 +34,11 @@ Install `Dependents` via Package Control.
 Don't see it? Try reinstalling Package Control. Altenatively, add the repository and install it:
 
 1. Package Control -> Add Repository
-2. Enter `https://github.com/mrjoelkemp/Dependents`
+2. Enter `https://github.com/mrjoelkemp/sublime-dependents`
 3. Package Control -> Install Package
-4. Choose Dependents
+4. Choose sublime-dependents
+
+If it doesn't work, please file an issue.
 
 ### Configuring settings
 
