@@ -1,0 +1,9 @@
+[
+    {
+        "caption": "Dependents",
+        "children": [
+            { "command": "dependents", "caption": "Find dependents" },
+            { "command": "jump_to_dependency", "caption": "Jump to dependency" }
+        ]
+    }
+]

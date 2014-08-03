@@ -65,6 +65,11 @@ OSX:
 * Find Dependents: `CMD + Option + Up arrow`
 * Jump to dependency: `CMD + Option + Right arrow` or `CMD + Option + Click`
 
+You can also trigger the commands via:
+
+* `File -> Dependents`
+* `Right click -> Dependents`
+
 #### Custom key bindings
 
 If you would like to specify custom keybindings, you can override them in `Preferences -> Key Bindings - User`
