@@ -8,6 +8,6 @@
   // Jump to a dependency
   {
     "keys": ["super+alt+right"],
-    "command": "jumptodependency"
+    "command": "jump_to_dependency"
   }
 ]

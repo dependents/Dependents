@@ -1,5 +1,28 @@
 [
     {
+        "id": "file",
+        "children":
+        [
+            {
+                "caption": "-",
+                "id": "dependents"
+            },
+            {
+                "caption": "Dependents",
+                "children": [
+                    {
+                        "caption": "Find Dependents of Current File",
+                        "command": "dependents"
+                    },
+                    {
+                        "caption": "Jump to dependency",
+                        "command": "jump_to_dependency"
+                    }
+                ]
+            }
+        ]
+    },
+    {
         "id": "preferences",
         "children":
         [

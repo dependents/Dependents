@@ -9,7 +9,6 @@ from .thread_progress import ThreadProgress
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
-        print('Yoooo')
         settings = sublime.load_settings('Dependents.sublime-settings')
         self.window.root    = settings.get('root');
         self.window.config  = settings.get('config');
