@@ -9,8 +9,8 @@ from .lock import *
 from .thread_progress import ThreadProgress
 
 class DependentsCommand(sublime_plugin.WindowCommand):
-    def run(self, root="", mode=""):
-        sublime.set_timeout(unlock, 10000)
+    def run(self):
+        clearStaleLock()
 
         if isLocked():
             return
