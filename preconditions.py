@@ -13,8 +13,8 @@ def met(absPathMinusRoot):
     """
     # Check for node-dependents
     if not has_local_install(absPathMinusRoot):
-        show_error("You need to install the node tool \"dependents\" globally\n\n" +
-                  "Run \"npm install -g dependents\" in your terminal.")
+        show_error("You need to install the node tool \"dependents\" locally\n\n" +
+                  "Run \"npm install dependents\" in your terminal.")
 
         return False
 
