@@ -8,4 +8,7 @@ def isLocked():
   return os.path.isfile('__dependencylock')
 
 def unlock():
-  os.remove('__dependencylock')
+  try:
+    os.remove('__dependencylock')
+  except:
+    print('depenedents: lock isn\'t set')

@@ -10,19 +10,26 @@ from .thread_progress import ThreadProgress
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, root="", mode=""):
+        sublime.set_timeout(unlock, 10000)
+
         if isLocked():
             return
 
         lock()
+
         settings = sublime.load_settings('Dependents.sublime-settings')
 
-        self.window.root    = settings.get('root');
-        self.window.config  = settings.get('config');
+        self.window.root    = settings.get('root')
+        self.window.config  = settings.get('config')
 
         # For legacy implementations that supplied the root via key bindings
         if not self.window.root and root:
-            settings.set('root', root);
-            self.window.root = root;
+            settings.set('root', root)
+            self.window.root = root
+
+        if not self.window.root:
+            show_error('Please set the "root" in \nPreferences -> Package Settings -> Dependents -> Settings - User')
+            return
 
         self.view           = self.window.active_view()
         self.view.filename  = self.view.file_name()
