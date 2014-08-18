@@ -5,18 +5,10 @@ import os
 import re
 from subprocess import Popen, PIPE
 from .preconditions import *
-from .lock import *
 from .thread_progress import ThreadProgress
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self):
-        clearStaleLock()
-
-        if isLocked():
-            return
-
-        lock()
-
         settings = sublime.load_settings('Dependents.sublime-settings')
 
         self.window.root    = settings.get('root')
@@ -66,8 +58,6 @@ class DependentsThread(threading.Thread):
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
 
-        unlock()
-
     def get_dependents(self):
         """
         Asks the node tool for the dependents of the current module
@@ -82,8 +72,12 @@ class DependentsThread(threading.Thread):
         if self.window.config:
             cmd.append(self.window.config)
 
+        print('Executing: ', ' '.join(cmd))
+
         dependents = Popen(cmd, stdout=PIPE).communicate()[0]
-        return dependents.decode('utf-8').split('\n')
+        dependents = dependents.decode('utf-8').split('\n')
+        print('Found ', '\n'.join(dependents))
+        return dependents
 
     def trim_paths(self, files):
         """
