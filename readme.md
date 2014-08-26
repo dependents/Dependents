@@ -4,11 +4,12 @@
 
 1. [Features](#features)
 2. [Prerequisites](#prerequisites)
-3. [Installation](#Installation)
-4. [Configuring Settings](#configuring-settings)
+3. [Installation](#installation)
+4. [Troubleshooting](#troubleshooting)
+5. [Configuring Settings](#configuring-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
-5. [Usage](#usage)
+6. [Usage](#usage)
  - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Jump to dependency](#jump-to-a-dependency)
 
@@ -39,6 +40,14 @@ Don't see it? Try reinstalling Package Control. Altenatively, add the repository
 4. Choose sublime-dependents
 
 If it doesn't work, please file an issue.
+
+### Troubleshooting
+
+If you're having trouble using Dependents, please check your console for errors: View -> Show Console
+
+* File an issue with an error messages (messages might apply to other plugins, but some output is better than no output)
+
+**If you upgraded to v1.2.0 or higher, you need to clear out the existing key bindings for Dependents.**
 
 ### Configuring settings
 
