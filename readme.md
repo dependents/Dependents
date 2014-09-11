@@ -6,6 +6,7 @@
 2. [Prerequisites](#prerequisites)
 3. [Installation](#installation)
 4. [Troubleshooting](#troubleshooting)
+4. [Old Issues](#old-issues)
 5. [Configuring Settings](#configuring-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
@@ -43,11 +44,15 @@ If it doesn't work, please file an issue.
 
 ### Troubleshooting
 
-If you're having trouble using Dependents, please check your console for errors: View -> Show Console
+If you're having trouble using Dependents, please check your console for errors: `View -> Show Console`
 
-* File an issue with an error messages (messages might apply to other plugins, but some output is better than no output)
+* File an issue with an error message
 
-**If you upgraded to v1.2.0 or higher, you need to clear out the existing key bindings for Dependents.**
+### Old Issues
+
+*Every file says that it has no dependents*: `node-dependents v1.0.4` fixed an issue where js files in `node_modules` was being parsed which caused esprima parse errors – returning no results.
+
+*The console says that it's missing a parameter "root"*: If you had a really early version of this plugin (before v1.2.0), then you need to clear out existing key bindings for Dependents.
 
 ### Configuring settings
 
