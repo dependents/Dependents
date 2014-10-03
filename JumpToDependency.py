@@ -47,9 +47,11 @@ class JumpToDependencyThread(threading.Thread):
         module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
-        # result = aliasLookup(module, self.config)
-        # if result:
-        #     module = result
+        if self.window.config:
+            result = self.aliasLookup(module, self.window.config)
+            print('Lookup Result:', result)
+            if result:
+                module = result
 
         extension = os.path.splitext(module)[1]
 
@@ -63,7 +65,7 @@ class JumpToDependencyThread(threading.Thread):
 
     def open_file(self, module):
         filename = self.view.path + self.window.root + '/' + module
-
+        print('Opening: ', filename)
         if not os.path.isfile(filename):
             cant_find_file()
             return
@@ -111,23 +113,26 @@ class JumpToDependencyThread(threading.Thread):
 
         return module
 
-def aliasLookup(module, config):
-    """
-    Looks up the (possibly aliased) filename via the supplied config
-    """
+    def aliasLookup(self, module, config):
+        """
+        Looks up the (possibly aliased) filename via the supplied config
+        """
 
-    cmd = [
-        'alias-lookup',
-        module,
-        config
-    ]
+        cmd = [
+            '/usr/local/bin/node',
+            self.view.path + 'node_modules/dependents/bin/dependencyLookup.js',
+            self.view.path + config,
+            module
+        ]
 
-    result = Popen(cmd, stdout=PIPE).communicate()[0]
-    return result.decode('utf-8')
+        print('Executing: ', ' '.join(cmd))
+
+        result = Popen(cmd, stdout=PIPE).communicate()[0]
+        return result.decode('utf-8').strip()
 
 
 def flatten(nested):
-        return [item for sublist in nested for item in sublist]
+    return [item for sublist in nested for item in sublist]
 
 def cant_find_file():
     show_error('Can\'t find that file')

@@ -64,8 +64,8 @@ class DependentsThread(threading.Thread):
             self.view.path + self.window.root
         ]
 
-        if self.window.config:
-            cmd.append(self.window.config)
+        # if self.window.config:
+        #     cmd.append(self.window.config)
 
         print('Executing: ', ' '.join(cmd))
 

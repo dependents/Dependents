@@ -3,16 +3,16 @@
 > Sublime Text 3 plugin for navigating JavaScript codebases
 
 1. [Features](#features)
-2. [Prerequisites](#prerequisites)
-3. [Installation](#installation)
-4. [Troubleshooting](#troubleshooting)
-4. [Old Issues](#old-issues)
+2. [Usage](#usage)
+ - [Find dependents](#find-the-dependents-of-the-current-module)
+ - [Jump to dependency](#jump-to-a-dependency)
+3. [Prerequisites](#prerequisites)
+4. [Installation](#installation)
 5. [Configuring Settings](#configuring-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
-6. [Usage](#usage)
- - [Find dependents](#find-the-dependents-of-the-current-module)
- - [Jump to dependency](#jump-to-a-dependency)
+6. [Troubleshooting](#troubleshooting)
+7. [Old Issues](#old-issues)
 
 ### Features:
 
@@ -23,11 +23,30 @@ Currently supporting: AMD modules and Mac OSX
 
 Not currently supported but planned: CommonJS modules, Windows OS, Linux OS. Pull requests welcome!
 
+### Usage
+
+#### Find the dependents of the current module
+
+`CMD + Option + Up arrow`, to trigger finding the dependents.
+
+* If dependents are found, you'll see them in a dropdown.
+ * You can select any of the items in the panel to jump to that file
+ * If there's only one dependent, you'll be taken to that dependent file directly.
+* If no dependents are found a popup will be shown
+
+#### Jump to a dependency
+
+1. Within a JS file, place your cursor over the dependency path you want to go to
+2. Press `CMD + Option + Right arrow` or `CMD + Option + Click` to jump to that file
+ - If a dependency is aliased, you'll need to supply the path to your requirejs configuration
+
 ### Prerequisites
 
 You need to have Node.js installed and the node tool [dependents](https://github.com/mrjoelkemp/node-dependents).
 
-`npm install dependents`
+`npm install dependents` in the root directory of your project
+
+*Global install support coming soon (brings about support for Windows and Linux)*
 
 ### Installation
 
@@ -42,23 +61,12 @@ Don't see it? Try reinstalling Package Control. Altenatively, add the repository
 
 If it doesn't work, please file an issue.
 
-### Troubleshooting
-
-If you're having trouble using Dependents, please check your console for errors: `View -> Show Console`
-
-* File an issue with an error message
-
-### Old Issues
-
-*Every file says that it has no dependents*: `node-dependents v1.0.4` fixed an issue where js files in `node_modules` was being parsed which caused esprima parse errors – returning no results.
-
-*The console says that it's missing a parameter "root"*: If you had a really early version of this plugin (before v1.2.0), then you need to clear out existing key bindings for Dependents.
-
 ### Configuring settings
 
-You need to supply the "root" of your JS codebase (i.e., the location where your JS files reside).
+* `root`: the location where your JS files reside.
+* `config`: (Optional) the path to your requirejs configuration file
 
-This can be specified by going to
+These can be specified by going to
 
 `Preferences -> Package Settings -> Dependents -> Settings - User`
 
@@ -66,7 +74,8 @@ and adding:
 
 ```js
 {
-  "root": "public/assets/js"
+  "root": "public/assets/js",
+  "config": "public/assets/js/config.js"
 }
 ```
 
@@ -105,18 +114,14 @@ like so:
 
 * You won't need the opening and closing square brackets `[]` if you have pre-existing key bindings
 
-### Usage
+### Troubleshooting
 
-#### Find the dependents of the current module
+If you're having trouble using Dependents, please check your console for errors: `View -> Show Console`
 
-Use the `keys` value above, `CMD + Option + Up arrow`, to trigger finding the dependents.
+* File an issue with an error message
 
-* If dependents are found, you'll see them in a dropdown.
- * You can select any of the items in the panel to jump to that file
- * If there's only one dependent, you'll be taken to that dependent file directly.
-* If no dependents are found a popup will be shown
+### Old Issues
 
-#### Jump to a dependency
+*Every file says that it has no dependents*: `node-dependents v1.0.4` fixed an issue where js files in `node_modules` was being parsed which caused esprima parse errors – returning no results.
 
-1. Within a JS file, place your cursor over the dependency path you want to go to
-2. Press `CMD + Option + Right arrow` or `CMD + Option + Click` to jump to that file
+*The console says that it's missing a parameter "root"*: If you had a really early version of this plugin (before v1.2.0), then you need to clear out existing key bindings for Dependents.

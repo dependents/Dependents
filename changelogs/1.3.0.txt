@@ -1,0 +1,25 @@
+Jump to aliased dependency
+---
+
+Dependents can now jump to dependencies that might be aliased.
+
+### How can I start using this?
+
+
+Please install the newest version of node-dependents in your project's root directory:
+
+npm install dependents
+
+
+
+In your settings, you'll need to supply the path to your RequireJS configuration file:
+
+Go to: Preferences -> Package Settings -> Dependents -> Settings - User
+
+and add the following property to the settings file:
+
+"config": "path/to/my/config.js"
+
+
+
+
