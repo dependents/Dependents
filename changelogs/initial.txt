@@ -1,3 +1,7 @@
+Please install node-dependents in the root of your codebase via:
+
+npm install dependents
+
 ---
 Configuring settings
 ---
@@ -11,10 +15,11 @@ This can be specified by going to
 and adding:
 
 {
-  "root": "public/assets/js"
+  "root": "path/to/my/js",
+  "config": "path/to/my/requirejs/config.js"
 }
 
-* Please modify the "root" value according to your codebase.
+* Please modify the "root" and "config" values according to your codebase.
 
 ---
 Default key bindings
