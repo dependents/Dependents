@@ -4,6 +4,8 @@ import threading
 import os
 import re
 from subprocess import Popen, PIPE
+from fnmatch import fnmatch
+
 # TODO: Support Python 2 style imports
 from .preconditions import met
 from .thread_progress import ThreadProgress
@@ -57,16 +59,29 @@ class JumpToDependencyThread(threading.Thread):
         extension = os.path.splitext(module)[1]
 
         # Use the current file's extension if not supplied
-        if (not extension):
+        if not extension:
             extension = os.path.splitext(self.view.filename)[1]
 
-        file_to_open = module + extension
+        file_to_open = self.get_absolute_path(module + extension)
+
+        # Our guess at the extension failed
+        if not os.path.isfile(file_to_open):
+            # Is relative to the module
+            actual_file = find_file_like(module)
+            if actual_file:
+                extension = os.path.splitext(actual_file)[1]
+                file_to_open = self.get_absolute_path(module + extension)
 
         self.open_file(file_to_open)
 
-    def open_file(self, module):
-        filename = self.view.path + self.window.root + '/' + module
+    def open_file(self, filename):
+        """
+        Opens the passed file or shows an error error message
+        if the file cannot be found
+        """
+
         print('Opening: ', filename)
+
         if not os.path.isfile(filename):
             cant_find_file()
             return
@@ -114,6 +129,23 @@ class JumpToDependencyThread(threading.Thread):
 
         return module
 
+    def get_absolute_path(self, module):
+        """
+        Returns a version of module that has the absolute path
+        and root path baked in
+        """
+        filename = ''
+
+        # If it's an absolute path already, it was probably
+        # a module that uses plugin loader
+        if self.view.path not in module:
+            filename += self.view.path
+            if self.window.root not in module:
+                filename += self.window.root + '/'
+
+        filename += module
+        return filename
+
     def aliasLookup(self, module, config):
         """
         Looks up the (possibly aliased) filename via the supplied config
@@ -130,6 +162,24 @@ class JumpToDependencyThread(threading.Thread):
 
         result = Popen(cmd, stdout=PIPE).communicate()[0]
         return result.decode('utf-8').strip()
+
+def find_file_like(path):
+    """
+    Traverses the parent directory of path looking for the
+    first file with a close enough name to the given path.
+
+    This is helpful if you don't know the extension of a file
+    (assuming the filename has a unique extension)
+    """
+    try:
+        dirname = os.path.dirname(path)
+        filename = [f for f in os.listdir(dirname) if fnmatch(f, os.path.basename(path) + '.*')]
+        if len(filename):
+            return filename[0]
+    except:
+        return ''
+
+    return ''
 
 
 def flatten(nested):

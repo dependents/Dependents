@@ -1,0 +1,22 @@
+Jump to a plugin loaded dependency
+----
+
+You can now jump to dependencies that use requirejs plugin loaders
+like hgn, hbs, css, txt.
+
+How can I start using this?
+
+1. Please update node-dependents via:
+
+npm install dependents
+
+2. Be sure to have the path to your requirejs config set in your settings,
+if you haven't set it already.
+
+Go to: Preferences -> Package Settings -> Dependents -> Settings - User
+
+and add the following property to the settings file:
+
+"config": "path/to/my/config.js"
+
+
