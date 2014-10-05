@@ -3,8 +3,9 @@ import subprocess
 import threading
 import os
 import re
-from .preconditions import met
 from subprocess import Popen, PIPE
+# TODO: Support Python 2 style imports
+from .preconditions import met
 from .thread_progress import ThreadProgress
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
@@ -132,6 +133,9 @@ class JumpToDependencyThread(threading.Thread):
 
 
 def flatten(nested):
+    """
+    Flattens a 2d array into a 1d array
+    """
     return [item for sublist in nested for item in sublist]
 
 def cant_find_file():
