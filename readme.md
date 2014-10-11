@@ -18,9 +18,9 @@
 * Find JavaScript modules that depend on the current JavaScript module.
 * Jump to a dependency
 
-Currently supporting: AMD modules and Mac OSX
+Currently supporting: AMD modules
 
-Not currently supported but planned: CommonJS modules, Windows OS, Linux OS. Pull requests welcome!
+Not currently supported but planned: CommonJS modules
 
 ### Usage
 
