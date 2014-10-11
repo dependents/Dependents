@@ -6,13 +6,12 @@
 2. [Usage](#usage)
  - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Jump to dependency](#jump-to-a-dependency)
-3. [Prerequisites](#prerequisites)
-4. [Installation](#installation)
-5. [Configuring Settings](#configuring-settings)
+3. [Installation](#installation)
+4. [Configuring Settings](#configuring-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
-6. [Troubleshooting](#troubleshooting)
-7. [Old Issues](#old-issues)
+5. [Troubleshooting](#troubleshooting)
+6. [Old Issues](#old-issues)
 
 ### Features:
 
@@ -39,14 +38,6 @@ Not currently supported but planned: CommonJS modules, Windows OS, Linux OS. Pul
 1. Within a JS file, place your cursor over the dependency path you want to go to
 2. Press `CMD + Option + Right arrow` or `CMD + Option + Click` to jump to that file
  - If a dependency is aliased, you'll need to supply the path to your requirejs configuration
-
-### Prerequisites
-
-You need to have Node.js installed and the node tool [dependents](https://github.com/mrjoelkemp/node-dependents).
-
-`npm install dependents` in the root directory of your project
-
-*Global install support coming soon (brings about support for Windows and Linux)*
 
 ### Installation
 

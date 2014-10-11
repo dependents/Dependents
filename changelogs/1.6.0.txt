@@ -1,0 +1,18 @@
+Big updates
+----
+
+1. Seamless node-dependents updates
+2. Cross platform support (Windows and Linux)
+3. Jump to dependencies (within your root) from anywhere in your codebase
+
+The node tool powering this plugin (node-dependents) has been
+integrated into the sublime-dependents codebase.
+
+This means you shouldn't ever have to install dependents manually.
+Feel free to delete your local install of node-dependents from your codebase
+
+Along with this is support for Windows and Linux operating systems.
+
+Ping me @mrjoelkemp if this update breaks anything.
+
+You don't have to do anything to get these updates.
