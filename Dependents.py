@@ -3,9 +3,9 @@ import subprocess
 import threading
 import os
 import re
-from subprocess import Popen, PIPE
 from .preconditions import *
 from .thread_progress import ThreadProgress
+from .node_dependents import get_dependents
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self):
@@ -57,20 +57,15 @@ class DependentsThread(threading.Thread):
         """
         Asks the node tool for the dependents of the current module
         """
-        cmd = [
-            '/usr/local/bin/node',
-            self.view.path + 'node_modules/dependents/bin/dependents.js',
-            self.view.filename,
-            self.view.path + self.window.root
-        ]
+        args = {
+            'filename': self.view.filename,
+            'root': self.view.path + self.window.root
+        }
 
         if self.window.config:
-            cmd.append(self.view.path + self.window.config)
+            args['config'] = self.view.path + self.window.config
 
-        print('Executing: ', ' '.join(cmd))
-
-        dependents = Popen(cmd, stdout=PIPE).communicate()[0]
-        dependents = dependents.decode('utf-8').split('\n')
+        dependents = get_dependents(args)
         print('Found ', '\n'.join(dependents))
         return dependents
 
