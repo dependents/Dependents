@@ -17,10 +17,7 @@ class JumpToDependencyCommand(sublime_plugin.WindowCommand):
         self.window.config  = settings.get('config');
         self.view           = self.window.active_view()
         self.view.filename  = self.view.file_name()
-        # The part of the path before the root
-        self.view.path      = self.view.filename[:self.view.filename.index(self.window.root)]
-        # The path of the path after the root
-        self.view.pathWithinRoot = self.view.filename[self.view.filename.index(self.window.root) + len(self.window.root):]
+        self.view.path      = self.window.folders()[0] + '/'
 
         if not met(self.view.path):
             return
