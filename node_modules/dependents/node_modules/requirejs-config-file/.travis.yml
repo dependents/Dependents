@@ -1,0 +1,16 @@
+language: node_js
+
+node_js:
+- '0.10'
+
+branches:
+  only:
+  - master
+
+before_script:
+- npm install -g grunt-cli
+- grunt --version
+
+notifications:
+  hipchat: 1fbdbbbaa517c485f935a6d72f1110@239240
+  on_success: never

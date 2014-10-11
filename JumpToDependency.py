@@ -3,12 +3,12 @@ import subprocess
 import threading
 import os
 import re
-from subprocess import Popen, PIPE
 from fnmatch import fnmatch
 
 # TODO: Support Python 2 style imports
 from .preconditions import met
 from .thread_progress import ThreadProgress
+from .node_dependents import alias_lookup
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
@@ -148,17 +148,10 @@ class JumpToDependencyThread(threading.Thread):
         Looks up the (possibly aliased) filename via the supplied config
         """
 
-        cmd = [
-            '/usr/local/bin/node',
-            self.view.path + 'node_modules/dependents/bin/dependencyLookup.js',
-            self.view.path + config,
-            module
-        ]
-
-        print('Executing: ', ' '.join(cmd))
-
-        result = Popen(cmd, stdout=PIPE).communicate()[0]
-        return result.decode('utf-8').strip()
+        return alias_lookup({
+            'config': self.view.path + config,
+            'module': module
+        })
 
 def find_file_like(path):
     """
