@@ -9,15 +9,20 @@ from fnmatch import fnmatch
 from .preconditions import met
 from .thread_progress import ThreadProgress
 from .node_dependents import alias_lookup
+from .project_settings import get_project_settings
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
-        settings = sublime.load_settings('Dependents.sublime-settings')
-        self.window.root    = settings.get('root');
-        self.window.config  = settings.get('config');
+        base_path = self.window.folders()[0] + '/'
+
+        settings = get_project_settings(base_path)
+
+        self.window.root    = settings['root']
+        self.window.config  = settings['config']
+
         self.view           = self.window.active_view()
         self.view.filename  = self.view.file_name()
-        self.view.path      = self.window.folders()[0] + '/'
+        self.view.path      = base_path
 
         if not met(self.view.path):
             return

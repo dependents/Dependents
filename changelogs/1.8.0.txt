@@ -1,0 +1,15 @@
+New Feature: Per-project settings
+----
+
+You can now create a .deprc file within your projects
+to configure the "root" and "config" on a per-project basis.
+
+An example .deprc file within a project would look like:
+
+{
+  "root": "path/to/my/js",
+  "config": "path/to/my/config.js"
+}
+
+Where you would change the values of "root" and (optionally) "config"
+to match your directory structure.

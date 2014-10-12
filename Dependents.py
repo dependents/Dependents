@@ -6,13 +6,16 @@ import re
 from .preconditions import *
 from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
+from .project_settings import get_project_settings
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):
-        settings = sublime.load_settings('Dependents.sublime-settings')
+        base_path = self.window.folders()[0] + '/'
 
-        self.window.root    = settings.get('root')
-        self.window.config  = settings.get('config')
+        settings = get_project_settings(base_path)
+
+        self.window.root    = settings['root']
+        self.window.config  = settings['config']
 
         if not self.window.root:
             show_error('Please set the "root" in \nPreferences -> Package Settings -> Dependents -> Settings - User')
@@ -22,7 +25,7 @@ class DependentsCommand(sublime_plugin.WindowCommand):
         self.view.filename  = self.view.file_name()
 
         # The part of the path before the root
-        self.view.path = self.window.folders()[0] + '/'
+        self.view.path = base_path
 
         self.view.modifier = modifier
 

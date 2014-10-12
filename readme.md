@@ -9,6 +9,7 @@
  - [Open all dependents](#open-all-dependents)
 3. [Installation](#installation)
 4. [Configuring Settings](#configuring-settings)
+ - [Per-project Settings](#per-project-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
 5. [Troubleshooting](#troubleshooting)
@@ -76,6 +77,13 @@ and adding:
   "config": "public/assets/js/config.js"
 }
 ```
+
+##### Per-project settings
+
+You can also define these settings on a per-project by creating a `.deprc` file in the main directory of your codebase.
+Set the settings above within the `.deprc` file.
+
+This is a great way of using this plugin across many projects with different directory structures.
 
 #### Default key bindings
 
