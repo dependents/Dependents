@@ -77,6 +77,13 @@ and adding:
 }
 ```
 
+##### Per-project settings
+
+You can also define these settings on a per-project by creating a `.deprc` file in the main directory of your codebase.
+Set the settings above within the `.deprc` file.
+
+This is a great way of using this plugin across many projects with different directory structures.
+
 #### Default key bindings
 
 By default, the following key bindings have been supplied:
