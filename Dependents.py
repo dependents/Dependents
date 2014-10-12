@@ -8,7 +8,7 @@ from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
 
 class DependentsCommand(sublime_plugin.WindowCommand):
-    def run(self):
+    def run(self, modifier=''):
         settings = sublime.load_settings('Dependents.sublime-settings')
 
         self.window.root    = settings.get('root')
@@ -22,7 +22,10 @@ class DependentsCommand(sublime_plugin.WindowCommand):
         self.view.filename  = self.view.file_name()
 
         # The part of the path before the root
-        self.view.path = self.view.filename[:self.view.filename.index(self.window.root)]
+        self.view.path = self.window.folders()[0] + '/'
+
+        if modifier:
+            self.view.modifier = modifier
 
         if not met(self.view.path):
             return
@@ -47,6 +50,11 @@ class DependentsThread(threading.Thread):
         """
 
         self.dependents = self.trim_paths(self.get_dependents())
+
+        if self.view.modifier == 'OPEN_ALL':
+            for dep in self.dependents:
+                self.open_file(dep)
+            return
 
         if len(self.dependents) == 1:
             self.open_file(self.dependents[0])

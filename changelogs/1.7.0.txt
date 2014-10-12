@@ -1,0 +1,5 @@
+New Feature: Open all dependents
+---
+
+Right click on the current file -> Dependents -> Open all dependents
+to have all dependents opened up in the editor.
