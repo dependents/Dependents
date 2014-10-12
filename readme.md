@@ -6,6 +6,7 @@
 2. [Usage](#usage)
  - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Jump to dependency](#jump-to-a-dependency)
+ - [Open all dependents](#open-all-dependents)
 3. [Installation](#installation)
 4. [Configuring Settings](#configuring-settings)
  - [Default Key Bindings](#default-key-bindings)
@@ -17,6 +18,7 @@
 
 * Find JavaScript modules that depend on the current JavaScript module.
 * Jump to a dependency
+* Open all dependent files
 
 Currently supporting: AMD modules
 
@@ -38,6 +40,11 @@ Not currently supported but planned: CommonJS modules
 1. Within a JS file, place your cursor over the dependency path you want to go to
 2. Press `CMD + Option + Right arrow` or `CMD + Option + Click` to jump to that file
  - If a dependency is aliased, you'll need to supply the path to your requirejs configuration
+
+#### Open all dependents
+
+1. Within a JS file, right click to open up a menu
+2. Click on Dependents -> Open all dependents to open all dependent files in the editor
 
 ### Installation
 
