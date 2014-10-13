@@ -11,13 +11,6 @@ def met(absPathMinusRoot):
     :param path
         The path to the current directory minus the root
     """
-    # Check for node-dependents
-    if not has_local_install(absPathMinusRoot):
-        show_error("You need to install the node tool \"dependents\" locally\n\n" +
-                  "Run \"npm install dependents\" in your terminal.")
-
-        return False
-
     # Check for the settings to be set
     settings = sublime.load_settings('Dependents.sublime-settings')
 
@@ -34,6 +27,3 @@ def met(absPathMinusRoot):
 
 def show_error(string):
     sublime.error_message(u'Dependents\n%s' % string)
-
-def has_local_install(path):
-    return os.path.exists(path + '/node_modules/dependents')
