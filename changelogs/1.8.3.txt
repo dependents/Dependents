@@ -1,0 +1,10 @@
+Bug fix
+---
+
+Fixing a bug broke finding dependents.
+
+Basically, with the merging of the plugin and node tool's codebases, it was necessary to
+indicate to sublime text to package this plugin differently. Without this, trying to execute
+commands on the node tool would result in a nasty error.
+
+Apologies for the inconvenience.
