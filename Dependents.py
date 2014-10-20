@@ -7,6 +7,7 @@ from .preconditions import *
 from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
 from .project_settings import get_project_settings
+from .show_error import show_error
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):
@@ -126,6 +127,3 @@ class DependentsThread(threading.Thread):
 
 def cant_find_file():
     show_error('Can\'t find that file')
-
-def show_error(string):
-    sublime.error_message(u'Dependents\n%s' % string)
