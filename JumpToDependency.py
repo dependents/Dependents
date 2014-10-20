@@ -10,6 +10,7 @@ from .preconditions import met
 from .thread_progress import ThreadProgress
 from .node_dependents import alias_lookup
 from .project_settings import get_project_settings
+from .show_error import show_error
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
@@ -187,6 +188,3 @@ def flatten(nested):
 
 def cant_find_file():
     show_error('Can\'t find that file')
-
-def show_error(string):
-    sublime.error_message(u'Dependents\n%s' % string)

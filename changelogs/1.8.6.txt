@@ -1,0 +1,13 @@
+Better error reporting
+---
+
+Now showing a dialog with the error message to indicate that something is wrong.
+
+If you do encounter errors from recently upgrading, please try:
+
+1. Package Control -> Remove Package -> Dependents
+2. Restart Sublime Text
+3. Package Control -> Install Package -> Dependents
+4. Restart Sublime Text
+
+That should fix the problem. Please report errors to @mrjoelkemp or github.com/mrjoelkemp/sublime-dependents
