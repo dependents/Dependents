@@ -87,7 +87,13 @@ class DependentsThread(threading.Thread):
 
         for f in files:
             if f:
-                trimmed.append(f[f.index(self.window.root) + len(self.window.root) + 1:])
+                try:
+                    filename = f[f.index(self.window.root) + len(self.window.root) + 1:]
+                except:
+                    print('Didn\'t have root in path: ', f)
+                    filename = f
+
+                trimmed.append(filename)
 
         return trimmed
 
