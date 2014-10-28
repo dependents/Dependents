@@ -95,9 +95,15 @@ function processFiles(options) {
 function processDependents(filename, fileContent, directory) {
   if (! fileContent) return;
 
+  var dependencies;
+
   // @todo: Detect if it's commonjs or amd then choose the appropriate detective
   // var dependencies = precinct(fileContent);
-  var dependencies = detective(fileContent);
+  try {
+     dependencies = detective(fileContent);
+  } catch(e) {
+    return;
+  }
 
   dependents[filename] = dependents[filename] || {};
 

@@ -27,4 +27,15 @@ describe('dependents', function() {
       }
     });
   });
+
+  it('does not throw on esprima errors', function(done) {
+    dependents.for({
+      filename: __dirname + '/example/error.js',
+      directory: __dirname + '/example',
+      success: function(dependents) {
+        assert(!dependents.length);
+        done();
+      }
+    });
+  });
 });

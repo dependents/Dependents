@@ -1,0 +1,24 @@
+{
+  "name": "Dependents",
+  "version": "0.0.0",
+  "description": "Sublime Text plugin to navigate JS codebases ",
+  "main": "index.js",
+  "dependencies": {
+    "dependents": "~1.4.0"
+  },
+  "private": true,
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/mrjoelkemp/sublime-dependents.git"
+  },
+  "author": "Joel Kemp <joel@mrjoelkemp.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mrjoelkemp/sublime-dependents/issues"
+  },
+  "homepage": "https://github.com/mrjoelkemp/sublime-dependents"
+}
