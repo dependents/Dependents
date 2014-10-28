@@ -17,6 +17,11 @@
                     {
                         "caption": "Jump to dependency",
                         "command": "jump_to_dependency"
+                    },
+                    {
+                        "caption": "Open All Dependents",
+                        "command": "dependents",
+                        "args": { "modifier": "OPEN_ALL"}
                     }
                 ]
             }

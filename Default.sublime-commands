@@ -6,5 +6,10 @@
     {
         "caption": "Dependents: Jump to dependency under your cursor",
         "command": "jump_to_dependency"
+    },
+    {
+        "caption": "Dependents: Open all dependents",
+        "command": "dependents",
+        "args": { "modifier": "OPEN_ALL"}
     }
 ]
