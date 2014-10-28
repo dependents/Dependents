@@ -77,7 +77,8 @@ class DependentsThread(threading.Thread):
             args['config'] = self.view.path + self.window.config
 
         dependents = get_dependents(args)
-        print('Found\n', '\n'.join(dependents))
+        print('Dependents found:')
+        print('\n'.join(dependents))
         return dependents
 
     def trim_paths(self, files):
