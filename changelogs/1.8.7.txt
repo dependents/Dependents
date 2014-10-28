@@ -1,0 +1,7 @@
+Bug Fixes
+---
+
+- Now swallowing all file parse errors from Esprima to avoid tainting the results of finding dependents.
+- Added "Open all Dependents" option to File menu and Sublime Text Command palette (cmd + shift + p)
+
+Report problems to @mrjoelkemp
