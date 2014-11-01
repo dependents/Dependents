@@ -60,6 +60,8 @@ Also supports "driver script" syntax:
 
 Also handles dynamically loaded dependencies (ex: inner requires).
 
+Also handles REM form: `define(function(require, exports, module) {})`.
+
 **Supports driver scripts**
 
 You can also find the dependencies from a script that has a top-level require (an app initialization/driver/entry-point script):
