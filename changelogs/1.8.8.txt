@@ -1,0 +1,7 @@
+Bug Fix
+---
+
+- Fixed a bug where a driver script within an IIFE wasn't being parsed
+and included in the set of dependents.
+
+Report problems to @mrjoelkemp
