@@ -1,0 +1,9 @@
+New feature: Support for CommonJS and ES6 codebases
+---
+
+Finding all Dependents should work for CommonJS and ES6 codebases.
+
+If you run into any problems, please file an issue at mrjoelkemp/sublime-dependents
+or ping me on twitter @mrjoelkemp.
+
+You can send me console logs via 'View -> Show Console'

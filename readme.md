@@ -14,6 +14,7 @@
  - [Custom Key Bindings](#custom-key-bindings)
 5. [Troubleshooting](#troubleshooting)
 6. [Old Issues](#old-issues)
+7. [Reporting an Issue](#reporting-an-issue)
 
 ### Features:
 
@@ -21,9 +22,7 @@
 * Jump to a dependency
 * Open all dependent files
 
-Currently supporting: AMD modules
-
-Not currently supported but planned: CommonJS modules
+Currently supporting: AMD, CommonJS, and ES6 codebases.
 
 ### Usage
 
@@ -131,3 +130,11 @@ If you're having trouble using Dependents, please check your console for errors:
 *Every file says that it has no dependents*: `node-dependents v1.0.4` fixed an issue where js files in `node_modules` was being parsed which caused esprima parse errors – returning no results.
 
 *The console says that it's missing a parameter "root"*: If you had a really early version of this plugin (before v1.2.0), then you need to clear out existing key bindings for Dependents.
+
+### Reporting an issue
+
+You can get console logs via `View -> Show Console`.
+
+Paste those logs into the body of your issue.
+
+Or ping me [@mrjoelkemp](https://twitter.com/mrjoelkemp)
