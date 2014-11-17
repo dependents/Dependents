@@ -1,0 +1,4 @@
+// amd
+define({
+  foo: 'foo'
+});

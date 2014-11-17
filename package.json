@@ -1,10 +1,10 @@
 {
   "name": "Dependents",
   "version": "0.0.0",
-  "description": "Sublime Text plugin to navigate JS codebases ",
+  "description": "Sublime Text plugin to navigate JS codebases",
   "main": "index.js",
   "dependencies": {
-    "dependents": "1.4.1"
+    "dependents": "~1.5.0"
   },
   "private": true,
   "devDependencies": {},

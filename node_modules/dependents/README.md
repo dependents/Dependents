@@ -1,11 +1,12 @@
 # Dependents [![npm](http://img.shields.io/npm/v/dependents.svg)](https://npmjs.org/package/dependents) [![npm](http://img.shields.io/npm/dm/dependents.svg)](https://npmjs.org/package/dependents)
 
-
 Get the JS modules that depend on (i.e., require) a given module.
 
 `npm install dependents`
 
-Primarily built for use in [Sublime Dependents](https://github.com/mrjoelkemp/sublime-dependents)
+*Primarily built for use in [Sublime Dependents](https://github.com/mrjoelkemp/sublime-dependents).*
+
+Supports AMD, CommonJS, and ES6 modules.
 
 ### Usage
 
@@ -18,7 +19,7 @@ Supported options:
 * `filename`: the module that you want to get the dependents of
 * `directory`: the directory to search for dependents (also known as the "root")
 * `files`: (optional) list of files to search through (if you want to control the files processed). Useful in clustering.
-* `config`: (optional) path to your requirejs or browserify shim config
+* `config`: (optional) path to your requirejs config
 * `callback`: a function that should accept a list of filenames representing modules that dependent on the module in `filename`
 
 Example:

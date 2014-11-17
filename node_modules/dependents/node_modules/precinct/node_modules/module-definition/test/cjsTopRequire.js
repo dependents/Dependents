@@ -1,0 +1,2 @@
+// commonjs
+require('foobar');

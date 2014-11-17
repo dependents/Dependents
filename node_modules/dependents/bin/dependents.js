@@ -3,7 +3,7 @@
 'use strict';
 
 var dependents = require('../'),
-    getJSFiles = require('../lib/getJSFiles'),
+    getJSFiles = require('get-all-js-files'),
     filename   = process.argv[2],
     directory  = process.argv[3],
     config     = process.argv[4],

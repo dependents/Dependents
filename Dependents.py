@@ -3,6 +3,7 @@ import subprocess
 import threading
 import os
 import re
+import time
 from .preconditions import *
 from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
@@ -51,8 +52,11 @@ class DependentsThread(threading.Thread):
         """
         Finds the dependents of the current file and jumps to that file or shows a panel of dependent files
         """
+        start_time = time.time()
 
         self.dependents = self.trim_paths(self.get_dependents())
+
+        print('Dependents: Elapsed - %s seconds' % (time.time() - start_time))
 
         if self.view.modifier and self.view.modifier == 'OPEN_ALL':
             for dep in self.dependents:
