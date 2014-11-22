@@ -6,17 +6,28 @@ from .node_bridge import node_bridge
 from .show_error import show_error
 
 def get_dependents(options):
-    args = [options['filename'], options['root']]
+    try:
+        args = [options['filename'], options['root']]
+    except:
+        print('Dependents: rilename or root not supplied')
 
-    if options['config']:
-        args.append(options['config'])
+    try:
+        if options['config']:
+            args.append(options['config'])
+    except:
+        print('Dependents: Config not supplied')
+
     try:
       return node_bridge(get_bin_path('dependents.js'), args).split('\n')
     except Exception as e:
       show_error(e)
 
 def alias_lookup(options):
-    args = [options['config'], options['module']]
+    try:
+        args = [options['config'], options['module']]
+    except:
+        args['', options['module']]
+
     try:
       return node_bridge(get_bin_path('dependencyLookup.js'), args).strip()
     except Exception as e:
