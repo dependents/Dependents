@@ -16,20 +16,26 @@ class DependentsCommand(sublime_plugin.WindowCommand):
 
         settings = get_project_settings(base_path)
 
-        self.window.root    = settings['root']
-        self.window.config  = settings['config']
+        self.window.root = settings['root']
+        self.window.config = settings['config']
+        self.window.sass_root = settings['sass_root']
 
-        if not self.window.root:
-            show_error('Please set the "root" in \nPreferences -> Package Settings -> Dependents -> Settings - User')
+        if not self.window.root and not self.window.sass_root:
+            show_error('Please set the "root" or "sass_root" in \nPreferences -> Package Settings -> Dependents -> Settings - User')
             return
 
-        self.view           = self.window.active_view()
-        self.view.filename  = self.view.file_name()
-
+        self.view = self.window.active_view()
+        self.view.filename = self.view.file_name()
         # The part of the path before the root
         self.view.path = base_path
-
         self.view.modifier = modifier
+        self.view.isSassFile = isSassFile(self.view.filename)
+
+        # All subsequent actions will be about the sass_root so just
+        # switch the root to reduce the redundant checking if we should
+        # use root or sass_root
+        if self.view.isSassFile:
+            self.window.root = self.window.sass_root
 
         if not met(self.view.path):
             return
@@ -132,3 +138,14 @@ class DependentsThread(threading.Thread):
 
 def cant_find_file():
     show_error('Can\'t find that file')
+
+def isSassFile(filename):
+    """
+    Whether or not the given filename is a Sass file
+    """
+
+    extension = os.path.splitext(filename)[1]
+    print('ext: ', extension)
+    print('filename: ', filename)
+
+    return extension == '.scss' or extension == '.sass'

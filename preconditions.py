@@ -4,8 +4,6 @@ import platform
 import subprocess
 import threading
 
-lookup = "where" if platform.system() == "Windows" else "which"
-
 def met(absPathMinusRoot):
     """
     :param path

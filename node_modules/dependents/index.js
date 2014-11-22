@@ -3,6 +3,7 @@ var precinct   = require('precinct'),
     fs         = require('fs'),
     lookup     = require('module-lookup-amd'),
     getJSFiles = require('get-all-js-files'),
+    util       = require('./lib/util'),
     ConfigFile = require('requirejs-config-file').ConfigFile,
 
     /**
@@ -29,7 +30,7 @@ var precinct   = require('precinct'),
  * @param  {Function}     options.success   - ({String[]}) -> null - Executed with the dependents for the given filename
  */
 module.exports.for = function(options) {
-  if (! options || ! options.filename) throw new Error('expected filename whose dependents to compute');
+  if (!options || !options.filename) throw new Error('expected filename whose dependents to compute');
 
   options.filename = path.resolve(options.filename);
 
@@ -44,7 +45,7 @@ module.exports.for = function(options) {
  * @param  {Object}   options
  * @param  {String}   options.directory
  * @param  {String}   options.filename
- * @param  {String[]} options.files
+ * @param  {String[]} [options.files] - Allows workers to process predetermined sets of files
  * @param  {Function} options.success
  * @param  {Object}   options.shims
  */
@@ -52,32 +53,37 @@ function processFiles(options) {
   var directory = options.directory,
       filename  = options.filename,
       files     = options.files,
-      cb        = options.success;
+      cb        = options.success,
+      fileOptions = {
+        directory: directory,
+        dirOptions: {
+          excludeDir: /(node_modules|bower_components|vendor)/
+        },
+        contentCb: function(file, content) {
+          processDependents(file, content, directory);
+        },
+        // When all files have been processed
+        filesCb: function() {
+          cb(getDependentsForFile(filename));
+        }
+      };
 
   if (!cb)        throw new Error('expected callback');
   if (!directory) throw new Error('expected directory name');
 
   if (!files) {
-    getJSFiles({
-      directory: directory,
-      dirOptions: {
-        excludeDir: /(node_modules|bower_components)/
-      },
-      contentCb: function(file, content) {
-        processDependents(file, content, directory);
-      },
-      // When all files have been processed
-      filesCb: function() {
-        cb(getDependentsForFile(filename));
-      }
-    });
+    if (util.isSassFile(filename)) {
+      util.getSassFiles(fileOptions);
+    } else {
+      getJSFiles(fileOptions);
+    }
 
   } else {
     files.forEach(function(filename) {
       var content = fs.readFileSync(filename).toString();
       try {
         processDependents(filename, content, directory);
-      } catch(e) {
+      } catch (e) {
         console.log(e);
       }
     });
@@ -94,13 +100,17 @@ function processFiles(options) {
  * @param {String} directory
  */
 function processDependents(filename, fileContent, directory) {
-  if (! fileContent) return;
+  if (!fileContent) return;
 
   var dependencies;
 
   try {
-     dependencies = precinct(fileContent);
-  } catch(e) {
+    if (util.isSassFile(filename)) {
+      dependencies = precinct(fileContent, 'sass');
+    } else {
+      dependencies = precinct(fileContent);
+    }
+  } catch (e) {
     return;
   }
 
@@ -109,11 +119,20 @@ function processDependents(filename, fileContent, directory) {
   // Register the current file as dependent on each dependency
   dependencies.forEach(function(dep) {
     // Look up the dep to see if it's aliased in the config
-    if (config) {
+    if (config && !util.isSassFile(filename)) {
       dep = lookup(config, dep);
     }
 
-    dep = (directory ? path.resolve(directory, dep) : dep) + '.js';
+    dep = (directory ? path.resolve(directory, dep) : dep);
+
+    if (util.isSassFile(filename)) {
+      if (dep.indexOf('.scss') === -1) {
+        dep += '.scss';
+      }
+    } else {
+      dep += '.js';
+    }
+
     dependents[dep] = dependents[dep] || {};
     dependents[dep][filename] = 1;
   });

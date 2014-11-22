@@ -20,7 +20,17 @@ def get_project_settings(base_path):
         settings = data
     else:
         sublime_settings = sublime.load_settings('Dependents.sublime-settings')
-        settings['root'] = sublime_settings.get('root')
-        settings['config'] = sublime_settings.get('config')
+        try:
+            settings['root'] = sublime_settings.get('root')
+        except:
+            settings['root'] = ''
+        try:
+            settings['config'] = sublime_settings.get('config')
+        except:
+            settings['config'] = ''
+        try:
+            settings['sass_root'] = sublime_settings.get('sass_root')
+        except:
+            settings['sass_root'] = ''
 
     return settings
