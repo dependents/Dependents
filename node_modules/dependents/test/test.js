@@ -39,33 +39,44 @@ describe('dependents', function() {
     });
   });
 
-  it('finds the dependents of commonjs modules', function (done) {
+  it('finds the dependents of commonjs modules', function(done) {
     dependents.for({
       filename: __dirname + '/example/commonjs/b.js',
       directory: __dirname + '/example/commonjs',
-      success: function (dependents) {
+      success: function(dependents) {
         assert(dependents.length);
         done();
       }
     });
   });
 
-  it('finds the dependents of es6 modules', function (done) {
+  it('finds the dependents of es6 modules', function(done) {
     dependents.for({
       filename: __dirname + '/example/es6/b.js',
       directory: __dirname + '/example/es6',
-      success: function (dependents) {
+      success: function(dependents) {
         assert(dependents.length);
         done();
       }
     });
   });
 
-  it('excludes node_modules and bower_components folders by default', function(done) {
+  it('finds the dependents of sass files', function(done) {
+    dependents.for({
+      filename: __dirname + '/example/sass/_foo.scss',
+      directory: __dirname + '/example/sass',
+      success: function(dependents) {
+        assert(dependents.length === 2);
+        done();
+      }
+    });
+  });
+
+  it('excludes common 3rd party folders by default', function(done) {
     dependents.for({
       filename: __dirname + '/example/exclusions/b.js',
       directory: __dirname + '/example/exclusions',
-      success: function (dependents) {
+      success: function(dependents) {
         assert(!dependents.length);
         done();
       }

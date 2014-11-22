@@ -1,0 +1,16 @@
+New Feature: Find Sass Dependents
+---
+
+Now you can find all the SASS stylesheets that depend on another stylesheet (typically a partial).
+
+
+You'll need to set the 'sass_root' property in your settings:
+
+Sublime Text -> Preferences -> Package Settings -> Dependents -> Settings - User
+
+"sass_root": "path/to/my/sass"
+
+
+
+Simply open a partial and use the existing keyboard shortcuts to find the dependents.
+

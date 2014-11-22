@@ -1,9 +1,11 @@
 Configuring settings
 ---
 
-You need to supply the "root" of your JS codebase (i.e., the location where your JS files reside).
+* You need to supply the "root" of your JS codebase (i.e., the location where your JS files reside).
+* You may also supply the location of your RequireJS configuration for AMD codebases
+* You may also supply the location of your SASS files.
 
-This can be specified by going to
+These can be specified by going to
 
 `Preferences -> Package Settings -> Dependents -> Settings - User`
 
@@ -11,10 +13,11 @@ and adding:
 
 {
   "root": "path/to/my/js",
-  "config": "path/to/my/requirejs/config.js"
+  "config": "path/to/my/requirejs/config.js",   # Optional
+  "sass_root": "path/to/my/sass"                # Optional
 }
 
-* Please modify the "root" and "config" values according to your codebase.
+* Please modify the "root", "config", and "sass_root" values according to your codebase.
 
 ---
 Default key bindings
@@ -26,3 +29,11 @@ OSX:
 
 * Find Dependents: `CMD + Option + Up arrow`
 * Jump to dependency: `CMD + Option + Right arrow` or `CMD + Option + Click`
+
+---
+Menu Options
+---
+
+You can find other features of this plugin from:
+
+File -> Dependents

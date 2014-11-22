@@ -8,5 +8,10 @@
   // The location of your requirejs or browserify config
   //
   // Example: 'path/to/my/config.js'
-  "config": ""
+  "config": "",
+
+  // The location of your sass files
+  //
+  // Example: 'public/assets/sass'
+  "sass_root": ""
 }
