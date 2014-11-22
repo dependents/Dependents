@@ -1,6 +1,6 @@
 ### Dependents
 
-> Sublime Text 3 plugin for navigating JavaScript codebases
+> Sublime Text 3 plugin for navigating Front-End (JS/Sass) codebases
 
 1. [Features](#features)
 2. [Usage](#usage)
@@ -18,11 +18,11 @@
 
 ### Features:
 
-* Find JavaScript modules that depend on the current JavaScript module.
+* Find JavaScript/Sass files that depend on the current JavaScript/Sass file.
 * Jump to a dependency
 * Open all dependent files
 
-Currently supporting: AMD, CommonJS, and ES6 codebases.
+Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 ### Usage
 
@@ -63,6 +63,7 @@ If it doesn't work, please file an issue.
 
 * `root`: the location where your JS files reside.
 * `config`: (Optional) the path to your requirejs configuration file
+* `sass_root`: (Optional) the path to your Sass files
 
 These can be specified by going to
 
@@ -73,7 +74,8 @@ and adding:
 ```js
 {
   "root": "public/assets/js",
-  "config": "public/assets/js/config.js"
+  "config": "public/assets/js/config.js",  # Optional
+  "sass_root": "public/assets/sass"        # Optional
 }
 ```
 
