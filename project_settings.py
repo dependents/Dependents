@@ -2,6 +2,15 @@ import sublime, sublime_plugin
 import os
 import json
 
+def get_settings_from_source(source):
+    settings = {}
+
+    settings['root'] = source.get('root', '')
+    settings['config'] = source.get('config', '')
+    settings['sass_root'] = source.get('sass_root', '')
+
+    return settings
+
 def get_project_settings(base_path):
     """
     Returns a settings map that contains project settings
@@ -17,20 +26,9 @@ def get_project_settings(base_path):
         data = json.load(json_data)
         json_data.close()
 
-        settings = data
+        settings = get_settings_from_source(data)
     else:
         sublime_settings = sublime.load_settings('Dependents.sublime-settings')
-        try:
-            settings['root'] = sublime_settings.get('root')
-        except:
-            settings['root'] = ''
-        try:
-            settings['config'] = sublime_settings.get('config')
-        except:
-            settings['config'] = ''
-        try:
-            settings['sass_root'] = sublime_settings.get('sass_root')
-        except:
-            settings['sass_root'] = ''
+        settings = get_settings_from_source(sublime_settings)
 
     return settings
