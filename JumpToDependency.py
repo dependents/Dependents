@@ -19,6 +19,13 @@ class JumpToDependencyCommand(sublime_plugin.WindowCommand):
         settings = get_project_settings(base_path)
 
         self.window.root    = settings['root']
+
+        if self.window.root[-1] != '/':
+            self.window.root += '/'
+
+        if self.window.root == './' or self.window.root == '.':
+            self.window.root = base_path
+
         self.window.config  = settings['config']
 
         self.view           = self.window.active_view()
@@ -145,8 +152,8 @@ class JumpToDependencyThread(threading.Thread):
         # a module that uses plugin loader
         if self.view.path not in module:
             filename += self.view.path
-            if self.window.root not in module:
-                filename += self.window.root + '/'
+            if self.window.root not in module and self.view.path != self.window.root:
+                filename += self.window.root
 
         filename += module
         return filename

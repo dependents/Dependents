@@ -17,12 +17,18 @@ class DependentsCommand(sublime_plugin.WindowCommand):
         settings = get_project_settings(base_path)
 
         self.window.root = settings['root']
+        if self.window.root[-1] != '/':
+            self.window.root += '/'
+
         self.window.config = settings['config']
         self.window.sass_root = settings['sass_root']
 
         if not self.window.root and not self.window.sass_root:
             show_error('Please set the "root" or "sass_root" in \nPreferences -> Package Settings -> Dependents -> Settings - User')
             return
+
+        if self.window.root == './' or self.window.root == '.':
+            self.window.root = base_path
 
         self.view = self.window.active_view()
         self.view.filename = self.view.file_name()
@@ -78,9 +84,15 @@ class DependentsThread(threading.Thread):
         """
         Asks the node tool for the dependents of the current module
         """
+        root = self.view.path
+
+        # In case the user supplied the base path as the root
+        if self.window.root != self.view.path:
+            root += self.window.root
+
         args = {
             'filename': self.view.filename,
-            'root': self.view.path + self.window.root
+            'root': root
         }
 
         if self.window.config:
@@ -100,13 +112,12 @@ class DependentsThread(threading.Thread):
         for f in files:
             if f:
                 try:
-                    filename = f[f.index(self.window.root) + len(self.window.root) + 1:]
+                    filename = f[f.index(self.window.root) + len(self.window.root):]
                 except:
                     print('Didn\'t have root in path: ', f)
                     filename = f
 
                 trimmed.append(filename)
-
         return trimmed
 
     def show_quick_panel(self):
@@ -124,8 +135,14 @@ class DependentsThread(threading.Thread):
         self.open_file(dependent)
 
     def open_file(self, dependent):
+        path = self.view.path
+
+        # In case the root is the directory root (path)
+        if path != self.window.root:
+            path += self.window.root
+
         # We removed the root originally when populating the dependents list
-        filename = self.view.path + self.window.root + '/' + dependent
+        filename = path + dependent
 
         if not os.path.isfile(filename):
             cant_find_file()

@@ -123,13 +123,17 @@ function processDependents(filename, fileContent, directory) {
       dep = lookup(config, dep);
     }
 
+    if (isRelativePath(dep)) {
+      dep = path.resolve(path.dirname(filename), dep);
+    }
+
     dep = (directory ? path.resolve(directory, dep) : dep);
 
     if (util.isSassFile(filename)) {
-      if (dep.indexOf('.scss') === -1) {
+      if (path.extname(dep) !== '.scss') {
         dep += '.scss';
       }
-    } else {
+    } else if (!path.extname(dep)) {
       dep += '.js';
     }
 
@@ -144,4 +148,12 @@ function processDependents(filename, fileContent, directory) {
  */
 function getDependentsForFile(filename) {
   return Object.keys(dependents[filename] || {});
+}
+
+/**
+ * @param  {String}  filename
+ * @return {Boolean}
+ */
+function isRelativePath(filename) {
+  return filename.indexOf('..') === 0 || filename.indexOf('.') === 0;
 }
