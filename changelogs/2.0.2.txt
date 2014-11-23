@@ -1,0 +1,14 @@
+Bug fixes
+---
+
+* Better support for relative dependencies (CommonJS).
+* Better handling of missing settings from a .deprc file
+
+You should now have no problems using the features on CommonJS codebases.
+
+Note: If you want to use this plugin on multiple codebases,
+I highly recommend creating a .deprc file with your settings (root, config, sass_root)
+and adding .deprc to your global gitignore if you don't want
+to commit the configuration.
+
+Ping me for any issues: @mrjoelkemp
