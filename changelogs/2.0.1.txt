@@ -1,0 +1,10 @@
+Performance boost
+---
+
+Additional (common) vendor folders are excluded from the search for dependents by default:
+
+* node_modules
+* bower_components
+* vendor
+
+3rd party libraries won't depend on your modules, so there's no reason to process them.
