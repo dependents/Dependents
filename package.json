@@ -4,7 +4,7 @@
   "description": "Sublime Text plugin to navigate JS codebases",
   "main": "index.js",
   "dependencies": {
-    "dependents": "~1.6.1"
+    "dependents": "~1.6.2"
   },
   "private": true,
   "devDependencies": {},

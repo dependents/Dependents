@@ -61,3 +61,18 @@ Requires `npm install -g dependents`
 ```bash
 dependents filename directory [config]
 ```
+
+The shell command will utilize multi-core processing if the `directory`
+contains more than 500 modules. That number was deduced from testing.
+
+### Additional notes
+
+3rd party modules are excluded from the following folders by default:
+
+* node_modules
+* bower_components
+* vendor
+
+The reason is that no 3rd party dependency will depend on any of
+your application code modules, so they should not be processed.
+This results in a performance boost.
