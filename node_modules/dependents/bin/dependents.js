@@ -143,6 +143,9 @@ if (cluster.isMaster) {
   } else {
     getJSFiles({
       directory: directory,
+      dirOptions: {
+        excludeDir: /(node_modules|bower_components|vendor)/
+      },
       filesCb: filesCb
     });
   }
