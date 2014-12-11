@@ -9,6 +9,7 @@ from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
 from .project_settings import get_project_settings
 from .show_error import show_error
+from .is_sass_file import is_sass_file
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):
@@ -35,12 +36,11 @@ class DependentsCommand(sublime_plugin.WindowCommand):
         # The part of the path before the root
         self.view.path = base_path
         self.view.modifier = modifier
-        self.view.isSassFile = isSassFile(self.view.filename)
 
         # All subsequent actions will be about the sass_root so just
         # switch the root to reduce the redundant checking if we should
         # use root or sass_root
-        if self.view.isSassFile:
+        if is_sass_file(self.view.filename):
             self.window.root = self.window.sass_root
 
         if not met(self.view.path):
@@ -155,14 +155,3 @@ class DependentsThread(threading.Thread):
 
 def cant_find_file():
     show_error('Can\'t find that file')
-
-def isSassFile(filename):
-    """
-    Whether or not the given filename is a Sass file
-    """
-
-    extension = os.path.splitext(filename)[1]
-    print('ext: ', extension)
-    print('filename: ', filename)
-
-    return extension == '.scss' or extension == '.sass'

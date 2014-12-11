@@ -11,6 +11,7 @@ from .thread_progress import ThreadProgress
 from .node_dependents import alias_lookup
 from .project_settings import get_project_settings
 from .show_error import show_error
+from .is_sass_file import is_sass_file
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
@@ -19,6 +20,7 @@ class JumpToDependencyCommand(sublime_plugin.WindowCommand):
         settings = get_project_settings(base_path)
 
         self.window.root    = settings['root']
+        self.window.sass_root    = settings['sass_root']
 
         if self.window.root[-1] != '/':
             self.window.root += '/'
@@ -57,22 +59,30 @@ class JumpToDependencyThread(threading.Thread):
 
         module = self.view.substr(region).strip()
         module = re.sub('[\'",]', '', module)
+        print('JumpToDependency: Extracted modulepath: ', module)
         module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
         if self.window.config:
             result = self.aliasLookup(module, self.window.config)
-            print('Lookup Result:', result)
+            print('JumpToDependency: Lookup Result:', result)
             if result:
                 module = result
 
         extension = os.path.splitext(module)[1]
+        print('JumpToDependency: Extension found: ', extension)
 
         # Use the current file's extension if not supplied
         if not extension:
             extension = os.path.splitext(self.view.filename)[1]
+            module_with_extension = module + extension
+        else:
+            module_with_extension = module
 
-        file_to_open = self.get_absolute_path(module + extension)
+        print('JumpToDependency: Before abs path resolution: ', module_with_extension)
+
+        file_to_open = self.get_absolute_path(module_with_extension)
+        print('JumpToDependency: After abs path resolution: ', file_to_open)
 
         # Our guess at the extension failed
         if not os.path.isfile(file_to_open):
@@ -80,7 +90,7 @@ class JumpToDependencyThread(threading.Thread):
             actual_file = find_file_like(module)
             if actual_file:
                 extension = os.path.splitext(actual_file)[1]
-                file_to_open = self.get_absolute_path(module + extension)
+                file_to_open = self.get_absolute_path(module_with_extension)
 
         self.open_file(file_to_open)
 
@@ -90,7 +100,7 @@ class JumpToDependencyThread(threading.Thread):
         if the file cannot be found
         """
 
-        print('Opening: ', filename)
+        print('JumpToDependency: Opening: ', filename)
 
         if not os.path.isfile(filename):
             cant_find_file()
@@ -143,11 +153,16 @@ class JumpToDependencyThread(threading.Thread):
         """
         filename = ''
 
+        root = self.window.root
+
+        if is_sass_file(self.view.filename):
+            root = self.window.sass_root
+
         # If it's an absolute path already, it was probably a module that uses plugin loader
         if self.view.path not in module:
             filename += self.view.path
-            if self.window.root not in module and self.view.path != self.window.root:
-                filename += self.window.root
+            if root not in module and self.view.path != root:
+                filename += root
 
         filename += module
         return filename
