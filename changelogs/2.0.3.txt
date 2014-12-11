@@ -1,0 +1,7 @@
+Bug fix: Jump to a module from any file (inside or outside the root)
+---
+
+If you have a test file that depends on a module within the root,
+you can jump to that dependency from the test file.
+
+Ping me for any issues: @mrjoelkemp. Thanks for using the plugin!
