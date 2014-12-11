@@ -31,8 +31,6 @@ class JumpToDependencyCommand(sublime_plugin.WindowCommand):
         self.view           = self.window.active_view()
         self.view.filename  = self.view.file_name()
         self.view.path      = base_path
-        # Needed for resolving relative paths
-        self.view.pathWithinRoot = self.view.filename[self.view.filename.index(self.window.root) + len(self.window.root):]
 
         if not met(self.view.path):
             return
@@ -133,7 +131,7 @@ class JumpToDependencyThread(threading.Thread):
 
     def handleRelativePaths(self, module):
         if (module.find('..') == 0 or module.find('.') == 0):
-            fileDir = os.path.dirname(self.view.pathWithinRoot)
+            fileDir = os.path.dirname(self.view.filename)
             module = os.path.normpath(os.path.join(fileDir, module))
 
             if (module[0] == '/'):
