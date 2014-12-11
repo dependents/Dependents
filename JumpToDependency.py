@@ -134,9 +134,6 @@ class JumpToDependencyThread(threading.Thread):
             fileDir = os.path.dirname(self.view.filename)
             module = os.path.normpath(os.path.join(fileDir, module))
 
-            if (module[0] == '/'):
-                module = module[1:]
-
         return module
 
     def get_absolute_path(self, module):
@@ -146,8 +143,7 @@ class JumpToDependencyThread(threading.Thread):
         """
         filename = ''
 
-        # If it's an absolute path already, it was probably
-        # a module that uses plugin loader
+        # If it's an absolute path already, it was probably a module that uses plugin loader
         if self.view.path not in module:
             filename += self.view.path
             if self.window.root not in module and self.view.path != self.window.root:

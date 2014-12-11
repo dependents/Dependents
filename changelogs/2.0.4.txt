@@ -1,0 +1,4 @@
+Jump to Dependency: Bug Fix
+---
+
+Jumping to relatively pathed modules has been fixed.
