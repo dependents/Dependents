@@ -5,11 +5,19 @@ import json
 def get_settings_from_source(source):
     settings = {}
 
-    settings['root'] = source.get('root', '')
+    settings['root'] = normalize_trailing_slash(source.get('root', ''))
+    settings['sass_root'] = normalize_trailing_slash(source.get('sass_root', ''))
     settings['config'] = source.get('config', '')
-    settings['sass_root'] = source.get('sass_root', '')
 
     return settings
+
+def normalize_trailing_slash(string):
+    normalized = string
+
+    if normalized and normalized[-1] != '/':
+        normalized += '/'
+
+    return normalized
 
 def get_project_settings(base_path):
     """

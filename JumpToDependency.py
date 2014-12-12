@@ -19,11 +19,8 @@ class JumpToDependencyCommand(sublime_plugin.WindowCommand):
 
         settings = get_project_settings(base_path)
 
-        self.window.root    = settings['root']
-        self.window.sass_root    = settings['sass_root']
-
-        if self.window.root[-1] != '/':
-            self.window.root += '/'
+        self.window.root = settings['root']
+        self.window.sass_root = settings['sass_root']
 
         if self.window.root == './' or self.window.root == '.':
             self.window.root = base_path
