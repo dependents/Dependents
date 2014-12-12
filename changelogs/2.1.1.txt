@@ -1,0 +1,7 @@
+Bug fix
+---
+
+You no longer have to include trailing slashes on the "sass_root" nor "root" settings.
+
+There was a bug where a trailing slash was incorrectly required on "sass_root".
+
