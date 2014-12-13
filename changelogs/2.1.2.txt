@@ -1,0 +1,8 @@
+Bug Fixes
+---
+
+1. A workspace with multiple top-level codebases will now work with this plugin
+2. Jumping to aliased dependencies has been fixed
+3. Better error messages when missing necessary settings
+
+For more information: https://github.com/mrjoelkemp/sublime-dependents/releases/tag/v2.1.2
