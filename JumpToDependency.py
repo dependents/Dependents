@@ -72,6 +72,7 @@ class JumpToDependencyThread(threading.Thread):
             actual_file = find_file_like(module)
             if actual_file:
                 extension = os.path.splitext(actual_file)[1]
+                module_with_extension = module + extension
                 file_to_open = self.get_absolute_path(module_with_extension)
 
         self.open_file(file_to_open)
