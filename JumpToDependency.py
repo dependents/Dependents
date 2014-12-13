@@ -6,7 +6,6 @@ import re
 from fnmatch import fnmatch
 
 # TODO: Support Python 2 style imports
-from .preconditions import met
 from .thread_progress import ThreadProgress
 from .node_dependents import alias_lookup
 from .show_error import show_error
@@ -14,9 +13,10 @@ from .command_setup import command_setup
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
-        command_setup(self)
+        setup_was_successful = command_setup(self)
 
-        if not met(self.view.path):
+        if not setup_was_successful:
+            print('JumpToDependency: Setup was not successful')
             return
 
         thread = JumpToDependencyThread(self.window, self.view)

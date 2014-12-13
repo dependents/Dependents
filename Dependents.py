@@ -4,7 +4,6 @@ import threading
 import os
 import re
 import time
-from .preconditions import *
 from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
 from .command_setup import command_setup
@@ -12,16 +11,13 @@ from .show_error import show_error
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):
-        command_setup(self)
+        setup_was_successful = command_setup(self)
 
-        if not self.window.root and not self.window.sass_root:
-            show_error('Please set the "root" or "sass_root" in \nPreferences -> Package Settings -> Dependents -> Settings - User')
+        if not setup_was_successful:
+            print('Dependents: Setup was not successful')
             return
 
         self.view.modifier = modifier
-
-        if not met(self.view.path):
-            return
 
         thread = DependentsThread(self.window, self.view)
         thread.start();
