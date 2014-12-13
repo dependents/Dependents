@@ -9,27 +9,13 @@ from fnmatch import fnmatch
 from .preconditions import met
 from .thread_progress import ThreadProgress
 from .node_dependents import alias_lookup
-from .project_settings import get_project_settings
 from .show_error import show_error
 from .is_sass_file import is_sass_file
+from .command_setup import command_setup
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
-        base_path = self.window.folders()[0] + '/'
-
-        settings = get_project_settings(base_path)
-
-        self.window.root = settings['root']
-        self.window.sass_root = settings['sass_root']
-
-        if self.window.root == './' or self.window.root == '.':
-            self.window.root = base_path
-
-        self.window.config  = settings['config']
-
-        self.view           = self.window.active_view()
-        self.view.filename  = self.view.file_name()
-        self.view.path      = base_path
+        command_setup(self)
 
         if not met(self.view.path):
             return

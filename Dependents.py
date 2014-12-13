@@ -7,31 +7,17 @@ import time
 from .preconditions import *
 from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
-from .project_settings import get_project_settings
-from .show_error import show_error
 from .is_sass_file import is_sass_file
+from .command_setup import command_setup
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):
-        base_path = self.window.folders()[0] + '/'
-
-        settings = get_project_settings(base_path)
-
-        self.window.root = settings['root']
-        self.window.config = settings['config']
-        self.window.sass_root = settings['sass_root']
+        command_setup(self)
 
         if not self.window.root and not self.window.sass_root:
             show_error('Please set the "root" or "sass_root" in \nPreferences -> Package Settings -> Dependents -> Settings - User')
             return
 
-        if self.window.root == './' or self.window.root == '.':
-            self.window.root = base_path
-
-        self.view = self.window.active_view()
-        self.view.filename = self.view.file_name()
-        # The part of the path before the root
-        self.view.path = base_path
         self.view.modifier = modifier
 
         # All subsequent actions will be about the sass_root so just
