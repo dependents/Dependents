@@ -7,8 +7,8 @@ import time
 from .preconditions import *
 from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
-from .is_sass_file import is_sass_file
 from .command_setup import command_setup
+from .show_error import show_error
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):
@@ -19,12 +19,6 @@ class DependentsCommand(sublime_plugin.WindowCommand):
             return
 
         self.view.modifier = modifier
-
-        # All subsequent actions will be about the sass_root so just
-        # switch the root to reduce the redundant checking if we should
-        # use root or sass_root
-        if is_sass_file(self.view.filename):
-            self.window.root = self.window.sass_root
 
         if not met(self.view.path):
             return

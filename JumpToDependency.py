@@ -10,7 +10,6 @@ from .preconditions import met
 from .thread_progress import ThreadProgress
 from .node_dependents import alias_lookup
 from .show_error import show_error
-from .is_sass_file import is_sass_file
 from .command_setup import command_setup
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
@@ -137,9 +136,6 @@ class JumpToDependencyThread(threading.Thread):
         filename = ''
 
         root = self.window.root
-
-        if is_sass_file(self.view.filename):
-            root = self.window.sass_root
 
         # If it's an absolute path already, it was probably a module that uses plugin loader
         if self.view.path not in module:
