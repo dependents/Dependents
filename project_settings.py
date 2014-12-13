@@ -1,6 +1,7 @@
 import sublime, sublime_plugin
 import os
 import json
+from .normalize_trailing_slash import normalize_trailing_slash
 
 def get_settings_from_source(source):
     settings = {}
@@ -10,14 +11,6 @@ def get_settings_from_source(source):
     settings['config'] = source.get('config', '')
 
     return settings
-
-def normalize_trailing_slash(string):
-    normalized = string
-
-    if normalized and normalized[-1] != '/':
-        normalized += '/'
-
-    return normalized
 
 def get_project_settings(base_path):
     """
