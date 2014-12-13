@@ -1,7 +1,6 @@
 # Detective-AMD [![npm](http://img.shields.io/npm/v/detective-amd.svg)](https://npmjs.org/package/detective-amd) [![npm](http://img.shields.io/npm/dm/detective-amd.svg)](https://npmjs.org/package/detective-amd)
 
-Returns a list of dependencies for a given JavaScript file using
-any of the AMD module syntaxes.
+Returns a list of dependencies for a given JavaScript file or AST using any of the AMD module syntaxes.
 
 *Inspired by substack/node-detective but built for AMD*
 
@@ -35,32 +34,30 @@ Here's how you can grab the list of dependencies of `a.js` **synchronously**.
 ```javascript
 var getDependencies = require('detective-amd');
 
-var srca = fs.readFileSync('a.js');
-var srcb = fs.readFileSync('b.js');
-var srcc = fs.readFileSync('c.js');
+var srca = fs.readFileSync('a.js', 'utf8');
+var srcb = fs.readFileSync('b.js', 'utf8');
+var srcc = fs.readFileSync('c.js', 'utf8');
 
-// Pass in the source code as a string
+// Pass in the source code or an AST (if you've already parsed the file)
 console.log(getDependencies(srca)); // prints ['./b', './c']
 console.log(getDependencies(srcb)); // prints []
 console.log(getDependencies(srcc)); // prints []
 
 ```
-### Notes
+### Syntax Support
 
-**Supports the 4 forms of AMD syntax:**
+**Supports the 4 forms of AMD module syntax:**
 
 * "named": `define('name', [deps], func)`
 * "dependency list": `define([deps], func)`
 * "factory": `define(func(require))`
 * "no dependencies": `define({})`
 
-Also supports "driver script" syntax:
-
-`require([deps], func)`
-
-Also handles dynamically loaded dependencies (ex: inner requires).
+Also supports "driver script" syntax: `require([deps], func)`
 
 Also handles REM form: `define(function(require, exports, module) {})`.
+
+Also handles dynamically loaded dependencies (ex: inner requires).
 
 **Supports driver scripts**
 

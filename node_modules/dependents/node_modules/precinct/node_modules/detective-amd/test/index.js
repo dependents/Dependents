@@ -5,9 +5,45 @@ var getDependencies = require('../'),
 
 describe('detective-amd', function() {
   function getDepsOf(filepath) {
-    var src = fs.readFileSync(path.resolve(__dirname, filepath));
+    var src = fs.readFileSync(path.resolve(__dirname, filepath), 'utf8');
     return getDependencies(src);
   }
+
+  it('accepts an AST', function() {
+    var amdAST = {
+      type: 'Program',
+      body: [{
+        type: 'ExpressionStatement',
+        expression: {
+          type: 'CallExpression',
+          callee: {
+              type: 'Identifier',
+              name: 'define'
+          },
+          arguments: [
+            {
+              type: 'ArrayExpression',
+              elements: []
+            },
+            {
+              type: 'FunctionExpression',
+              id: null,
+              params: [],
+              defaults: [],
+              body: {
+                type: 'BlockStatement',
+                body: []
+              },
+              rest: null,
+              generator: false,
+              expression: false
+          }]
+        }
+      }]
+    };
+    var deps = getDependencies(amdAST);
+    assert(!deps.length);
+  });
 
   it('returns the dependencies of the factory form', function() {
     var deps = getDepsOf('./amd/factory.js');

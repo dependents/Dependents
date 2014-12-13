@@ -17,4 +17,10 @@ describe('detective-sass', function() {
     hasDependencies('@import "_foo.scss";\n@import "_bar.scss";');
     hasDependencies('@import "_foo.scss";\n@import "_bar.scss";\n@import "_baz";\n@import "_buttons";');
   });
+
+  it('does not throw for empty files', function() {
+    assert.doesNotThrow(function() {
+      detective('');
+    });
+  });
 });

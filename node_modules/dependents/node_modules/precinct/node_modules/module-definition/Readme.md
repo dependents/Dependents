@@ -19,14 +19,9 @@ getModuleType('myscript.js', function (err, type) {
 var type = getModuleType.sync('myscript.js');
 console.log(type);
 
-// From source
+// From source (string or an AST)
 var type = getModuleType.fromSource('define({foo: "foo"});');
 console.log(type);
-```
-
-Or via shell command (requires a global install: `npm install -g module-definition`)
-```
-module-definition filename
 ```
 
 Passes one of the following strings to the given callback or returns the string in sync api:
@@ -35,3 +30,11 @@ Passes one of the following strings to the given callback or returns the string 
 * commonjs
 * es6
 * none
+
+* You may also pass an AST to `fromSource` to avoid an internal parsing of the source
+
+
+Via shell command (requires a global install: `npm install -g module-definition`)
+```
+module-definition filename
+```

@@ -3,16 +3,16 @@ var Walker  = require('node-source-walk'),
     fs      = require('fs');
 
 /**
- * Determines the type of the module from the supplied source code
+ * Determines the type of the module from the supplied source code or AST
  *
- * @param  {String} source
+ * @param  {String|Object} source - The string content or AST of a file
  * @return {String}
  */
 function fromSource(source) {
   if (typeof source === 'undefined') throw new Error('source not supplied');
 
   var walker = new Walker({
-        esprimaHarmony: true
+        ecmaVersion: 6
       }),
       hasDefine = false,
       hasAMDTopLevelRequire = false,
@@ -22,6 +22,7 @@ function fromSource(source) {
       hasES6Export = false,
       isAMD, isCommonJS, isES6;
 
+  // Walker accepts as AST to avoid reparsing
   walker.walk(source, function(node) {
     if (types.isDefine(node)) {
       hasDefine = true;
