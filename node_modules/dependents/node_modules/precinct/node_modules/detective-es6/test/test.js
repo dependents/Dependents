@@ -2,6 +2,31 @@ var assert = require('assert');
 var detective = require('../');
 
 describe('detective-es6', function() {
+  var ast = {
+    type: 'Program',
+    body: [{
+      type: 'VariableDeclaration',
+      declarations: [{
+        type: 'VariableDeclarator',
+        id: {
+            type: 'Identifier',
+            name: 'x'
+        },
+        init: {
+            type: 'Literal',
+            value: 4,
+            raw: '4'
+        }
+      }],
+      kind: 'let'
+    }]
+  };
+
+  it('accepts an ast', function() {
+    var deps = detective(ast);
+    assert(!deps.length);
+  });
+
   it('retrieves the dependencies of es6 modules', function() {
     var deps = detective('import {foo, bar} from "mylib";');
     assert(deps.length === 1);

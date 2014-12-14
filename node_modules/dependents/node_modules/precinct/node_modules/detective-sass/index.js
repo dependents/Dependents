@@ -5,7 +5,7 @@
  * @return {String[]}
  */
 module.exports = function(fileContent) {
-  if (!fileContent) { throw new Error('content not given'); }
+  if (typeof fileContent === 'undefined') { throw new Error('content not given'); }
   if (typeof fileContent !== 'string') { throw new Error('content is not a string'); }
 
   var dependencies = [];
