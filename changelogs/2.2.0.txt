@@ -1,0 +1,4 @@
+Performance Optimizations
+---
+
+Under the hood, a few optimizations have been made for faster fetching of the dependents
