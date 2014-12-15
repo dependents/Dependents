@@ -21,6 +21,7 @@ dependents.for({
   filename: './a.js',
   directory: './',
   config: 'path/to/my/config.js' // optional
+  exclude: ['my_vendor_files'],  // optional
   success: function (dependents) {
     console.log(dependents);
   }
@@ -52,7 +53,8 @@ Optional:
 
 * `files`: list of files to search through (if you want to control the files processed). Useful in clustering.
 * `config`: path to your requirejs config. Used to look up path aliases.
-
+* `exclude`: a list of files and/or folders to exclude from the search.
+ * The following 3rd party modules are excluded from the following folders by default: `node_modules`, `bower_components`, `vendor`
 
 Or via a shell command:
 
@@ -64,15 +66,3 @@ dependents filename directory [config]
 
 The shell command will utilize multi-core processing if the `directory`
 contains more than 500 modules. That number was deduced from testing.
-
-### Additional notes
-
-3rd party modules are excluded from the following folders by default:
-
-* node_modules
-* bower_components
-* vendor
-
-The reason is that no 3rd party dependency will depend on any of
-your application code modules, so they should not be processed.
-This results in a performance boost.

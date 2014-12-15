@@ -1,0 +1,18 @@
+New Feature: Exclude files and folders
+----
+
+Now you can exclude specific files and folder names from the search for dependents.
+
+If you're using the plugin in a large codebase, this can shave off a few seconds.
+
+
+To use this, add the following setting to Preferences -> Package Settings -> Dependents -> Settings - User
+
+"exclude": [
+  "jquery.js",
+  "someOtherFile.js",
+  "plugins/"
+]
+
+Note: The trailing slash is not required for indicating that a name is of a directory.
+

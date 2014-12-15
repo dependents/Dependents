@@ -64,6 +64,10 @@ If it doesn't work, please file an issue.
 * `root`: the location where your JS files reside.
 * `config`: (Optional) the path to your requirejs configuration file
 * `sass_root`: (Optional) the path to your Sass files
+* `exclude`: (Optional) a list of paths and/or folder names to exclude from the search for dependents
+ * Omitting folders that contain 3rd party libraries can drastically speed up the search for a large codebase.
+ * The following folders are excluded by default: `node_modules`, `bower_components`, `vendor`
+ * Note: Subdirectories are not supported; you can't supply `some/sub/folder` as an exclusion
 
 These can be specified by going to
 
@@ -75,7 +79,8 @@ and adding:
 {
   "root": "public/assets/js",
   "config": "public/assets/js/config.js",  # Optional
-  "sass_root": "public/assets/sass"        # Optional
+  "sass_root": "public/assets/sass",       # Optional
+  "exclude": ['jquery.js', 'require.js']   # Optional
 }
 ```
 

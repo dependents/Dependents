@@ -33,6 +33,10 @@ def track(event, data = {}):
   except MixpanelException as e:
     print('Tracking not possible: ', e);
 
+  # Prevents an exception from underlying request libs of mixpanel
+  except:
+    print('Probably no internet: ', str(sys.exc_info()[0]));
+
   finally:
     print(event, data)
 
