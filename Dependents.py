@@ -4,17 +4,21 @@ import threading
 import os
 import re
 import time
+
 from .thread_progress import ThreadProgress
 from .node_dependents import get_dependents
 from .command_setup import command_setup
 from .show_error import show_error
+
+from .track import track as t
+from .printer import p
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):
         setup_was_successful = command_setup(self)
 
         if not setup_was_successful:
-            print('Dependents: Setup was not successful')
+            show_error('Dependents: Setup was not successful. Please file an issue', True)
             return
 
         self.view.modifier = modifier
@@ -37,11 +41,9 @@ class DependentsThread(threading.Thread):
         """
         Finds the dependents of the current file and jumps to that file or shows a panel of dependent files
         """
-        start_time = time.time()
+        total_start_time = time.time()
 
         self.dependents = self.trim_paths(self.get_dependents())
-
-        print('Dependents: Elapsed - %s seconds' % (time.time() - start_time))
 
         if self.view.modifier and self.view.modifier == 'OPEN_ALL':
             for dep in self.dependents:
@@ -52,6 +54,15 @@ class DependentsThread(threading.Thread):
             self.open_file(self.dependents[0])
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
+
+        tracking_data = {
+            "etime": time.time() - total_start_time,
+        }
+
+        if self.view.modifier:
+            tracking_data["modifier"] = self.view.modifier
+
+        t('Run_Dependents', tracking_data)
 
     def get_dependents(self):
         """
@@ -71,9 +82,15 @@ class DependentsThread(threading.Thread):
         if self.window.config:
             args['config'] = self.view.path + self.window.config
 
-        dependents = get_dependents(args)
-        print('Dependents found:')
-        print('\n'.join(dependents))
+        fetch_time = time.time()
+
+        # Newline in output is an empty dependent
+        # TODO: Something to fix from node-dependents?
+        dependents = [d for d in get_dependents(args) if d]
+
+        p('Fetch time:', time.time() - fetch_time)
+        p(len(dependents), 'dependents found:\n' + '\n'.join(dependents))
+
         return dependents
 
     def trim_paths(self, files):
@@ -87,7 +104,7 @@ class DependentsThread(threading.Thread):
                 try:
                     filename = f[f.index(self.window.root) + len(self.window.root):]
                 except:
-                    print('Didn\'t have root in path: ', f)
+                    p('Didn\'t have root in path', f)
                     filename = f
 
                 trimmed.append(filename)
@@ -95,7 +112,7 @@ class DependentsThread(threading.Thread):
 
     def show_quick_panel(self):
         if not self.dependents:
-            show_error('\nCan\'t find any file that depends on this file')
+            show_error('Can\'t find any file that depends on this file')
             return
 
         self.window.show_quick_panel(self.dependents, self.on_done)
@@ -118,6 +135,9 @@ class DependentsThread(threading.Thread):
         filename = path + dependent
 
         if not os.path.isfile(filename):
+            t('Missing file', {
+                "filename": filename
+            })
             cant_find_file()
             return
 

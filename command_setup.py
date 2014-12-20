@@ -3,6 +3,7 @@ from .project_settings import get_project_settings
 from .normalize_trailing_slash import normalize_trailing_slash
 from .is_sass_file import is_sass_file
 from .show_error import show_error
+from .track import track as t
 
 def command_setup(self):
     """
@@ -12,6 +13,17 @@ def command_setup(self):
 
     returns True for success, False for an error
     """
+
+    try:
+        return _init(self)
+    except:
+        t("Setup Exception", {
+            "message": str(sys.exc_info()[0])
+        })
+
+    return False
+
+def _init(self):
     success = True
 
     self.view           = self.window.active_view()

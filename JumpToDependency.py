@@ -3,6 +3,7 @@ import subprocess
 import threading
 import os
 import re
+import time
 from fnmatch import fnmatch
 
 # TODO: Support Python 2 style imports
@@ -11,12 +12,15 @@ from .node_dependents import alias_lookup
 from .show_error import show_error
 from .command_setup import command_setup
 
+from .track import track as t
+from .printer import p
+
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
         setup_was_successful = command_setup(self)
 
         if not setup_was_successful:
-            print('JumpToDependency: Setup was not successful')
+            show_error('JumpToDependency: Setup was not successful. Please file an issue', True)
             return
 
         thread = JumpToDependencyThread(self.window, self.view)
@@ -37,22 +41,42 @@ class JumpToDependencyThread(threading.Thread):
         """
         Jumps to the file identified by the string under the cursor
         """
-        region = self.get_selected_module_region()
+
+        total_start_time = time.time()
+
+        try:
+            region = self.get_selected_module_region()
+        except:
+            t('Misc_Error', {
+               "type": "list index out of range"
+            })
+            show_error('You need to click within the quoted path')
+            return
 
         module = self.view.substr(region).strip()
         module = re.sub('[\'",]', '', module)
-        print('JumpToDependency: Extracted modulepath: ', module)
+
+        p('Extracted Path', { "path": module })
+
         module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
         if self.window.config:
+            lookup_start_time = time.time()
+
             result = self.aliasLookup(module, self.window.config)
-            print('JumpToDependency: Lookup Result:', result)
+
+            p('Alias Lookup', {
+                "module_result": module + ' => ' + result,
+                "config": self.window.config,
+                "etime": time.time() - lookup_start_time
+            })
+
             if result:
                 module = result
 
         extension = os.path.splitext(module)[1]
-        print('JumpToDependency: Extension found: ', extension)
+        p('Extension found', extension)
 
         # Use the current file's extension if not supplied
         if not extension:
@@ -61,10 +85,10 @@ class JumpToDependencyThread(threading.Thread):
         else:
             module_with_extension = module
 
-        print('JumpToDependency: Before abs path resolution: ', module_with_extension)
+        p('Before abs path resolution', module_with_extension)
 
         file_to_open = self.get_absolute_path(module_with_extension)
-        print('JumpToDependency: After abs path resolution: ', file_to_open)
+        p('After abs path resolution', file_to_open)
 
         # Our guess at the extension failed
         if not os.path.isfile(file_to_open):
@@ -77,15 +101,22 @@ class JumpToDependencyThread(threading.Thread):
 
         self.open_file(file_to_open)
 
+        t('Run_JumpToDependency', {
+            "etime": time.time() - total_start_time
+        })
+
     def open_file(self, filename):
         """
         Opens the passed file or shows an error error message
         if the file cannot be found
         """
 
-        print('JumpToDependency: Opening: ', filename)
+        p('Opening:', filename)
 
         if not os.path.isfile(filename):
+            t('Missing file', {
+                "filename": filename
+            })
             cant_find_file()
             return
 
@@ -123,11 +154,17 @@ class JumpToDependencyThread(threading.Thread):
         return None
 
     def handleRelativePaths(self, module):
+        resolved = module
+
         if (module.find('..') == 0 or module.find('.') == 0):
             fileDir = os.path.dirname(self.view.filename)
-            module = os.path.normpath(os.path.join(fileDir, module))
+            resolved = os.path.normpath(os.path.join(fileDir, module))
 
-        return module
+            p('Relative Path Resolved', {
+                "module_resolved": module + ' => ' + resolved
+            })
+
+        return resolved
 
     def get_absolute_path(self, module):
         """
