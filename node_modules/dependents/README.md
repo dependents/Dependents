@@ -11,58 +11,62 @@
 
 ### Usage
 
-JS Example:
+##### JS Example:
 
 ```javascript
 var dependents = require('dependents');
 
 // Find all modules that require (depend on) ./a.js
-dependents.for({
+dependents({
   filename: './a.js',
   directory: './',
   config: 'path/to/my/config.js' // optional
   exclude: ['my_vendor_files'],  // optional
-  success: function (dependents) {
+  success: function (err, dependents) {
     console.log(dependents);
   }
 });
 ```
 
-SASS Example:
+##### SASS Example:
 
 ```javascript
 var dependents = require('dependents');
 
 // Find all sass files that import (depend on) _myPartial.scss
-dependents.for({
+dependents({
   filename: '_myPartial.scss',
   directory: 'path/to/my/sass',
-  success: function (dependents) {
+  success: function (err, dependents) {
     console.log(dependents);
   }
 });
 ```
 
-Required options:
+### Options
+
+##### Required options:
 
 * `filename`: the module that you want to get the dependents of
 * `directory`: the directory to search for dependents (also known as the "root")
 * `success`: a function that should accept a list of filenames representing modules that depend on the module in `filename`
 
-Optional:
+##### Optional:
 
 * `files`: list of files to search through (if you want to control the files processed). Useful in clustering.
 * `config`: path to your requirejs config. Used to look up path aliases.
 * `exclude`: a list of files and/or folders to exclude from the search.
  * The following 3rd party modules are excluded from the following folders by default: `node_modules`, `bower_components`, `vendor`
 
-Or via a shell command:
+### CLI
 
 Requires `npm install -g dependents`
 
 ```bash
-dependents filename directory [config]
+dependents --directory=path/to/my/js [options] filename
 ```
+
+* You can see all the cli options via `dependents --help`
 
 The shell command will utilize multi-core processing if the `directory`
 contains more than 500 modules. That number was deduced from testing.
