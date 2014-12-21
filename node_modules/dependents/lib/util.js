@@ -75,9 +75,8 @@ module.exports.processExcludes = function(excludes, directory) {
   if (!excludes) { return results; }
 
   excludes.forEach(function(exclude) {
-    var resolved = path.resolve(directory, exclude);
-
     try {
+      var resolved = path.resolve(directory, exclude);
       var stats = fs.lstatSync(resolved);
 
       if (stats.isDirectory()) {
@@ -86,6 +85,7 @@ module.exports.processExcludes = function(excludes, directory) {
         exclude = path.basename(exclude, path.extname(exclude));
         files.push(exclude);
       }
+    // Ignore files that don't exist
     } catch (e) {}
   });
 

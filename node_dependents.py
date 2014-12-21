@@ -10,32 +10,40 @@ from .printer import p
 
 def get_dependents(options):
     try:
-        args = [options['filename'], options['root']]
+        args = ['--directory=' + options['root']]
     except:
         t('Misc_Error', {
-            "type": "filename or root not supplied"
+            "type": "root not supplied"
         })
 
     try:
         if options['config']:
-            args.append(options['config'])
+            args.append('--config=' + options['config'])
     except:
         p('Dependents: Config not supplied')
 
     try:
         if options['exclude']:
-            args.append(options['exclude'])
+            args.append('--exclude=' + options['exclude'])
     except:
         p('Dependents: exclude list not supplied')
+
+    args.append(options['filename'])
 
     return exec_script('dependents.js', args).split('\n')
 
 
 def alias_lookup(options):
-    try:
-        args = [options['config'], options['module']]
-    except:
-        args['', options['module']]
+    args = []
+
+    # if 'config' not in options:
+    #     show_error('An error occurred. Please file an issue with the following:\n\n' + str(e), True)
+
+    if 'config' in options:
+        args.append('--config=' + options['config'])
+
+    if 'module' in options:
+        args.append(options['module'])
 
     return exec_script('dependencyLookup.js', args).strip()
 
