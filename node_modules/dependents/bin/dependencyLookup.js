@@ -2,8 +2,8 @@
 
 'use strict';
 
-var lookup = require('module-lookup-amd'),
-    config = process.argv[2],
-    path = process.argv[3];
+var lookup = require('module-lookup-amd');
+var config = process.argv[2];
+var path = process.argv[3];
 
 console.log(lookup(config, path));

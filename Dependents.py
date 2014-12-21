@@ -82,6 +82,9 @@ class DependentsThread(threading.Thread):
         if self.window.config:
             args['config'] = self.view.path + self.window.config
 
+        if self.window.exclude:
+            args['exclude'] = ','.join(self.window.exclude)
+
         fetch_time = time.time()
 
         # Newline in output is an empty dependent

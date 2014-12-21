@@ -22,7 +22,14 @@ def get_dependents(options):
     except:
         p('Dependents: Config not supplied')
 
+    try:
+        if options['exclude']:
+            args.append(options['exclude'])
+    except:
+        p('Dependents: exclude list not supplied')
+
     return exec_script('dependents.js', args).split('\n')
+
 
 def alias_lookup(options):
     try:

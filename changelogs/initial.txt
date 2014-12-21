@@ -1,10 +1,6 @@
 Configuring settings
 ---
 
-* You need to supply the "root" of your JS codebase (i.e., the location where your JS files reside).
-* You may also supply the location of your RequireJS configuration for AMD codebases
-* You may also supply the location of your SASS files.
-
 These can be specified by going to
 
 `Preferences -> Package Settings -> Dependents -> Settings - User`
@@ -14,10 +10,16 @@ and adding:
 {
   "root": "path/to/my/js",
   "config": "path/to/my/requirejs/config.js",   # Optional
-  "sass_root": "path/to/my/sass"                # Optional
+  "sass_root": "path/to/my/sass",               # Optional,
+  "exclude": ['jquery.js', 'plugins/']          # Optional
 }
 
-* Please modify the "root", "config", and "sass_root" values according to your codebase.
+* "root": the location where your JS files reside
+* "config": the location of your RequireJS configuration for AMD codebases
+* "sass_root": the location of your SASS files
+* "exclude": a list of files and folder names to exclude in the search for dependents
+
+* Please modify the values according to your codebase.
 
 ---
 Default key bindings
@@ -37,3 +39,5 @@ Menu Options
 You can find other features of this plugin from:
 
 File -> Dependents
+
+Or by right clicking on a file and going to the Dependents menu

@@ -42,6 +42,7 @@ def _init(self):
     self.window.root = settings['root']
     self.window.sass_root = settings['sass_root']
     self.window.config = settings['config']
+    self.window.exclude = settings['exclude']
 
     if self.window.root == './' or self.window.root == '.':
         self.window.root = base_path
