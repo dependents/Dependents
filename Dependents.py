@@ -5,13 +5,14 @@ import os
 import re
 import time
 
-from .thread_progress import ThreadProgress
-from .node_dependents import get_dependents
-from .command_setup import command_setup
-from .show_error import show_error
+from .lib.thread_progress import ThreadProgress
+from .lib.command_setup import command_setup
+from .lib.show_error import show_error
 
-from .track import track as t
-from .printer import p
+from .lib.track import track as t
+from .lib.printer import p
+
+from .node_dependents import get_dependents
 
 class DependentsCommand(sublime_plugin.WindowCommand):
     def run(self, modifier=''):

@@ -3,10 +3,10 @@ from os.path import dirname, realpath, join
 import sublime, sublime_plugin
 
 from .node_bridge import node_bridge
-from .show_error import show_error
+from .lib.show_error import show_error
 
-from .track import track as t
-from .printer import p
+from .lib.track import track as t
+from .lib.printer import p
 
 def get_dependents(options):
     try:
@@ -35,9 +35,6 @@ def get_dependents(options):
 
 def alias_lookup(options):
     args = []
-
-    # if 'config' not in options:
-    #     show_error('An error occurred. Please file an issue with the following:\n\n' + str(e), True)
 
     if 'config' in options:
         args.append('--config=' + options['config'])

@@ -1,4 +1,4 @@
-from .Mixpanel import *
+from ..vendor.Mixpanel import *
 import inspect
 import os
 import sys
