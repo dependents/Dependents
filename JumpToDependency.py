@@ -8,7 +8,7 @@ from fnmatch import fnmatch
 
 # TODO: Support Python 2 style imports
 from .lib.thread_progress import ThreadProgress
-from .lib.show_error import show_error
+from .lib.show_error import *
 from .lib.command_setup import command_setup
 
 from .lib.track import track as t
@@ -219,6 +219,3 @@ def flatten(nested):
     Flattens a 2d array into a 1d array
     """
     return [item for sublist in nested for item in sublist]
-
-def cant_find_file():
-    show_error('Can\'t find that file')

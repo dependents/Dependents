@@ -9,3 +9,6 @@ def show_error(string, should_show_more_info=False):
       message += '\n\n%s' % more_info
 
     sublime.error_message(message)
+
+def cant_find_file():
+  show_error('Can\'t find that file')

@@ -7,7 +7,7 @@ import time
 
 from .lib.thread_progress import ThreadProgress
 from .lib.command_setup import command_setup
-from .lib.show_error import show_error
+from .lib.show_error import *
 
 from .lib.track import track as t
 from .lib.printer import p
@@ -149,6 +149,3 @@ class DependentsThread(threading.Thread):
             self.window.open_file(filename)
 
         sublime.set_timeout(open, 10)
-
-def cant_find_file():
-    show_error('Can\'t find that file')
