@@ -7,13 +7,14 @@ import time
 from fnmatch import fnmatch
 
 # TODO: Support Python 2 style imports
-from .thread_progress import ThreadProgress
-from .node_dependents import alias_lookup
-from .show_error import show_error
-from .command_setup import command_setup
+from .lib.thread_progress import ThreadProgress
+from .lib.show_error import show_error
+from .lib.command_setup import command_setup
 
-from .track import track as t
-from .printer import p
+from .lib.track import track as t
+from .lib.printer import p
+
+from .node_dependents import alias_lookup
 
 class JumpToDependencyCommand(sublime_plugin.WindowCommand):
     def run(self):
