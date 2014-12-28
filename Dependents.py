@@ -8,7 +8,7 @@ import time
 from .lib.thread_progress import ThreadProgress
 from .lib.command_setup import command_setup
 from .lib.show_error import *
-
+from .lib.trim_paths_of_root import trim_paths_of_root
 from .lib.track import track as t
 from .lib.printer import p
 
@@ -44,7 +44,7 @@ class DependentsThread(threading.Thread):
         """
         total_start_time = time.time()
 
-        self.dependents = self.trim_paths(self.get_dependents())
+        self.dependents = trim_paths_of_root(self.get_dependents(), self.window.root)
 
         if self.view.modifier and self.view.modifier == 'OPEN_ALL':
             for dep in self.dependents:
@@ -97,23 +97,6 @@ class DependentsThread(threading.Thread):
 
         return dependents
 
-    def trim_paths(self, files):
-        """
-        Returns the filepaths for each file minus the root and its trailing slash
-        """
-        trimmed = []
-
-        for f in files:
-            if f:
-                try:
-                    filename = f[f.index(self.window.root) + len(self.window.root):]
-                except:
-                    p('Didn\'t have root in path', f)
-                    filename = f
-
-                trimmed.append(filename)
-        return trimmed
-
     def show_quick_panel(self):
         if not self.dependents:
             show_error('Can\'t find any file that depends on this file')
@@ -128,6 +111,8 @@ class DependentsThread(threading.Thread):
         dependent = self.dependents[picked]
         self.open_file(dependent)
 
+    # TODO: Consider conslidating with JumpToDependency's implementation
+    # and moving this to a lib module
     def open_file(self, dependent):
         path = self.view.path
 
