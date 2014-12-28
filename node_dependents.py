@@ -36,9 +36,6 @@ def get_dependents(options):
 def alias_lookup(options):
     args = []
 
-    # if 'config' not in options:
-    #     show_error('An error occurred. Please file an issue with the following:\n\n' + str(e), True)
-
     if 'config' in options:
         args.append('--config=' + options['config'])
 
