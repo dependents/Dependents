@@ -1,7 +1,8 @@
 Configuring settings
 ---
 
-These can be specified by going to
+These can be specified by creating a .deprc file with the following
+settings in the root directory of your codebase or by going to
 
 `Preferences -> Package Settings -> Dependents -> Settings - User`
 
@@ -11,13 +12,15 @@ and adding:
   "root": "path/to/my/js",
   "config": "path/to/my/requirejs/config.js",   # Optional
   "sass_root": "path/to/my/sass",               # Optional,
-  "exclude": ['jquery.js', 'plugins/']          # Optional
+  "exclude": ['jquery.js', 'plugins/'],         # Optional
+  "build_config": "path/to/my/requirejs/build.json" # Optional
 }
 
 * "root": the location where your JS files reside
 * "config": the location of your RequireJS configuration for AMD codebases
 * "sass_root": the location of your SASS files
 * "exclude": a list of files and folder names to exclude in the search for dependents
+* "build_config": the location of your requirejs build configuration file
 
 * Please modify the values according to your codebase.
 
