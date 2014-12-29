@@ -57,11 +57,11 @@ class DependentsThread(threading.Thread):
             sublime.set_timeout(self.show_quick_panel, 10)
 
         tracking_data = {
-            "etime": time.time() - total_start_time,
+            'etime': time.time() - total_start_time,
         }
 
         if self.view.modifier:
-            tracking_data["modifier"] = self.view.modifier
+            tracking_data['modifier'] = self.view.modifier
 
         t('Run_Dependents', tracking_data)
 
@@ -125,7 +125,7 @@ class DependentsThread(threading.Thread):
 
         if not os.path.isfile(filename):
             t('Missing file', {
-                "filename": filename
+                'filename': filename
             })
             cant_find_file()
             return
