@@ -8,6 +8,7 @@ import time
 from .lib.thread_progress import ThreadProgress
 from .lib.command_setup import command_setup
 from .lib.show_error import *
+from .lib.trim_paths_of_root import trim_paths_of_root
 from .lib.track import track as t
 from .lib.printer import p
 
@@ -21,10 +22,12 @@ class FindDriverCommand(sublime_plugin.WindowCommand):
             show_error('Dependents: Setup was not successful. Please file an issue', True)
             return
 
+        self.view.modifier = modifier
+
         thread = FindDriverThread(self.window, self.view)
         thread.start();
 
-        ThreadProgress(thread, 'Finding drivers', '')
+        ThreadProgress(thread, 'Finding relevant entry points', '')
 
 class FindDriverThread(threading.Thread):
     def __init__(self, window, view):
