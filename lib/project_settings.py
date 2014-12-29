@@ -10,6 +10,7 @@ def get_settings_from_source(source):
     settings['sass_root'] = normalize_trailing_slash(source.get('sass_root', ''))
     settings['config'] = source.get('config', '')
     settings['exclude'] = source.get('exclude', '')
+    settings['build_config'] = source.get('build_config', '')
 
     if not settings['exclude']:
         settings['exclude'] = []

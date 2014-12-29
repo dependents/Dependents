@@ -4,7 +4,9 @@
         "children": [
             { "command": "jump_to_dependency", "caption": "Jump to dependency" },
             { "command": "dependents", "caption": "Find dependents" },
-            { "command": "dependents", "caption": "Open all dependents", "args": { "modifier": "OPEN_ALL"}}
+            { "command": "dependents", "caption": "Open all dependents", "args": { "modifier": "OPEN_ALL"}},
+            { "command": "find_driver", "caption": "Find relevant app entry points" },
+            { "command": "find_driver", "caption": "Open all relevant app entry points", "args": { "modifier": "OPEN_ALL"}}
         ]
     }
 ]

@@ -13,5 +13,13 @@
   // The location of your sass files
   //
   // Example: 'public/assets/sass'
-  "sass_root": ""
+  "sass_root": "",
+
+  // File and folder names to exclude from dependents search
+  "exclude": [],
+
+  // The path to your RequireJS Build Configuration
+  //
+  // Example: 'public/assets/js/build.json'
+  "build_config": ""
 }

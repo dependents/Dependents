@@ -4,15 +4,15 @@ import threading
 import os
 import re
 import time
-from fnmatch import fnmatch
 
 # TODO: Support Python 2 style imports
 from .lib.thread_progress import ThreadProgress
-from .lib.show_error import show_error
+from .lib.show_error import *
 from .lib.command_setup import command_setup
-
+from .lib.find_file_like import find_file_like
 from .lib.track import track as t
 from .lib.printer import p
+from .lib.flatten import flatten
 
 from .node_dependents import alias_lookup
 
@@ -194,31 +194,3 @@ class JumpToDependencyThread(threading.Thread):
             'config': self.view.path + config,
             'module': module
         })
-
-def find_file_like(path):
-    """
-    Traverses the parent directory of path looking for the
-    first file with a close enough name to the given path.
-
-    This is helpful if you don't know the extension of a file
-    (assuming the filename has a unique extension)
-    """
-    try:
-        dirname = os.path.dirname(path)
-        filename = [f for f in os.listdir(dirname) if fnmatch(f, os.path.basename(path) + '.*')]
-        if len(filename):
-            return filename[0]
-    except:
-        return ''
-
-    return ''
-
-
-def flatten(nested):
-    """
-    Flattens a 2d array into a 1d array
-    """
-    return [item for sublist in nested for item in sublist]
-
-def cant_find_file():
-    show_error('Can\'t find that file')

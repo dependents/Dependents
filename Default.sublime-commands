@@ -11,5 +11,14 @@
         "caption": "Dependents: Open all dependents",
         "command": "dependents",
         "args": { "modifier": "OPEN_ALL"}
+    },
+    {
+        "caption": "Dependents: Find relevant app entry points",
+        "command": "find_driver",
+    },
+    {
+        "caption": "Dependents: Open all relevant app entry points",
+        "command": "find_driver",
+        "args": { "modifier": "OPEN_ALL"}
     }
 ]

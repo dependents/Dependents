@@ -1,0 +1,14 @@
+New Feature: Find relevant app entry points
+----
+
+To use:
+
+* Right click on a file to open the context menu
+* Click on Dependents -> Find relevant app entry points
+
+Optional:
+
+If you're using RequireJS, you can optionally set the "build_config"
+setting to supply the location to your Rjs build configuration file.
+  * This should have a "modules" section that lists your entry points/bundles
+
