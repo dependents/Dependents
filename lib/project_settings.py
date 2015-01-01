@@ -1,7 +1,8 @@
-import sublime, sublime_plugin
+import sublime
 import os
 import json
 from .normalize_trailing_slash import normalize_trailing_slash
+from .find_base_path import find_base_path
 
 def get_settings_from_source(source):
     settings = {}
@@ -11,18 +12,23 @@ def get_settings_from_source(source):
     settings['config'] = source.get('config', '')
     settings['exclude'] = source.get('exclude', '')
     settings['build_config'] = source.get('build_config', '')
+    settings['node_path'] = source.get('node_path', '')
+
+    # Users shouldn't need to worry about the leading colon
+    if settings['node_path'] and not settings['node_path'].startswith(':'):
+        settings['node_path'] = ':' + settings['node_path']
 
     if not settings['exclude']:
         settings['exclude'] = []
 
     return settings
 
-def get_project_settings(base_path):
+def get_project_settings():
     """
     Returns a settings map that contains project settings
     either from a .deprc file or the plugin's sublime-settings file
     """
-    project_settings_path = base_path + '.deprc'
+    project_settings_path = find_base_path() + '.deprc'
 
     settings = {}
 
@@ -34,7 +40,6 @@ def get_project_settings(base_path):
 
         settings = get_settings_from_source(data)
     else:
-        sublime_settings = sublime.load_settings('Dependents.sublime-settings')
-        settings = get_settings_from_source(sublime_settings)
+        settings = get_settings_from_source(sublime.load_settings('Dependents.sublime-settings'))
 
     return settings

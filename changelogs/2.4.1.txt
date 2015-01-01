@@ -1,0 +1,14 @@
+Bug Fix: Specify node location
+---
+
+Previously, it was assumed that on an OSX machine, the default
+node path was /usr/local/bin. This is not always the case
+and users were experiencing error messages where
+the node version could not be found.
+
+If you need to, you can now specify your particular
+node path by setting the "node_path" setting:
+
+"node_path": "/path/to/a/folder"
+
+This will default to /usr/local/bin if not supplied.

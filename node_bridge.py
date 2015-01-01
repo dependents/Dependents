@@ -7,6 +7,7 @@ from os.path import dirname, realpath, join
 
 from .lib.track import track as t
 from .lib.show_error import show_error
+from .lib.project_settings import get_project_settings
 
 """
 Modified version of node_bridge from sublime-fixmyjs
@@ -20,7 +21,15 @@ def node_bridge(bin, args=[], data=''):
     if IS_OSX:
         # GUI apps in OS X doesn't contain .bashrc/.zshrc set paths
         env = os.environ.copy()
-        env['PATH'] += ':/usr/local/bin'
+
+        node_path = get_project_settings().get('node_path')
+
+        if not node_path:
+            node_path = ':/usr/local/bin'
+
+        print('Node path: ', node_path)
+
+        env['PATH'] += node_path
 
     try:
         cmd = ['node', bin] + args

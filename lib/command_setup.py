@@ -1,9 +1,9 @@
 import sys
 from .project_settings import get_project_settings
-from .normalize_trailing_slash import normalize_trailing_slash
 from .is_sass_file import is_sass_file
 from .show_error import show_error
 from .track import track as t
+from .find_base_path import find_base_path
 
 def command_setup(self):
     """
@@ -29,15 +29,9 @@ def _init(self):
     self.view           = self.window.active_view()
     self.view.filename  = self.view.file_name()
 
-    # Find the most relevant open folder
-    for folder in self.window.folders():
-        if folder in self.view.filename:
-            base_path = normalize_trailing_slash(folder)
-            break
+    self.view.path = find_base_path()
 
-    self.view.path = base_path
-
-    settings = get_project_settings(base_path)
+    settings = get_project_settings()
 
     self.window.root = settings['root']
     self.window.sass_root = settings['sass_root']
