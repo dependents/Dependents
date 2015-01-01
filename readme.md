@@ -10,7 +10,6 @@
  - [Open all dependents](#open-all-dependents)
  - [Find relevant app entry points](#find-relevant-app-entry-points)
 4. [Configuring Settings](#configuring-settings)
- - [Per-project Settings](#per-project-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
 5. [Troubleshooting](#troubleshooting)
@@ -79,12 +78,12 @@ If it doesn't work, please file an issue.
 * `build_config`: (Optional) path to your RequireJS Build configuration json file
  * This should have a "modules" section that lists your bundles (entry points)
  * Supplying this yields a significant performance speedup when finding relevant app entry points
+* `node_path`: (Optional) path to your node installation. Defaults to `/usr/local/bin` on OSX
 
-These can be specified by going to
+You can define these settings on a per-project basis by creating
+a `.deprc` file in the main directory of your codebase.
 
-`Preferences -> Package Settings -> Dependents -> Settings - User`
-
-and adding:
+Configure the settings above within the `.deprc` file by adding:
 
 ```js
 {
@@ -92,16 +91,16 @@ and adding:
   "config": "public/assets/js/config.js",  # Optional
   "sass_root": "public/assets/sass",       # Optional
   "exclude": ['jquery.js', 'require.js'],  # Optional
-  "build_config": "public/assets/js/build.json" # Optional
+  "build_config": "public/assets/js/build.json", # Optional
+  "node_path": "/my/node/install/folder"   # Optional
 }
 ```
 
-##### Per-project settings
+Alternatively, you can specify the settings by going to
 
-You can also define these settings on a per-project by creating a `.deprc` file in the main directory of your codebase.
-Set the settings above within the `.deprc` file.
+`Preferences -> Package Settings -> Dependents -> Settings - User`
 
-This is a great way of using this plugin across many projects with different directory structures.
+and adding your configuration.
 
 #### Default key bindings
 
