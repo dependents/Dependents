@@ -24,6 +24,38 @@
                         "args": { "modifier": "OPEN_ALL"}
                     },
                     {
+                        "caption": "Find relevant app entry points",
+                        "command": "find_driver"
+                    },
+                    {
+                        "caption": "Open all relevent entry points",
+                        "command": "find_driver",
+                        "args": { "modifier": "OPEN_ALL"}
+                    },
+                    {
+                        "caption": "Find callers of that function",
+                        "command": "find_callers"
+                    },
+                    {
+                        "caption": "Open all callers of that function",
+                        "command": "find_callers",
+                        "args": { "modifier": "OPEN_ALL"}
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "id": "preferences",
+        "children":
+        [
+            {
+                "caption": "Package Settings",
+                "mnemonic": "P",
+                "id": "package-settings",
+                "children":
+                [
+                    {
                         "caption": "Copy all dependents to clipboard",
                         "command": "dependents",
                         "args": { "modifier": "COPY_ALL"}
