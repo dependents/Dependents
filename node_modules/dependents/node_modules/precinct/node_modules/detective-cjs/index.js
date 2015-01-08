@@ -1,5 +1,6 @@
 var Walker = require('node-source-walk');
 var types = require('ast-module-types');
+var escodegen = require('escodegen');
 
 /**
  * [exports description]
