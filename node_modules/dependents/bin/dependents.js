@@ -163,6 +163,16 @@ function filesCb(files) {
 }
 
 if (cluster.isMaster) {
+  if (!directory) {
+    console.error('A directory was not supplied');
+    process.exit(1);
+  }
+
+  if (!filename) {
+    console.error('A filename was not supplied');
+    process.exit(1);
+  }
+
   if (exclude && typeof exclude === 'string') {
     exclude = exclude.split(',');
   }

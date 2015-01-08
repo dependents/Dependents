@@ -1,1 +1,1 @@
-var a = require('./b');
+var b = require('./b');

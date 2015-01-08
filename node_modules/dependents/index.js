@@ -1,10 +1,8 @@
-var precinct = require('precinct');
 var path = require('path');
 var fs = require('fs');
-var lookup = require('module-lookup-amd');
 var getJSFiles = require('get-all-js-files');
 var ConfigFile = require('requirejs-config-file').ConfigFile;
-var resolveDepPath = require('resolve-dependency-path');
+var computeDependents = require('./lib/computeDependents');
 
 var util = require('./lib/util');
 
@@ -64,7 +62,7 @@ function processFiles(options) {
   };
 
   var _processDeps = function(file, content) {
-    processDependents({
+    computeDependents({
       filename: file,
       content: content,
       directory: directory,
@@ -104,48 +102,4 @@ function processFiles(options) {
 
     done();
   }
-}
-
-/**
- * Registers all dependencies of the given file as "used"
- *
- * @param {Object} options
- * @param {String} options.filename
- * @param {String} options.fileContent
- * @param {String} options.directory
- * @param {Object} options.dependents - hash of dependents found so far
- */
-function processDependents(options) {
-  var filename = options.filename;
-  var fileContent = options.content;
-  var directory = options.directory;
-  var dependents = options.dependents;
-  var dependencies;
-
-  if (!fileContent) { return; }
-
-  try {
-    if (util.isSassFile(filename)) {
-      dependencies = precinct(fileContent, 'sass');
-    } else {
-      dependencies = precinct(fileContent);
-    }
-  } catch (e) {
-    return;
-  }
-
-  dependents[filename] = dependents[filename] || {};
-
-  // Register the current file as dependent on each dependency
-  dependencies.forEach(function(dep) {
-    // Look up the dep to see if it's aliased in the config
-    if (options.config && !util.isSassFile(filename)) {
-      dep = lookup(options.config, dep);
-    }
-
-    dep = resolveDepPath(dep, filename, directory);
-
-    dependents[dep] = dependents[dep] || {};
-    dependents[dep][filename] = 1;
-  });
 }
