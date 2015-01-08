@@ -40,7 +40,7 @@ def _init(self):
     self.window.build_config = settings['build_config']
 
     if self.window.root == './' or self.window.root == '.':
-        self.window.root = base_path
+        self.window.root = self.view.path
 
     # All subsequent actions will be about the sass_root so just
     # switch the root to reduce the redundant checking if we should
