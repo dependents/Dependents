@@ -53,16 +53,18 @@ function fromSource(source) {
   isCommonJS = hasExports || (hasRequire && !hasDefine);
   isES6 = hasES6Import || hasES6Export;
 
+  // ES6 features are so unique that we can
+  // eagerly exit. (#19)
+  if (isES6) {
+    return 'es6';
+  }
+
   if (isAMD) {
     return 'amd';
   }
 
   if (isCommonJS) {
     return 'commonjs';
-  }
-
-  if (isES6) {
-    return 'es6';
   }
 
   return 'none';
