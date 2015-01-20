@@ -2,7 +2,7 @@ from .printer import p
 
 def trim_paths_of_root(files, root):
     """
-    Returns the filepaths for each file minus the root and its trailing slash
+    Returns the filepaths for each file minus the root
     """
     trimmed = []
 
