@@ -1,58 +1,28 @@
 var getModuleType = require('../'),
     path = require('path'),
     fs = require('fs'),
-    assert = require('assert');
+    assert = require('assert'),
+    amdAST = require('./amdAST');
 
 describe('module-definition', function() {
   var expected = {
-    './cjsExport.js': 'commonjs',
-    './cjsRequire.js': 'commonjs',
-    './amdNoDep.js': 'amd',
-    './iife.js': 'none',
-    './amdFactory.js': 'amd',
-    './amdDeps.js': 'amd',
-    './cjsTopRequire.js': 'commonjs',
-    './empty.js': 'none',
-    './amdREM.js': 'amd',
-    './es6Import.js': 'es6',
-    './es6Export.js': 'es6'
-  },
-
-  amdAST = {
-    type: 'Program',
-    body: [{
-      type: 'ExpressionStatement',
-      expression: {
-        type: 'CallExpression',
-        callee: {
-            type: 'Identifier',
-            name: 'define'
-        },
-        arguments: [
-          {
-            type: 'ArrayExpression',
-            elements: []
-          },
-          {
-            type: 'FunctionExpression',
-            id: null,
-            params: [],
-            defaults: [],
-            body: {
-              type: 'BlockStatement',
-              body: []
-            },
-            rest: null,
-            generator: false,
-            expression: false
-        }]
-      }
-    }]
+    cjsExport: 'commonjs',
+    cjsRequire: 'commonjs',
+    amdNoDep: 'amd',
+    iife: 'none',
+    amdFactory: 'amd',
+    amdDeps: 'amd',
+    cjsTopRequire: 'commonjs',
+    empty: 'none',
+    amdREM: 'amd',
+    es6Import: 'es6',
+    es6Export: 'es6',
+    es6WithRequire: 'es6'
   };
 
   function testMethodAgainstExpected(method) {
     Object.keys(expected).forEach(function(file) {
-      method(file, expected[file]);
+      method('./' + file + '.js', expected[file]);
     });
   }
 

@@ -41,6 +41,12 @@ describe('module-types', function() {
       assert(!check('var foo = 2; \nrequire([], function(){});', types.isTopLevelRequire));
       assert(check('require(["a"], function(a){});', types.isTopLevelRequire));
     });
+
+    it('does not fail on es6', function() {
+      assert.doesNotThrow(function() {
+        check('import require from "mylib"; \nrequire();', types.isTopLevelRequire, true);
+      });
+    });
   });
 
   describe('isExports', function() {
