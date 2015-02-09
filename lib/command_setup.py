@@ -3,7 +3,9 @@ from .project_settings import get_project_settings
 from .is_sass_file import is_sass_file
 from .show_error import show_error
 from .track import track as t
+from .printer import p
 from .find_base_path import find_base_path
+from .is_relative_path import is_relative_path
 
 def command_setup(self):
     """
@@ -26,8 +28,8 @@ def command_setup(self):
 def _init(self):
     success = True
 
-    self.view           = self.window.active_view()
-    self.view.filename  = self.view.file_name()
+    self.view = self.window.active_view()
+    self.view.filename = self.view.file_name()
 
     self.view.path = find_base_path()
 
@@ -39,8 +41,13 @@ def _init(self):
     self.window.exclude = settings['exclude']
     self.window.build_config = settings['build_config']
 
-    if self.window.root == './' or self.window.root == '.':
+    if is_relative_path(self.window.root):
         self.window.root = self.view.path
+        p('Relative root set set to', self.window.root)
+
+    if is_relative_path(self.window.sass_root):
+        self.window.sass_root = self.view.path
+        p('Relative sass_root set to', self.window.sass_root)
 
     # All subsequent actions will be about the sass_root so just
     # switch the root to reduce the redundant checking if we should

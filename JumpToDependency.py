@@ -13,6 +13,8 @@ from .lib.find_file_like import find_file_like
 from .lib.track import track as t
 from .lib.printer import p
 from .lib.flatten import flatten
+from .lib.is_sass_file import is_sass_file
+from .lib.get_underscored_sass_path import get_underscored_sass_path
 
 from .node_dependents import alias_lookup
 
@@ -91,8 +93,15 @@ class JumpToDependencyThread(threading.Thread):
         file_to_open = self.get_absolute_path(module_with_extension)
         p('After abs path resolution', file_to_open)
 
+        file_exists = os.path.isfile(file_to_open)
+
+        if not file_exists and is_sass_file(file_to_open):
+            p('Now looking for underscored sass path')
+            file_to_open = get_underscored_sass_path(file_to_open)
+            p('Underscored file:', file_to_open)
+
         # Our guess at the extension failed
-        if not os.path.isfile(file_to_open):
+        elif not file_exists:
             # Is relative to the module
             actual_file = find_file_like(module)
             if actual_file:
@@ -178,11 +187,11 @@ class JumpToDependencyThread(threading.Thread):
 
         # If it's an absolute path already, it was probably a module that uses plugin loader
         if self.view.path not in module:
-            filename += self.view.path
+            filename = os.path.normpath(os.path.join(filename, self.view.path))
             if root not in module and self.view.path != root:
-                filename += root
+                filename = os.path.normpath(os.path.join(filename, root))
 
-        filename += module
+        filename = os.path.normpath(os.path.join(filename, module))
         return filename
 
     def aliasLookup(self, module, config):
@@ -191,6 +200,6 @@ class JumpToDependencyThread(threading.Thread):
         """
 
         return alias_lookup({
-            'config': self.view.path + config,
+            'config': os.path.normpath(os.path.join(self.view.path + config)),
             'module': module
         })

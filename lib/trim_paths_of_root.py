@@ -11,7 +11,7 @@ def trim_paths_of_root(files, root):
             try:
                 filename = f[f.index(root) + len(root):]
             except:
-                p('Didn\'t have root in path', f)
+                p('Didn\'t have root', root, ' in path', f)
                 filename = f
 
             trimmed.append(filename)

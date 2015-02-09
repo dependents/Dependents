@@ -73,7 +73,7 @@ class DependentsThread(threading.Thread):
 
         # In case the user supplied the base path as the root
         if self.window.root != self.view.path:
-            root += self.window.root
+            root = os.path.normpath(os.path.join(root, self.window.root))
 
         args = {
             'filename': self.view.filename,
@@ -81,7 +81,7 @@ class DependentsThread(threading.Thread):
         }
 
         if self.window.config:
-            args['config'] = self.view.path + self.window.config
+            args['config'] = os.path.normpath(os.path.join(self.view.path, self.window.config))
 
         if self.window.exclude:
             args['exclude'] = ','.join(self.window.exclude)
@@ -118,10 +118,10 @@ class DependentsThread(threading.Thread):
 
         # In case the root is the directory root (path)
         if path != self.window.root:
-            path += self.window.root
+            path = os.path.normpath(os.path.join(path, self.window.root))
 
         # We removed the root originally when populating the dependents list
-        filename = path + dependent
+        filename = os.path.normpath(os.path.join(path, dependent))
 
         if not os.path.isfile(filename):
             t('Missing file', {
