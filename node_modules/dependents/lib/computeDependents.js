@@ -2,6 +2,8 @@ var precinct = require('precinct');
 var util = require('./util');
 var lookup = require('module-lookup-amd');
 var resolveDepPath = require('resolve-dependency-path');
+var fs = require('fs');
+var path = require('path');
 
 /**
  * Registers all dependencies of the given file as "used"
@@ -32,10 +34,35 @@ module.exports = function(options) {
 
     dep = resolveDepPath(dep, filename, directory);
 
+    // In sass, @import "foo" can resolve to foo.scss or _foo.scss
+    if (util.isSassFile(dep) && !fs.existsSync(dep) && path.basename(dep)[0] !== '_') {
+      var underscored = getUnderscoredSassPath(dep);
+
+      if (! fs.existsSync(underscored)) {
+        return;
+      }
+
+      dep = underscored;
+    }
+
     dependents[dep] = dependents[dep] || {};
     // The current file is a dependent of the dependency
     dependents[dep][filename] = 1;
   });
+};
+
+/**
+ * Returns an underscored version of the given dependency's file path
+ *
+ * @param  {String} dep
+ * @return {String}
+ */
+function getUnderscoredSassPath(dep) {
+  var ext = path.extname(dep);
+  var filename = path.basename(dep, ext);
+  var dirname = path.dirname(dep);
+
+  return dirname + '/_' + filename + ext;
 }
 
 /**

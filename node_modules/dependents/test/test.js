@@ -176,7 +176,20 @@ describe('dependents', function() {
         filename: __dirname + '/example/sass/_foo.scss',
         directory: __dirname + '/example/sass',
         success: function(err, dependents) {
-          assert(dependents.length === 2);
+          assert(dependents.length === 3);
+          done();
+        }
+      });
+    });
+
+    it('handles sass partials with underscored files', function(done) {
+      dependents({
+        filename: __dirname + '/example/sass/_foo.scss',
+        directory: __dirname + '/example/sass',
+        success: function(err, dependents) {
+          assert(dependents.some(function(dep) {
+            return dep.indexOf('stylesUnderscore.scss') !== -1;
+          }));
           done();
         }
       });

@@ -1,0 +1,5 @@
+Bug fix: Now handling Sass imports that rely on underscore partial names
+
+Sass supports imports "foo" being mapped to _foo.scss on the filesystem.
+
+Dependents now handles this case.

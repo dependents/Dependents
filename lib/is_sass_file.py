@@ -6,7 +6,5 @@ def is_sass_file(filename):
     """
 
     extension = os.path.splitext(filename)[1]
-    print('ext: ', extension)
-    print('filename: ', filename)
 
     return extension == '.scss' or extension == '.sass'

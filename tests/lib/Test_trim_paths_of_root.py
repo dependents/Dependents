@@ -1,5 +1,6 @@
 from lib.trim_paths_of_root import trim_paths_of_root
 
+# TODO: Test that it handles when the path does not have foo in it
 class Test(object):
     def test_trim_paths_of_root(self):
         files = [

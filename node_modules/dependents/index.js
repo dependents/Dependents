@@ -39,6 +39,11 @@ module.exports = function dependents(options) {
   processFiles(options);
 };
 
+/**
+ * @private
+ * @param  {String} configPath
+ * @return {Object}
+ */
 module.exports._readConfig = function(configPath) {
   return new ConfigFile(configPath).read();
 };
@@ -69,7 +74,7 @@ function processFiles(options) {
       dependents: options.dependents,
       config: options.config
     });
-  }
+  };
 
   var _excludes = util.DEFAULT_EXCLUDE_DIR.concat(options.exclusions);
   var exclusions = util.processExcludes(_excludes, directory);
