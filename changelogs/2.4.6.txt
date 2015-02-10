@@ -1,0 +1,7 @@
+Sass Bug Fix: Jump to Dependency now respect Sass' lookup path
+
+The plugin will now look for a file with the path that you clicked on in the given order:
+
+1. Checks the directory of the current file
+2. Checks the directory of the current file for an underscored partial
+3. Checks the sass_root

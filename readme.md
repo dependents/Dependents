@@ -20,7 +20,7 @@
 
 * Find dependents: files that immediately depend/require/import the current JavaScript/Sass file.
 * Open all dependents
-* Jump to a dependency: quickly jump to a file that the current file imports/requires
+* Jump to a dependency: quickly jump to a file that the current file @imports or requires
 * Find relevant app entry points that depend on the current file
 * Open all relevant app entry points for the current file
 
