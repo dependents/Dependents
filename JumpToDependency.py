@@ -73,32 +73,59 @@ class JumpToDependencyThread(threading.Thread):
         else:
             module_with_extension = module
 
-        p('Before abs path resolution', module_with_extension)
+        if is_sass_file(module_with_extension):
+            file_to_open = self.resolve_sass_import(module_with_extension)
+        else:
+            p('Before abs path resolution', module_with_extension)
 
-        file_to_open = self.get_absolute_path(module_with_extension)
-        p('After abs path resolution', file_to_open)
+            # Assume the file is about the root
+            file_to_open = self.get_absolute_path(module_with_extension)
+            p('After abs path resolution', file_to_open)
 
-        file_exists = os.path.isfile(file_to_open)
-
-        if not file_exists and is_sass_file(file_to_open):
-            p('Now looking for underscored sass path')
-            file_to_open = get_underscored_sass_path(file_to_open)
-            p('Underscored file:', file_to_open)
-
-        # Our guess at the extension failed
-        elif not file_exists:
-            # Is relative to the module
-            actual_file = find_file_like(module)
-            if actual_file:
-                extension = os.path.splitext(actual_file)[1]
-                module_with_extension = module + extension
-                file_to_open = self.get_absolute_path(module_with_extension)
+            file_exists = os.path.isfile(file_to_open)
+            if not file_exists:
+                p('Now searching for a file like', module)
+                # Is relative to the module
+                actual_file = find_file_like(module)
+                if actual_file:
+                    extension = os.path.splitext(actual_file)[1]
+                    module_with_extension = module + extension
+                    file_to_open = self.get_absolute_path(module_with_extension)
 
         self.open_file(file_to_open)
 
         t('Run_JumpToDependency', {
             'etime': time.time() - total_start_time
         })
+
+    def resolve_sass_import(self, filename):
+        """
+        Looks for the appropriate filename to open
+        by checking the same folder as the current file and
+        if the file isn't found, looking for an underscored
+        partial with the expected name.
+        """
+        # Check current file's directory
+        file_dir = os.path.dirname(self.view.filename)
+
+        p('Looking within', file_dir, 'for', filename)
+
+        file_to_open = os.path.normpath(os.path.join(file_dir, filename))
+        if os.path.isfile(file_to_open):
+            return file_to_open
+
+        # Check underscored file within current file's directory
+        file_to_open = get_underscored_sass_path(file_to_open)
+        p('Now looking for underscored sass path', file_to_open)
+        if os.path.isfile(file_to_open):
+            return file_to_open
+
+        # If all else fails, check the root
+        file_to_open = self.get_absolute_path(filename)
+        if os.path.isfile(file_to_open):
+            return file_to_open
+
+        return None
 
     def open_file(self, filename):
         """
@@ -108,7 +135,7 @@ class JumpToDependencyThread(threading.Thread):
 
         p('Opening:', filename)
 
-        if not os.path.isfile(filename):
+        if not filename or not os.path.isfile(filename):
             t('Missing file', {
                 'filename': filename
             })
