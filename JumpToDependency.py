@@ -64,7 +64,7 @@ class JumpToDependencyThread(threading.Thread):
         module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
-        if self.window.config:
+        if self.window.config and not is_sass_file(self.view.filename):
             lookup_start_time = time.time()
 
             result = self.aliasLookup(module, self.window.config)
