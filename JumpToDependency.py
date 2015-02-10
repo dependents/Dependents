@@ -47,33 +47,18 @@ class JumpToDependencyThread(threading.Thread):
 
         total_start_time = time.time()
 
-        try:
-            region = self.get_selected_module_region()
-        except:
-            t('Misc_Error', {
-               "type": "list index out of range"
-            })
-            show_error('You need to click within the quoted path')
+        module = self.get_selected_module_name()
+
+        if not module:
             return
 
-        module = self.view.substr(region).strip()
-        module = re.sub('[\'",]', '', module)
-
-        p('Extracted Path', { "path": module })
+        p('Extracted Path', { 'path': module })
 
         module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
         if self.window.config and not is_sass_file(self.view.filename):
-            lookup_start_time = time.time()
-
             result = self.aliasLookup(module, self.window.config)
-
-            p('Alias Lookup', {
-                "module_result": module + ' => ' + result,
-                "config": self.window.config,
-                "etime": time.time() - lookup_start_time
-            })
 
             if result:
                 module = result
@@ -112,7 +97,7 @@ class JumpToDependencyThread(threading.Thread):
         self.open_file(file_to_open)
 
         t('Run_JumpToDependency', {
-            "etime": time.time() - total_start_time
+            'etime': time.time() - total_start_time
         })
 
     def open_file(self, filename):
@@ -125,7 +110,7 @@ class JumpToDependencyThread(threading.Thread):
 
         if not os.path.isfile(filename):
             t('Missing file', {
-                "filename": filename
+                'filename': filename
             })
             cant_find_file()
             return
@@ -136,32 +121,58 @@ class JumpToDependencyThread(threading.Thread):
         sublime.set_timeout(open, 10)
 
     def get_selected_module_region(self):
+        """
+        Returns the sublime region corresponding to the selected module path
+        """
         selections = self.view.sel()
 
-        if selections:
-            region = selections[0]
+        if not selections:
+            return None
 
-            if region.a == region.b:
-                selected_region = self.view.word(region)
-                selected_line = self.view.line(region)
+        region = selections[0]
 
-                line = self.view.substr(selected_line)
-                pattern = '[\'"]{1}([^"\']*)[\'"]{1}'
-                strings_on_line = re.findall(pattern, line)
+        if region.a != region.b:
+            return None
 
-                if not len(strings_on_line):
-                    cant_find_file()
-                    return
+        selected_region = self.view.word(region)
+        selected_line = self.view.line(region)
 
-                # Get the locations of the strings within the buffer
-                regions = map(lambda string: self.view.find_all(string), strings_on_line)
-                regions = flatten(list(regions))
-                # Get the regions that intersect with the clicked region
-                region = list(filter(lambda r: r.contains(selected_region), regions))
-                region = region[0]
-                return region
+        line = self.view.substr(selected_line)
+        pattern = '[\'"]{1}([^"\']*)[\'"]{1}'
+        strings_on_line = re.findall(pattern, line)
 
-        return None
+        if not len(strings_on_line):
+            cant_find_file()
+            return
+
+        # Get the locations of the strings within the buffer
+        regions = map(lambda string: self.view.find_all(string), strings_on_line)
+        regions = flatten(list(regions))
+        # Get the regions that intersect with the clicked region
+        region = list(filter(lambda r: r.contains(selected_region), regions))
+
+        if not len(region):
+            return None
+
+        return region[0]
+
+    def get_selected_module_name(self):
+        """
+        Returns the name of the selected module
+        """
+        region = self.get_selected_module_region()
+
+        if not region:
+            t('Misc_Error', {
+               'type': 'list index out of range'
+            })
+            show_error('You need to click within the quoted path')
+            return
+
+        module = self.view.substr(region).strip()
+        module = re.sub('[\'",]', '', module)
+
+        return module
 
     def handleRelativePaths(self, module):
         resolved = module
@@ -171,7 +182,7 @@ class JumpToDependencyThread(threading.Thread):
             resolved = os.path.normpath(os.path.join(fileDir, module))
 
             p('Relative Path Resolved', {
-                "module_resolved": module + ' => ' + resolved
+                'module_resolved': module + ' => ' + resolved
             })
 
         return resolved
@@ -198,8 +209,17 @@ class JumpToDependencyThread(threading.Thread):
         """
         Looks up the (possibly aliased) filename via the supplied config
         """
+        lookup_start_time = time.time()
 
-        return alias_lookup({
-            'config': os.path.normpath(os.path.join(self.view.path + config)),
+        result =  alias_lookup({
+            'config': os.path.normpath(os.path.join(self.view.path, config)),
             'module': module
         })
+
+        p('Alias Lookup', {
+            "module_result": module + ' => ' + result,
+            "config": self.window.config,
+            "etime": time.time() - lookup_start_time
+        })
+
+        return result
