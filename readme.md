@@ -15,6 +15,7 @@
 5. [Troubleshooting](#troubleshooting)
 6. [Old Issues](#old-issues)
 7. [Reporting an Issue](#reporting-an-issue)
+8. [Contributing to Dependents](https://github.com/mrjoelkemp/sublime-dependents/blob/master/Contributing.md)
 
 ### Features:
 
