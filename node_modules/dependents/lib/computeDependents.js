@@ -32,17 +32,11 @@ module.exports = function(options) {
       dep = lookup(options.config, dep);
     }
 
-    dep = resolveDepPath(dep, filename, directory);
+    if (util.isSassFile(filename)) {
+      dep = resolveSassDepPath(dep, filename, directory);
 
-    // In sass, @import "foo" can resolve to foo.scss or _foo.scss
-    if (util.isSassFile(dep) && !fs.existsSync(dep) && path.basename(dep)[0] !== '_') {
-      var underscored = getUnderscoredSassPath(dep);
-
-      if (! fs.existsSync(underscored)) {
-        return;
-      }
-
-      dep = underscored;
+    } else {
+      dep = resolveDepPath(dep, filename, directory);
     }
 
     dependents[dep] = dependents[dep] || {};
@@ -50,6 +44,38 @@ module.exports = function(options) {
     dependents[dep][filename] = 1;
   });
 };
+
+/**
+ * Determines the resolved dependency path according to
+ * the Sass compiler's dependency lookup behavior
+ *
+ * @param  {String} dep
+ * @param  {String} filename
+ * @param  {String} directory
+ * @return {String}
+ */
+function resolveSassDepPath(dep, filename, directory) {
+  var fileDir = path.dirname(filename);
+  // Use the file's extension if necessary
+  var ext = path.extname(dep) ? '' : path.extname(filename);
+  var sassDep;
+
+  if (dep.indexOf('..') === 0 || dep.indexOf('.') === 0) {
+    sassDep = path.resolve(filename, dep) + ext;
+
+    if (fs.existsSync(sassDep)) { return sassDep; }
+  }
+
+  var underscored = path.resolve(fileDir, '_' + dep) + ext;
+
+  if (fs.existsSync(underscored)) { return underscored; }
+
+  var samedir = path.resolve(fileDir, dep) + ext;
+
+  if (fs.existsSync(samedir)) { return samedir; }
+
+  return path.resolve(directory, dep) + ext;
+}
 
 /**
  * Returns an underscored version of the given dependency's file path

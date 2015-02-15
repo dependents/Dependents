@@ -1,0 +1,4 @@
+Find Dependents Bug fix: Sass import resolution
+
+Find Dependents handles underscored partials and imports in the same directory.
+
