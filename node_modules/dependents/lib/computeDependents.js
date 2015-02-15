@@ -66,7 +66,13 @@ function resolveSassDepPath(dep, filename, directory) {
     if (fs.existsSync(sassDep)) { return sassDep; }
   }
 
-  var underscored = path.resolve(fileDir, '_' + dep) + ext;
+  // path.basename in case the dep is slashed: a/b/c should be a/b/_c.scss
+  var isSlashed = dep.indexOf('/') !== -1;
+  var _dep = isSlashed ?
+            path.dirname(dep) + '/_' + path.basename(dep) :
+            '_' + dep;
+
+  var underscored = path.resolve(fileDir, _dep) + ext;
 
   if (fs.existsSync(underscored)) { return underscored; }
 
