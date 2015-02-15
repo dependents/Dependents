@@ -219,5 +219,29 @@ describe('dependents', function() {
         }
       });
     });
+
+    it('handles non-underscored imports from subdirectories', function(done) {
+      dependents({
+        filename: __dirname + '/example/nestedsass/a/b/b2.scss',
+        directory: __dirname + '/example/nestedsass',
+        success: function(err, dependents) {
+          assert(!err);
+          assert(listHasFile(dependents, 'styles.scss'));
+          done();
+        }
+      });
+    });
+
+    it('handles underscored imports from subdirectories', function(done) {
+      dependents({
+        filename: __dirname + '/example/nestedsass/a/b/_b3.scss',
+        directory: __dirname + '/example/nestedsass',
+        success: function(err, dependents) {
+          assert(!err);
+          assert(listHasFile(dependents, 'styles.scss'));
+          done();
+        }
+      });
+    });
   });
 });
