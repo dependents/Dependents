@@ -16,8 +16,10 @@ Thanks for being interested in contributing.
 5. [Release Strategy](#release-strategy)
 6. [PR Guidelines](#pr-guidelines)
 7. [Non-code Contributions](#non-code-contributions)
+8. [Development workflow](#development-workflow)
 
 ### Motivation
+
 I created Dependents out of frustration. I noticed major inefficiencies in my workflow when trying to navigate and learn a large codebase.
 
 The goal for Dependents and its future features is to allow for fast and effective navigation about front-end codebases. This is achieved by letting you find and understand what you’re looking for with little to no downtime.
@@ -72,12 +74,12 @@ is Mixpanel for tracking errors and the frequency of command usage.
 The test suite resides in `tests` and is still being backfilled. Testing
 Sublime Text plugins is still the wild west, so it's a work in progress.
 
-Nose and Mock are used.
+[Nose](https://nose.readthedocs.org/en/latest/) and [Mock](https://docs.python.org/3/library/unittest.mock.html) are used.
 
 You can run the test suite by installing the `requirements-dev` using pip
 then running `nosetests` or `npm test`.
 
-Any PR contributions must have tests.
+**Any PR contributions must have tests.**
 
 ### The backend node tools
 
@@ -119,7 +121,7 @@ Package Control visits all plugins hourly and pulls new tags.
 Try to replicate the existing style, though I'd welcome changes to make
 the code more idiomatic to the Python language.
 
-A contribution must have tests.
+**A contribution must have tests.**
 
 ### Non-code contributions
 
@@ -133,4 +135,32 @@ you can contribute by doing any of the following:
 * Screencasts for getting started
 
 Any and all contributions are appreciated.
+
+### Development Workflow
+
+You will need [Nodejs](http://nodejs.org/download/) installed.
+
+When developing Dependents, I have a cloned copy of this repo in
+`/Users/YOUR_USER_NAME/Library/Application Support/Sublime Text 3/Packages/Dependents`.
+
+* I renamed the repo after cloning for clarity
+
+This means that you will only be able to run the development version
+while developing the plugin – as the production version is installed
+to that location as well.
+
+Any time I make a change to a file, I (unfortunately) have to re-save
+either Dependents.py or JumpToDependency.py (depending on which feature I'm
+modifying). Modifying a dependency of those files and saving does not
+reload the command files. Only the reload of the command files seems to
+make the changes take effect.
+
+* A file system watcher that resaves the command files on any file modification
+should resolve this pain.
+
+Once the command files are updated, you can test your live changes in an open
+instance of Sublime Text.
+
+* I'll typically keep one window open with the Dependents codebase
+and another window open with a test project.
 
