@@ -1,4 +1,4 @@
-from lib.show_error import show_error
+from ...lib.show_error import show_error
 import sublime
 from mock import MagicMock
 
