@@ -1,14 +1,15 @@
 ### Dependents
 
-> Sublime Text 3 plugin for navigating Front-End (JS/Sass) codebases
+> Sublime Text 3 plugin for navigating front-end (JS/Sass) codebases
 
-1. [Features](#features)
+Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
+
 2. [Installation](#installation)
 3. [Usage](#usage)
  - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Jump to dependency](#jump-to-a-dependency)
- - [Open all dependents](#open-all-dependents)
  - [Find relevant app entry points](#find-relevant-app-entry-points)
+ - [View dependency tree as JSON](#view-dependency-tree-as-json)
 4. [Configuring Settings](#configuring-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
@@ -16,16 +17,6 @@
 6. [Old Issues](#old-issues)
 7. [Reporting an Issue](#reporting-an-issue)
 8. [Contributing to Dependents](https://github.com/mrjoelkemp/sublime-dependents/blob/master/Contributing.md)
-
-### Features:
-
-* Find dependents: files that immediately depend/require/import the current JavaScript/Sass file.
-* Open all dependents
-* Jump to a dependency: quickly jump to a file that the current file @imports or requires
-* Find relevant app entry points that depend on the current file
-* Open all relevant app entry points for the current file
-
-Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 ### Installation
 
@@ -44,6 +35,8 @@ If it doesn't work, please file an issue.
 
 #### Find the dependents of the current module
 
+Dependents are files that immediately depend/require/import the current file.
+
 `CMD + Option + Up arrow`, to trigger finding the dependents.
 
 * If dependents are found, you'll see them in a dropdown.
@@ -51,21 +44,38 @@ If it doesn't work, please file an issue.
  * If there's only one dependent, you'll be taken to that dependent file directly.
 * If no dependents are found a popup will be shown
 
+You can also open all of the dependents at once via:
+
+1. Within a file, right click to open up a menu
+2. Click on `Dependents -> Open all dependents` to open all dependent files in the editor
+
 #### Jump to a dependency
+
+Quickly jump to a file that the current file @imports or requires
 
 1. Within a file, place your cursor over the dependency path you want to go to
 2. Press `CMD + Option + Right arrow` or `CMD + Option + Click` to jump to that file
  - If a dependency is aliased, you'll need to supply the path to your requirejs configuration
 
-#### Open all dependents
-
-1. Within a file, right click to open up a menu
-2. Click on `Dependents -> Open all dependents` to open all dependent files in the editor
-
 #### Find relevant app entry points
+
+Find relevant application entry points that depend on the current file
+somewhere within their dependency tree
 
 1. Within a file, right click to open the context menu
 2. Click on `Dependents -> Find relevant app entry points`
+
+You can also open all relevant app entry points at once via:
+
+1. Within a file, right click to open the context menu
+2. Click on `Dependents -> Open all relevant app entry points`
+
+#### View dependency tree as JSON
+
+View a snapshot of the current file's dependency tree as a JSON file
+
+1. Within a file, right click to open the context menu
+2. Click on `Dependents -> View this file's dependency tree`
 
 ### Configuring settings
 
