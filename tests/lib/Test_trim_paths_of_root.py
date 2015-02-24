@@ -1,4 +1,4 @@
-from lib.trim_paths_of_root import trim_paths_of_root
+from ...lib.trim_paths_of_root import trim_paths_of_root
 
 # TODO: Test that it handles when the path does not have foo in it
 class Test(object):

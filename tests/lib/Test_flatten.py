@@ -1,4 +1,4 @@
-from lib.flatten import flatten
+from ...lib.flatten import flatten
 
 class TestFlatten(object):
   def test_flatten(self):

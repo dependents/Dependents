@@ -1,4 +1,4 @@
-from lib.get_underscored_sass_path import get_underscored_sass_path
+from ...lib.get_underscored_sass_path import get_underscored_sass_path
 
 class Test(object):
   def test_get_underscored_sass_path(self):
