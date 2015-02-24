@@ -3,6 +3,7 @@ import os
 import json
 from .normalize_trailing_slash import normalize_trailing_slash
 from .find_base_path import find_base_path
+from .printer import p
 
 def get_settings_from_source(source):
     settings = {}
@@ -33,7 +34,7 @@ def get_project_settings():
     settings = {}
 
     if os.path.exists(project_settings_path):
-        print('Using found .deprc')
+        p('Using found .deprc')
         json_data = open(project_settings_path)
         data = json.load(json_data)
         json_data.close()

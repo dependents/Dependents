@@ -1,0 +1,5 @@
+New Feature: View dependency tree as a JSON file
+
+Right click on a file and select:
+
+Dependents -> View this file's dependency tree

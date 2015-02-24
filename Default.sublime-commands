@@ -20,5 +20,9 @@
         "caption": "Dependents: Open all relevant app entry points",
         "command": "find_driver",
         "args": { "modifier": "OPEN_ALL"}
+    },
+    {
+        "caption": "Dependents: View this file's dependency tree",
+        "command": "tree"
     }
 ]
