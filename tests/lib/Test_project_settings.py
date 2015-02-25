@@ -1,4 +1,4 @@
-from ...lib.project_settings import get_settings_from_source, get_project_settings
+from lib.project_settings import get_settings_from_source, get_project_settings
 
 class Test(object):
     def test_get_settings_from_source(self):

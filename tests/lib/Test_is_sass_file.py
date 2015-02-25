@@ -1,4 +1,4 @@
-from ...lib.is_sass_file import is_sass_file
+from lib.is_sass_file import is_sass_file
 
 class Test(object):
   def test_is_sass_file(self):
