@@ -1,5 +1,5 @@
 var getDriverScripts = require('get-driver-scripts');
-var getTreeAsList = require('dependency-tree');
+var getTreeAsList = require('dependency-tree').toList;
 var path = require('path');
 var q = require('q');
 

@@ -6,7 +6,7 @@
   "dependencies": {
     "dependency-tree": "~3.0.0",
     "dependents": "~2.0.8",
-    "taxicab": "~2.0.2"
+    "taxicab": "~2.0.3"
   },
   "private": true,
   "devDependencies": {},
