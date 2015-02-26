@@ -1,4 +1,4 @@
-from lib.is_relative_path import is_relative_path
+from Dependents.lib.is_relative_path import is_relative_path
 
 class Test(object):
   def test_is_relative_path(self):
