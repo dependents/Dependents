@@ -9,7 +9,7 @@ Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
  - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Jump to dependency](#jump-to-a-dependency)
  - [Find relevant app entry points](#find-relevant-app-entry-points)
- - [View dependency tree as JSON](#view-dependency-tree-as-json)
+ - [View dependency tree](#view-dependency-tree)
 4. [Configuring Settings](#configuring-settings)
  - [Default Key Bindings](#default-key-bindings)
  - [Custom Key Bindings](#custom-key-bindings)
@@ -25,9 +25,9 @@ Install `Dependents` via Package Control.
 Don't see it? Try reinstalling Package Control. Altenatively, add the repository and install it:
 
 1. Package Control -> Add Repository
-2. Enter `https://github.com/mrjoelkemp/sublime-dependents`
+2. Enter `https://github.com/mrjoelkemp/Dependents`
 3. Package Control -> Install Package
-4. Choose sublime-dependents
+4. Choose Dependents
 
 If it doesn't work, please file an issue.
 
@@ -70,9 +70,9 @@ You can also open all relevant app entry points at once via:
 1. Within a file, right click to open the context menu
 2. Click on `Dependents -> Open all relevant app entry points`
 
-#### View dependency tree as JSON
+#### View dependency tree
 
-View a snapshot of the current file's dependency tree as a JSON file
+View a snapshot of the current file's dependency tree (as a JSON file)
 
 1. Within a file, right click to open the context menu
 2. Click on `Dependents -> View this file's dependency tree`
@@ -121,6 +121,11 @@ OSX:
 
 * Find Dependents: `CMD + Option + Up arrow`
 * Jump to dependency: `CMD + Option + Right arrow` or `CMD + Option + Click`
+
+Windows and Linux:
+
+* Find Dependents: `Control + Alt + Up arrow`
+* Jump to dependency: `Control + Alt + Right arrow` or `Control + Option + Click`
 
 You can also trigger the commands via:
 

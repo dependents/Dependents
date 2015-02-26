@@ -2,18 +2,15 @@ Configuring settings
 ---
 
 These can be specified by creating a .deprc file with the following
-settings in the root directory of your codebase or by going to
-
-`Preferences -> Package Settings -> Dependents -> Settings - User`
-
-and adding:
+settings in the root directory of your codebase:
 
 {
-  "root": "path/to/my/js",
-  "config": "path/to/my/requirejs/config.js",   # Optional
-  "sass_root": "path/to/my/sass",               # Optional,
-  "exclude": ['jquery.js', 'plugins/'],         # Optional
-  "build_config": "path/to/my/requirejs/build.json" # Optional
+  "root": "public/assets/js",
+  "config": "public/assets/js/config.js",  # Optional
+  "sass_root": "public/assets/sass",       # Optional
+  "exclude": ['jquery.js', 'require.js'],  # Optional
+  "build_config": "public/assets/js/build.json", # Optional
+  "node_path": "/my/node/install/folder"   # Optional
 }
 
 * "root": the location where your JS files reside
@@ -21,8 +18,9 @@ and adding:
 * "sass_root": the location of your SASS files
 * "exclude": a list of files and folder names to exclude in the search for dependents
 * "build_config": the location of your requirejs build configuration file
+* "node_path": the location of your node executable
 
-* Please modify the values according to your codebase.
+**Please modify the values according to your codebase.**
 
 ---
 Default key bindings
@@ -34,6 +32,11 @@ OSX:
 
 * Find Dependents: `CMD + Option + Up arrow`
 * Jump to dependency: `CMD + Option + Right arrow` or `CMD + Option + Click`
+
+Windows and Linux:
+
+* Find Dependents: `Control + Alt + Up arrow`
+* Jump to dependency: `Control + Alt + Right arrow` or `Control + Option + Click`
 
 ---
 Menu Options

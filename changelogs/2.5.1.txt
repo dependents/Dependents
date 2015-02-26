@@ -1,0 +1,2 @@
+Bug Fix: On install, imports no longer error. Affected Windows users heavily.
+New Feature: Windows and Linux key bindings
