@@ -1,0 +1,1 @@
+Bug fix: node_path on Windows is no longer prefixed with a colon
