@@ -50,3 +50,10 @@ docs/_build/
 
 # PyBuilder
 target/
+
+# Node specific exclusions
+.bin
+grunt/
+grunt-cli/
+grunt-contrib-watch/
+grunt-touch/

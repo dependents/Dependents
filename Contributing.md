@@ -143,24 +143,24 @@ You will need [Nodejs](http://nodejs.org/download/) installed.
 When developing Dependents, I have a cloned copy of this repo in
 `/Users/YOUR_USER_NAME/Library/Application Support/Sublime Text 3/Packages/Dependents`.
 
-* I renamed the repo after cloning for clarity
-
 This means that you will only be able to run the development version
 while developing the plugin – as the production version is installed
 to that location as well.
 
-Any time I make a change to a file, I (unfortunately) have to re-save
-either Dependents.py or JumpToDependency.py (depending on which feature I'm
-modifying). Modifying a dependency of those files and saving does not
-reload the command files. Only the reload of the command files seems to
-make the changes take effect.
+Run `npm install` in the root directory to pull down the dependencies.
 
-* A file system watcher that resaves the command files on any file modification
-should resolve this pain.
+* Since the node tools are already committed via node_modules, you're really only pulling down
+the development dependencies (which are gitignored to avoid bloating the package).
+
+Run `grunt` in the root of the repo to start the watcher.
+
+* Any time you change a file, the command files are reloaded. Otherwise, you won't see new code being used;
+it's a sublime text thing.
 
 Once the command files are updated, you can test your live changes in an open
 instance of Sublime Text.
 
 * I'll typically keep one window open with the Dependents codebase
 and another window open with a test project.
+* Keep the console open `CMD + `` or `View -> Show Console` to see print statements and debug information.
 
