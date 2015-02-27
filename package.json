@@ -9,7 +9,12 @@
     "taxicab": "~2.0.3"
   },
   "private": true,
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.5",
+    "grunt-cli": "~0.1.13",
+    "grunt-contrib-watch": "~0.6.1",
+    "grunt-touch": "~0.1.0"
+  },
   "scripts": {
     "test": "nosetests"
   },
