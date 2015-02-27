@@ -1,6 +1,8 @@
 import sublime
 import os
 import json
+import platform
+
 from .normalize_trailing_slash import normalize_trailing_slash
 from .find_base_path import find_base_path
 from .printer import p
@@ -15,8 +17,8 @@ def get_settings_from_source(source):
     settings['build_config'] = source.get('build_config', '')
     settings['node_path'] = source.get('node_path', '')
 
-    # Users shouldn't need to worry about the leading colon
-    if settings['node_path'] and not settings['node_path'].startswith(':'):
+    # Users shouldn't need to worry about the leading colon (if necessary #124)
+    if settings['node_path'] and not settings['node_path'].startswith(':') and platform.system() != 'Windows':
         settings['node_path'] = ':' + settings['node_path']
 
     if not settings['exclude']:
