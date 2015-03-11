@@ -1,0 +1,4 @@
+  {
+    "root": "tests",
+    "sass_root": "scss/" 
+  }

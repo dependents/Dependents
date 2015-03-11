@@ -1,0 +1,10 @@
+#content {
+  @include color-set($content-bg-color);
+  padding: 0 3em;
+}
+
+@media (min-width: 768px) {
+  #content {
+    flex: 2; 
+  }
+}

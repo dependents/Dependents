@@ -2,8 +2,16 @@
   {
     "button": "button1",
     "count": 1,
-    "modifiers": ["control", "alt"],
+    "modifiers": ["ctrl", "alt"],
     "press_command": "drag_select",
     "command": "jump_to_dependency"
+  },
+  {
+    "button": "button1",
+    "count": 1,
+    "modifiers": ["ctrl", "shift"],
+    "press_command": "drag_select",
+    "command": "dependents"
   }
+
 ]

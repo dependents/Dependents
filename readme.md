@@ -4,15 +4,17 @@
 
 Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
-2. [Installation](#installation)
+1. [Installation](#installation)
+2. [Configuring Settings](#configuring-settings)
 3. [Usage](#usage)
- - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Jump to dependency](#jump-to-a-dependency)
+ - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Find relevant app entry points](#find-relevant-app-entry-points)
  - [View dependency tree](#view-dependency-tree)
-4. [Configuring Settings](#configuring-settings)
- - [Default Key Bindings](#default-key-bindings)
- - [Custom Key Bindings](#custom-key-bindings)
+4. [Bindings](#bindings)
+ - [Key Bindings](#key-bindings)
+ - [Mouse Bindings](#mouse-bindings)
+ - [Customizing Bindings](#customizing-bindings)
 5. [Troubleshooting](#troubleshooting)
 6. [Old Issues](#old-issues)
 7. [Reporting an Issue](#reporting-an-issue)
@@ -22,7 +24,7 @@ Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 Install `Dependents` via Package Control.
 
-Don't see it? Try reinstalling Package Control. Altenatively, add the repository and install it:
+Don't see it? Try reinstalling Package Control. Alternatively, add the repository and install it:
 
 1. Package Control -> Add Repository
 2. Enter `https://github.com/mrjoelkemp/Dependents`
@@ -31,31 +33,75 @@ Don't see it? Try reinstalling Package Control. Altenatively, add the repository
 
 If it doesn't work, please file an issue.
 
+If you want contribute or use the latest commits simply git clone the repository `https://github.com/mrjoelkemp/Dependents` to your Packages directory with a directory name of `Dependents`. From sublime choose `Preferences>Browse Packages`  to easily determine the path to the Packages directory for your install.  Be sure to remove the package via package control first if you had already done so to avoid package control updating the package.
+
+### Configuring settings
+
+There a two ways in which to invoke the package settings.  
+
+One is globally via entires in a user settings file `Preferences>Package Settings>Dependents>Settings-User`.  You can open the `Settings-Default` file and copy and paste the contents as a starter template.   Do not edit the default file as that will be overwritten with updates.
+
+Alternatively you can define settings on a per-project basis by creating
+a `.deprc` file in the root of the sublime project/folder.  The paths you will specify are then **relative** to the sublime project/folder root. This is the preferred way if you are working on more than one project using sublime (aren't we all!)
+
+* `root`: (required) the ultimate/root path at which to limit dependent searching.  When using `.deprc` would be `""` if same as root of sublime project/folder.
+* `config`: (Optional) the path to your requirejs configuration file
+* `sass_root`: (Optional) the path to your Sass files
+* `exclude`: (Optional) a list of paths and/or folder names to exclude from the search for dependents
+ * Omitting folders that contain 3rd party libraries can drastically speed up the search for a large codebase.
+ * The following folders are excluded by default: `node_modules`, `bower_components`, `vendor`
+ * Note: Subdirectories are not supported; you can't supply `some/sub/folder` as an exclusion
+* `build_config`: (Optional) path to your RequireJS Build configuration json file
+ * This should have a "modules" section that lists your bundles (entry points)
+ * Supplying this yields a significant performance speedup when finding relevant app entry points
+* `node_path`: (Optional) path to your node installation. Defaults to `/usr/local/bin` on OSX
+
+example:
+```
+{
+  "root": "public/assets/js",
+  "config": "public/assets/js/config.js",  # Optional
+  "sass_root": "public/assets/sass",       # Optional
+  "exclude": ['jquery.js', 'require.js'],  # Optional
+  "build_config": "public/assets/js/build.json", # Optional
+  "node_path": "/my/node/install/folder"   # Optional
+}
+```
+
+
 ### Usage
+
+There are four ways to trigger the package's commands
+
+* From Main Menu `File -> Dependents`
+* From Context `Right click -> Dependents`
+* Via keyboard [see the key bindings](#key-bindings)
+* Via mouse click [see the mouse bindings](#mouse-bindings)
+
+#### Jump to a dependency
+
+Quickly jump to a file that the current file @imports (sass) or requires (js)
+
+1. Within a file, place your cursor over the dependency path you want to go to
+2. Then trigger the `Jump to dependency` command in one of the four ways noted above.
+ 
+*For javascript* if a dependency is aliased, you'll need to supply the path to your requirejs configuration
 
 #### Find the dependents of the current module
 
 Dependents are files that immediately depend/require/import the current file.
 
-`CMD + Option + Up arrow`, to trigger finding the dependents.
+Trigger the `Find dependents` command in one of the four ways noted above.
 
 * If dependents are found, you'll see them in a dropdown.
  * You can select any of the items in the panel to jump to that file
  * If there's only one dependent, you'll be taken to that dependent file directly.
 * If no dependents are found a popup will be shown
 
-You can also open all of the dependents at once via:
+You can also open all of the dependents at once:
 
 1. Within a file, right click to open up a menu
 2. Click on `Dependents -> Open all dependents` to open all dependent files in the editor
-
-#### Jump to a dependency
-
-Quickly jump to a file that the current file @imports or requires
-
-1. Within a file, place your cursor over the dependency path you want to go to
-2. Press `CMD + Option + Right arrow` or `CMD + Option + Click` to jump to that file
- - If a dependency is aliased, you'll need to supply the path to your requirejs configuration
 
 #### Find relevant app entry points
 
@@ -77,64 +123,50 @@ View a snapshot of the current file's dependency tree (as a JSON file)
 1. Within a file, right click to open the context menu
 2. Click on `Dependents -> View this file's dependency tree`
 
-### Configuring settings
+### Bindings
 
-* `root`: the location where your JS files reside.
-* `config`: (Optional) the path to your requirejs configuration file
-* `sass_root`: (Optional) the path to your Sass files
-* `exclude`: (Optional) a list of paths and/or folder names to exclude from the search for dependents
- * Omitting folders that contain 3rd party libraries can drastically speed up the search for a large codebase.
- * The following folders are excluded by default: `node_modules`, `bower_components`, `vendor`
- * Note: Subdirectories are not supported; you can't supply `some/sub/folder` as an exclusion
-* `build_config`: (Optional) path to your RequireJS Build configuration json file
- * This should have a "modules" section that lists your bundles (entry points)
- * Supplying this yields a significant performance speedup when finding relevant app entry points
-* `node_path`: (Optional) path to your node installation. Defaults to `/usr/local/bin` on OSX
+To more swiftly and conveniently trigger the package's commands both key and mouse bindings are provided.
 
-You can define these settings on a per-project basis by creating
-a `.deprc` file in the main directory of your codebase.
-
-Configure the settings above within the `.deprc` file by adding:
-
-```js
-{
-  "root": "public/assets/js",
-  "config": "public/assets/js/config.js",  # Optional
-  "sass_root": "public/assets/sass",       # Optional
-  "exclude": ['jquery.js', 'require.js'],  # Optional
-  "build_config": "public/assets/js/build.json", # Optional
-  "node_path": "/my/node/install/folder"   # Optional
-}
-```
-
-Alternatively, you can specify the settings by going to
-
-`Preferences -> Package Settings -> Dependents -> Settings - User`
-
-and adding your configuration.
-
-#### Default key bindings
+#### Key bindings
 
 By default, the following key bindings have been supplied:
 
 OSX:
 
 * Find Dependents: `CMD + Option + Up arrow`
-* Jump to dependency: `CMD + Option + Right arrow` or `CMD + Option + Click`
+* Jump to dependency: `CMD + Option + Right arrow` 
+  
+Windows and Linux:
+
+* Jump to dependency: `Ctrl + Shift + Down arrow`
+* Find Dependents: `Ctrl + Shift + Up arrow`
+
+
+
+#### Mouse bindings
+
+By default, the following key bindings have been supplied:
+
+OSX:
+
+* Jump to dependency: `Option + Command + Click` on the dependency item
+* Find Dependents: `conrol + Option + Click` anywhere in document
+
 
 Windows and Linux:
 
-* Find Dependents: `Control + Alt + Up arrow`
-* Jump to dependency: `Control + Alt + Right arrow` or `Control + Option + Click`
+* Jump to dependency: `Cntrl + Alt + Click`  on the dependency item
+* Find Dependents: `Cnrtl + Shift + Click`   anywhere in document
 
-You can also trigger the commands via:
 
-* `File -> Dependents`
-* `Right click -> Dependents`
 
-#### Custom key bindings
+### Customizing bindings
 
-If you would like to specify custom keybindings, you can override them in `Preferences -> Key Bindings - User`
+THIS NEEDS EDITING
+
+If you would like to specify custom key and mouse bindings, you can override them in 
+
+`Preferences -> Key Bindings - User`
 
 like so:
 
@@ -153,6 +185,9 @@ like so:
 
 * You won't need the opening and closing square brackets `[]` if you have pre-existing key bindings
 * For bindings for Finding relevant app entry points, the command is `find_driver`.
+
+
+
 
 ### Troubleshooting
 
