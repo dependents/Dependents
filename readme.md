@@ -33,13 +33,13 @@ Don't see it? Try reinstalling Package Control. Alternatively, add the repositor
 
 If it doesn't work, please file an issue.
 
-If you want contribute or use the latest commits simply git clone the repository `https://github.com/mrjoelkemp/Dependents` to your Packages directory with a directory name of `Dependents`. From sublime choose `Preferences>Browse Packages`  to easily determine the path to the Packages directory for your install.  Be sure to remove the package via package control first if you had already done so to avoid package control updating the package.
+If you want contribute or use the latest commits simply git clone the repository `https://github.com/mrjoelkemp/Dependents` to your Packages directory with a directory name of `Dependents`. From sublime choose `Preferences -> Browse Packages`  to easily determine the path to the Packages directory for your install.  Be sure to remove the package via package control first if you had already done so to avoid package control updating the package.
 
 ### Configuring settings
 
 There a two ways in which to invoke the package settings.  
 
-One is globally via entires in a user settings file `Preferences>Package Settings>Dependents>Settings-User`.  You can open the `Settings-Default` file and copy and paste the contents as a starter template.   Do not edit the default file as that will be overwritten with updates.
+One is globally via entires in a user settings file `Preferences -> Package Settings -> Dependents -> Settings-User`.  You can open the `Settings-Default` file and copy and paste the contents as a starter template.   Do not edit the default file as that will be overwritten with updates.
 
 Alternatively you can define settings on a per-project basis by creating
 a `.deprc` file in the root of the sublime project/folder.  The paths you will specify are then **relative** to the sublime project/folder root. This is the preferred way if you are working on more than one project using sublime (aren't we all!)
@@ -214,7 +214,7 @@ For Linux or Windows
 
 Setting up custom mouse bindings is a bit more involved mostly because Sublime by default does not have a menu item for conveniently editing your user mouse bindings.
 
-You will need to add the appropriate file (below) to your OS to your `User` directory.  `Preferences -> Browse Packages`  will help you find that directory.  Alterntively you can add a menu item `Preferences -> Mouse Bindings - User` to create and edit this file.  See the end of this section for details 
+You will need to add the appropriate file (below) to your OS to your `User` directory.  `Preferences -> Browse Packages`  will help you find that directory.  Alterntively you can add a menu item `Preferences -> Mouse Bindings - User` to create and edit this file.  See the [end of this section for details](#mousemenu) 
 
 ```
 Default (Linux).sublime-mousemap  
@@ -264,6 +264,7 @@ For Linux or Windows
 ]
 ```
 
+<a name="mousemenu">/<a>
 **Setting up a user mouse bindings menu item**
 
 In your `User` directory create a file Main.sublime-menu.  `Preferences -> Browse Packages` will help you find your `User` directory
