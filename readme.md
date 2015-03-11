@@ -37,7 +37,7 @@ If you want contribute or use the latest commits simply git clone the repository
 
 ### Configuring settings
 
-There a two ways in which to invoke the package settings.  
+There are two ways in which to invoke the package settings.  
 
 One is globally via entires in a user settings file `Preferences -> Package Settings -> Dependents -> Settings-User`.  You can open the `Settings-Default` file and copy and paste the contents as a starter template.   Do not edit the default file as that will be overwritten with updates.
 
@@ -269,7 +269,7 @@ For Linux or Windows
 
 In your `User` directory create a file Main.sublime-menu.  `Preferences -> Browse Packages` will help you find your `User` directory
 
-Into that file put this code and you will then see `Preferences -> Mouse Bindings - User` in the menu.  Now this menu item to edit your user mouse bindings.  It will create the correct mouse binding file in your `User` directory.  See above for mouse binding default code to copy, paste and edit.
+Into that file put this code and you will then see `Preferences -> Mouse Bindings - User` in the menu.  Now use this menu item to edit your user mouse bindings.  It will create the correct mouse binding file in your `User` directory.  See above for mouse binding default code to copy, paste and edit.
 
 ```
 [
