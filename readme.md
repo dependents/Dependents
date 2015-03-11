@@ -264,12 +264,12 @@ For Linux or Windows
 ]
 ```
 
-<a name="mousemenu">/<a>
+<a name="mousemenu"><a>
 **Setting up a user mouse bindings menu item**
 
 In your `User` directory create a file Main.sublime-menu.  `Preferences -> Browse Packages` will help you find your `User` directory
 
-Into that file put this code and you will then see `Preferences -> Browse Packages`.  Use this menu item to edit your user mouse bindings.  It will create the correct mouse binders file in your `User` directory.
+Into that file put this code and you will then see `Preferences -> Mouse Bindings - User` in the menu.  Now this menu item to edit your user mouse bindings.  It will create the correct mouse binding file in your `User` directory.  See above for mouse binding default code to copy, paste and edit.
 
 ```
 [
