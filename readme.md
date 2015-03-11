@@ -133,8 +133,9 @@ By default, the following key bindings have been supplied:
 
 OSX:
 
-* Find Dependents: `CMD + Option + Up arrow`
-* Jump to dependency: `CMD + Option + Right arrow` 
+* Jump to dependency: `Option + Command + Down arrow` 
+* Find Dependents: `Option + Command + Up arrow`
+
   
 Windows and Linux:
 
@@ -150,42 +151,147 @@ By default, the following key bindings have been supplied:
 OSX:
 
 * Jump to dependency: `Option + Command + Click` on the dependency item
-* Find Dependents: `conrol + Option + Click` anywhere in document
+* Find Dependents: `Shift + Command + Click` anywhere in document
 
 
 Windows and Linux:
 
-* Jump to dependency: `Cntrl + Alt + Click`  on the dependency item
-* Find Dependents: `Cnrtl + Shift + Click`   anywhere in document
+* Jump to dependency: `Ctrl + Alt + Click`  on the dependency item
+* Find Dependents: `Ctrl + Shift + Click`   anywhere in document
 
 
 
 ### Customizing bindings
 
-THIS NEEDS EDITING
+If you would like to specify custom key and mouse bindings or if the default ones conflict with your current setup, you can override them in with the OS specific key and mouse binding files located in your User directory
 
-If you would like to specify custom key and mouse bindings, you can override them in 
+**Key bindings**
+
+The easy way to access the user keybindings file is from the menu
 
 `Preferences -> Key Bindings - User`
 
-like so:
+you can copy and paste the default settings for your OS below into your key bindings file, edit them to suit and save.
 
+For Mac OSX
 ```
 [
+  // Find the dependents for the current module, super=command, alt=option
   {
     "keys": ["super+alt+up"],
     "command": "dependents"
   },
+
+  // Jump to a dependency
   {
-    "keys": ["super+alt+right"],
-    "command": "jump_to_dependency",
+    "keys": ["super+alt+down"],
+    "command": "jump_to_dependency"
   }
 ]
 ```
 
-* You won't need the opening and closing square brackets `[]` if you have pre-existing key bindings
-* For bindings for Finding relevant app entry points, the command is `find_driver`.
+For Linux or Windows
+```
+[
+  // Find the dependents for the current module
+  {
+    "keys": ["ctrl+shift+up"],
+    "command": "dependents"
+  },
 
+  // Jump to a dependency
+  {
+    "keys": ["ctrl+shift+down"],
+    "command": "jump_to_dependency"
+  }
+]
+```
+
+* You won't need the opening and closing square brackets `[]` if you have pre-existing key bindings.
+* If you want to add a keybinding for Finding relevant app entry points, the command is `find_driver`.
+
+**Mouse bindings**
+
+Setting up custom mouse bindings is a bit more involved mostly because Sublime by default does not have a menu item for conveniently editing your user mouse bindings.
+
+You will need to add the appropriate file (below) to your OS to your `User` directory.  `Preferences -> Browse Packages`  will help you find that directory.  Alterntively you can add a menu item `Preferences -> Mouse Bindings - User` to create and edit this file.  See the end of this section for details 
+
+```
+Default (Linux).sublime-mousemap  
+Default (OSX).sublime-mousemap
+Default (Windows).sublime-mousemap
+```
+
+you can then copy and paste the default settings for your OS below into your mouse bindings file, edit them to suit and save.
+
+For Mac OSX   super=command, alt=option
+```
+[
+  {
+    "button": "button1",
+    "count": 1,
+    "modifiers": ["super", "alt"],
+    "press_command": "drag_select",
+    "command": "jump_to_dependency"
+  },
+  {
+    "button": "button1",
+    "count": 1,
+    "modifiers": ["super", "shift"],
+    "press_command": "drag_select",
+    "command": "dependents"
+  }
+]
+```
+
+For Linux or Windows
+```
+[
+  {
+    "button": "button1",
+    "count": 1,
+    "modifiers": ["ctrl", "alt"],
+    "press_command": "drag_select",
+    "command": "jump_to_dependency"
+  },
+  {
+    "button": "button1",
+    "count": 1,
+    "modifiers": ["ctrl", "shift"],
+    "press_command": "drag_select",
+    "command": "dependents"
+  }
+]
+```
+
+**Setting up a user mouse bindings menu item**
+
+In your `User` directory create a file Main.sublime-menu.  `Preferences -> Browse Packages` will help you find your `User` directory
+
+Into that file put this code and you will then see `Preferences -> Browse Packages`.  Use this menu item to edit your user mouse bindings.  It will create the correct mouse binders file in your `User` directory.
+
+```
+[
+    {
+        "caption": "Preferences",
+        "mnemonic": "n",
+        "id": "preferences",
+        "children":
+        [
+            { "caption": "-" },
+            {
+                "command": "open_file", "args":
+                {
+                    "file": "${packages}/User/Default ($platform).sublime-mousemap",
+                    "contents": "[\n\t$0\n]\n"
+                },
+                "caption": "Mouse Bindings – User"
+            },
+     { "caption": "-" }
+        ]
+    }
+]
+```
 
 
 
