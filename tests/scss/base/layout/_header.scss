@@ -1,0 +1,11 @@
+// fixed roll over header
+header {
+  @include color-set($header-bg-color);
+  position: fixed;
+  top: 0;
+  z-index: 1;
+  height: 200px;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
