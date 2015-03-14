@@ -37,16 +37,51 @@ If you want contribute or use the latest commits simply git clone the repository
 
 ### Configuring settings
 
-There are two ways in which to invoke the package settings.  
+Rather than using a typical sublime settings file you define settings on a *per-project basis* by creating a `.deprc` file in a project (open folder) root. The paths you will specify are then **relative** to the folder although absolute paths can be used.  Following are a few examples to help you get started.  Below are the current settings that the package recognizes.
 
-One is globally via entires in a user settings file `Preferences -> Package Settings -> Dependents -> Settings-User`.  You can open the `Settings-Default` file and copy and paste the contents as a starter template.   Do not edit the default file as that will be overwritten with updates.
+Say you open a folder/project in sublime to `/path/to/projects/someproject`.  Put a .deprc file in the project root  `/someproject`.   
 
-Alternatively you can define settings on a per-project basis by creating
-a `.deprc` file in the root of the sublime project/folder.  The paths you will specify are then **relative** to the sublime project/folder root. This is the preferred way if you are working on more than one project using sublime (aren't we all!)
+For javascript if you want dependents to search all the way to this root (`/someproject`) then put this in the `.deprc` file
+```
+{
+  "root": "./",
+}
+```
+Use `"./"` to signify the root and NOT just a `""`.
 
-* `root`: (required) the ultimate/root path at which to limit dependent searching.  When using `.deprc` would be `""` if same as root of sublime project/folder.
+But if your javascript code was all contained within a subdirectory of `/someproject` you could limit your dependents search there.
+```
+{
+   "root": "root": "assets/js"
+}
+```
+
+Works the same for sass but use `sass_root`
+```
+{
+  "sass_root": "assets/sass",
+}
+```
+
+
+Here is an example of using some other optional settings.  You can also combine js and sass roots in the same `.deprc`.  See below for all possible settings. At a minimum you will need at last a `root` or `sass_root` in any `.deprc` file
+```
+{
+  "root": "assets/js",
+  "config": "assets/js/config.js",  
+  "exclude": ['jquery.js', 'require.js'],  
+  "build_config": "assets/js/build.json", 
+  "node_path": "/my/node/install/folder", 
+  "sass_root": "assets/sass",  
+}
+```
+
+Tip: If you like to open a separate windows in sublime for subdirectories of your project just put a `.deprc` file there too with the reduced/correct relative paths.   
+
+
+**javascript specific settings**
+* `root`: the ultimate/root path at which to limit dependent searching.  
 * `config`: (Optional) the path to your requirejs configuration file
-* `sass_root`: (Optional) the path to your Sass files
 * `exclude`: (Optional) a list of paths and/or folder names to exclude from the search for dependents
  * Omitting folders that contain 3rd party libraries can drastically speed up the search for a large codebase.
  * The following folders are excluded by default: `node_modules`, `bower_components`, `vendor`
@@ -55,19 +90,9 @@ a `.deprc` file in the root of the sublime project/folder.  The paths you will s
  * This should have a "modules" section that lists your bundles (entry points)
  * Supplying this yields a significant performance speedup when finding relevant app entry points
 * `node_path`: (Optional) path to your node installation. Defaults to `/usr/local/bin` on OSX
-
-example:
-```
-{
-  "root": "public/assets/js",
-  "config": "public/assets/js/config.js",  # Optional
-  "sass_root": "public/assets/sass",       # Optional
-  "exclude": ['jquery.js', 'require.js'],  # Optional
-  "build_config": "public/assets/js/build.json", # Optional
-  "node_path": "/my/node/install/folder"   # Optional
-}
-```
-
+ 
+**sass specific settings**
+* `sass_root`: the ultimate/root path for your sass file architecture at which to limit dependent searching. This package works swell if you follow the architecture guidelines at [sass-guidelines](http://sass-guidelin.es/#architecture).
 
 ### Usage
 
@@ -131,10 +156,10 @@ To more swiftly and conveniently trigger the package's commands both key and mou
 
 By default, the following key bindings have been supplied:
 
-OSX:
+OSX:  
 
-* Jump to dependency: `Option + Command + Down arrow` 
-* Find Dependents: `Option + Command + Up arrow`
+* Jump to dependency: `Command + Option + Right arrow` 
+* Find Dependents: `Command + Option + Up arrow`
 
   
 Windows and Linux:
@@ -150,8 +175,8 @@ By default, the following key bindings have been supplied:
 
 OSX:
 
-* Jump to dependency: `Option + Command + Click` on the dependency item
-* Find Dependents: `Shift + Command + Click` anywhere in document
+* Jump to dependency: `Command + Option + Click` on the dependency item
+* Find Dependents: `Command + Shift + Click` anywhere in document
 
 
 Windows and Linux:
