@@ -5,6 +5,9 @@
 Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 1. [Installation](#installation)
+ - [Nodejs Dependency](#node.js-dependency)
+ - [OSX or Linux](#osx-or-linux-install)
+ - [Windows](#windows-install)
 2. [Configuring Settings](#configuring-settings)
 3. [Usage](#usage)
  - [Jump to dependency](#jump-to-a-dependency)
@@ -22,7 +25,14 @@ Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 ### Installation
 
-Install `Dependents` via Package Control.
+#### Node.js Dependency
+
+Unlike most sublime packages this one is written part in Python which is supported within Sublime and part in Javascipt which is not.  See [Contributing to Dependents](https://github.com/mrjoelkemp/sublime-dependents/blob/master/Contributing.md) for details.  As such you **must** have a copy of [Node.js](https://nodejs.org/) installed on your system.  It must be available via a directory included in your OS's `PATH` environment variable which is usually the case when the program is installed normally.  In OSX and Linux a link to node.js `node` usually goes in the `usr/local/bin` directory which is typically already in the `PATH`.  The Node.js windows installer will add the install directory to the `PATH` variable but you must reboot to reload it.
+If you have issues with running Node.js from within the package see the `node_path` setting under [configuring settings](#configuring-settings) below.
+
+#### OSX or Linux Install
+
+If you are using OSX or Linux you can install `Dependents` via Package Control.
 
 Don't see it? Try reinstalling Package Control. Alternatively, add the repository and install it:
 
@@ -34,6 +44,18 @@ Don't see it? Try reinstalling Package Control. Alternatively, add the repositor
 If it doesn't work, please file an issue.
 
 If you want contribute or use the latest commits simply git clone the repository `https://github.com/mrjoelkemp/Dependents` to your Packages directory with a directory name of `Dependents`. From sublime choose `Preferences -> Browse Packages`  to easily determine the path to the Packages directory for your install.  Be sure to remove the package via package control first if you had already done so to avoid package control updating the package.
+
+#### Windows Install
+
+Currently because node_modules creates an extensively deep set of folder paths the package will fail to load completely into the normal Sublime packages directory.  This is due to the limit of 256 characters for file path in Windows.  Thus you can **not** install this packages via package control.
+
+To beat the 256 character limitation
+
+* git clone the repository `https://github.com/mrjoelkemp/Dependents` to a dependents folder in the root of your C drive, `C:\dependents`
+* Make a symbolic link from there to a folder of the same name `depdendents` in your sublime packages directory.  You can use [mklink](http://www.sevenforums.com/tutorials/278262-mklink-create-use-links-windows.html) or install this [tool](http://schinagl.priv.at/nt/hardlinkshellext/linkshellextension.html) which makes creating symbolic links easy.
+
+Hopefully in the future a version can be released that shortens the file paths and thus overcomes Window's limitation.  Sorry for the hassle but being able to use Dependents is worth it!
+
 
 ### Configuring settings
 
@@ -71,16 +93,17 @@ Here is an example of using some other optional settings.  You can also combine 
   "config": "assets/js/config.js",  
   "exclude": ['jquery.js', 'require.js'],  
   "build_config": "assets/js/build.json", 
-  "node_path": "/my/node/install/folder", 
   "sass_root": "assets/sass",  
 }
 ```
 
 Tip: If you like to open a separate windows in sublime for subdirectories of your project just put a `.deprc` file there too with the reduced/correct relative paths.   
 
+**general setting**
+* `node_path`: (Optional) path to your node installation. A properly set `PATH` environment variable should preclude having to use this but for unusual cases we provide this setting.  `/usr/local/bin` is install path on OSX and Linux.  In windows the `PATH` is set during by the Node.js installer (be sure to reboot)
 
 **javascript specific settings**
-* `root`: the ultimate/root path at which to limit dependent searching.  
+* `root`: the ultimate/root path at which to limit js dependent searching.  
 * `config`: (Optional) the path to your requirejs configuration file
 * `exclude`: (Optional) a list of paths and/or folder names to exclude from the search for dependents
  * Omitting folders that contain 3rd party libraries can drastically speed up the search for a large codebase.
@@ -89,7 +112,7 @@ Tip: If you like to open a separate windows in sublime for subdirectories of you
 * `build_config`: (Optional) path to your RequireJS Build configuration json file
  * This should have a "modules" section that lists your bundles (entry points)
  * Supplying this yields a significant performance speedup when finding relevant app entry points
-* `node_path`: (Optional) path to your node installation. Defaults to `/usr/local/bin` on OSX
+
  
 **sass specific settings**
 * `sass_root`: the ultimate/root path for your sass file architecture at which to limit dependent searching. This package works swell if you follow the architecture guidelines at [sass-guidelines](http://sass-guidelin.es/#architecture).
