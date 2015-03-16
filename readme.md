@@ -27,12 +27,14 @@ Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 #### Nodejs Dependency
 
-Unlike most sublime packages this one is written part in Python which is supported within Sublime and part in Javascipt which is not.
-See [Contributing to Dependents](https://github.com/mrjoelkemp/sublime-dependents/blob/master/Contributing.md) for details.
-As such you **must** have a copy of [Node.js](https://nodejs.org/) installed on your system.
-It must be available via a directory included in your OS's `PATH` environment variable which is usually the case when the program
-is installed normally. In OSX and Linux a link to node.js `node` usually goes in the `usr/local/bin` directory which is typically
-already in the `PATH`. The Node.js windows installer will add the install directory to the `PATH` variable but you must reboot to reload it.
+Unlike most sublime packages, the bulk of the plugin's logic is written in Javascipt; see [Contributing to Dependents](https://github.com/mrjoelkemp/sublime-dependents/blob/master/Contributing.md) for details.
+As such, you **must** have a copy of [Node.js](https://nodejs.org/) installed on your system.
+
+* It must be available via a directory included in your OS's `PATH` environment variable which is usually the case when the program
+is installed normally.
+* In OSX and Linux a link to node.js `node` usually goes in the `usr/local/bin` directory which is typically already in the `PATH`.
+* The Node.js windows installer will add the install directory to the `PATH` variable but you must reboot to reload it.
+
 If you have issues with running Node.js from within the package see the `node_path` setting under [configuring settings](#configuring-settings) below.
 
 #### OSX or Linux Install
@@ -48,7 +50,10 @@ Don't see it? Try reinstalling Package Control. Alternatively, add the repositor
 
 If it doesn't work, please file an issue.
 
-If you want contribute or use the latest commits simply git clone the repository `https://github.com/mrjoelkemp/Dependents` to your Packages directory with a directory name of `Dependents`. From sublime choose `Preferences -> Browse Packages`  to easily determine the path to the Packages directory for your install.  Be sure to remove the package via package control first if you had already done so to avoid package control updating the package.
+If you want contribute or use the latest commits simply git clone the repository
+`https://github.com/mrjoelkemp/Dependents` to your Packages directory with a directory name of `Dependents`.
+From sublime choose `Preferences -> Browse Packages` to easily determine the path to the Packages directory for your install.
+Be sure to remove the package via package control first to avoid package control updating the package.
 
 #### Windows Install
 
@@ -73,9 +78,9 @@ Rather than using a typical sublime settings file you define settings on a *per-
 project (open folder) root. The paths you will specify are then **relative** to the folder although absolute paths can be used.
 Following are a few examples to help you get started.  Below are the current settings that the package recognizes.
 
-Say you open a folder/project in sublime to `/path/to/projects/someproject`.  Put a .deprc file in the project root  `/someproject`.
+Say you open a folder/project in sublime to `/path/to/projects/someproject`.  Put a `.deprc` file in the project root  `/someproject`.
 
-For javascript if you want dependents to search all the way to this root (`/someproject`) then put this in the `.deprc` file
+For JavaScript, if you want dependents to search all the way to this root (`/someproject`) then put this in the `.deprc` file
 ```
 {
   "root": "./",
@@ -83,7 +88,7 @@ For javascript if you want dependents to search all the way to this root (`/some
 ```
 Use `"./"` to signify the root and NOT just a `""`.
 
-But if your javascript code was all contained within a subdirectory of `/someproject` you could limit your dependents search there.
+But if your JS code was all contained within a subdirectory of `/someproject` you could limit your dependents search there.
 ```
 {
    "root": "root": "assets/js"
@@ -98,7 +103,9 @@ Works the same for sass but use `sass_root`
 ```
 
 
-Here is an example of using some other optional settings.  You can also combine js and sass roots in the same `.deprc`.  See below for all possible settings. At a minimum you will need at last a `root` or `sass_root` in any `.deprc` file
+Here is an example of using some other optional settings.  You can also combine js and sass roots in the same `.deprc`.
+See below for all possible settings. At a minimum, you will need at last a `root` or `sass_root` in any `.deprc` file.
+
 ```
 {
   "root": "assets/js",
@@ -113,9 +120,10 @@ Tip: If you like to open a separate windows in sublime for subdirectories of you
 file there too with the reduced/correct relative paths.
 
 **General Settings**
-* `node_path`: (Optional) path to your node installation. A properly set `PATH` environment variable should preclude having
-to use this but for unusual cases we provide this setting. `/usr/local/bin` is install path on OSX and Linux.
-In windows the `PATH` is set during by the Node.js installer (be sure to reboot).
+* `node_path`: (Optional) path to your node installation.
+ * A properly set `PATH` environment variable should preclude having to use this but for unusual cases we provide this setting.
+ * `/usr/local/bin` is install path on OSX and Linux.
+ * In windows the `PATH` is set during by the Node.js installer (be sure to reboot).
 
 **JavaScript Settings**
 * `root`: the ultimate/root path at which to limit js dependent searching.
@@ -130,7 +138,8 @@ In windows the `PATH` is set during by the Node.js installer (be sure to reboot)
 
 
 **Sass settings**
-* `sass_root`: the ultimate/root path for your sass file architecture at which to limit dependent searching. This package works swell if you follow the architecture guidelines at [sass-guidelines](http://sass-guidelin.es/#architecture).
+* `sass_root`: the ultimate/root path for your sass file architecture at which to limit dependent searching.
+ * This package works swell if you follow the architecture guidelines at [sass-guidelines](http://sass-guidelin.es/#architecture).
 
 ### Usage
 
