@@ -1,0 +1,7 @@
+Documentation and Key bindings
+---
+
+* Thanks to @dkebler for enhancing the project's documentation on https://github.com/mrjoelkemp/Dependents.
+* Windows installation issues now have a workaround: https://github.com/mrjoelkemp/Dependents#windows-install
+* Windows and Linux key bindings have been altered for better ergonomics: https://github.com/mrjoelkemp/Dependents#key-bindings
+* Mouse binding added for Dependents: https://github.com/mrjoelkemp/Dependents#mouse-bindings
