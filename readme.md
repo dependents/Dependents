@@ -5,7 +5,7 @@
 Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 1. [Installation](#installation)
- - [Nodejs Dependency](#node.js-dependency)
+ - [Nodejs Dependency](#nodejs-dependency)
  - [OSX or Linux](#osx-or-linux-install)
  - [Windows](#windows-install)
 2. [Configuring Settings](#configuring-settings)
@@ -25,7 +25,7 @@ Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
 
 ### Installation
 
-#### Node.js Dependency
+#### Nodejs Dependency
 
 Unlike most sublime packages this one is written part in Python which is supported within Sublime and part in Javascipt which is not.  See [Contributing to Dependents](https://github.com/mrjoelkemp/sublime-dependents/blob/master/Contributing.md) for details.  As such you **must** have a copy of [Node.js](https://nodejs.org/) installed on your system.  It must be available via a directory included in your OS's `PATH` environment variable which is usually the case when the program is installed normally.  In OSX and Linux a link to node.js `node` usually goes in the `usr/local/bin` directory which is typically already in the `PATH`.  The Node.js windows installer will add the install directory to the `PATH` variable but you must reboot to reload it.
 If you have issues with running Node.js from within the package see the `node_path` setting under [configuring settings](#configuring-settings) below.
