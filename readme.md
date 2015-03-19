@@ -14,6 +14,7 @@ Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
  - [Find dependents](#find-the-dependents-of-the-current-module)
  - [Find relevant app entry points](#find-relevant-app-entry-points)
  - [View dependency tree](#view-dependency-tree)
+ - [Copy Path to Clipboard](#copy-path-to-clipboard)
 4. [Bindings](#bindings)
  - [Key Bindings](#key-bindings)
  - [Mouse Bindings](#mouse-bindings)
@@ -195,6 +196,20 @@ View a snapshot of the current file's dependency tree (as a JSON file)
 1. Within a file, right click to open the context menu
 2. Click on `Dependents -> View this file's dependency tree`
 
+#### Copy path to clipboard
+
+Copy the rootless path of the current module to the clipboard. (JS and Sass)
+
+For example, if the root is `assets/js` and the filename is `path/to/assets/js/myFeature/file.js`,
+then the command will copy `myFeature/file` to the clipboard.
+
+This is useful when you want to include the current module as a dependency of another module.
+
+1. Within a file, right click to open the context menu
+2. Click on `Dependents -> Copy path to the clipboard`
+
+Or via its key binding.
+
 ### Bindings
 
 To more swiftly and conveniently trigger the package's commands both key and mouse bindings are provided.
@@ -207,7 +222,7 @@ OSX:
 
 * Jump to dependency: `Command + Option + Right arrow`
 * Find Dependents: `Command + Option + Up arrow`
-
+* Copy path to clipboard: `Command + Shift + C`
 
 Windows and Linux:
 
