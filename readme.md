@@ -91,7 +91,7 @@ Use `"./"` to signify the root and NOT just a `""`.
 But if your JS code was all contained within a subdirectory of `/someproject` you could limit your dependents search there.
 ```
 {
-   "root": "root": "assets/js"
+   "root": "assets/js"
 }
 ```
 
