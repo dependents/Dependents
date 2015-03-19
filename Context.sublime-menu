@@ -7,7 +7,8 @@
             { "command": "dependents", "caption": "Open all dependents", "args": { "modifier": "OPEN_ALL"}},
             { "command": "find_driver", "caption": "Find relevant app entry points" },
             { "command": "find_driver", "caption": "Open all relevant app entry points", "args": { "modifier": "OPEN_ALL"}},
-            { "command": "tree", "caption": "View this file's dependency tree" }
+            { "command": "tree", "caption": "View this file's dependency tree" },
+            { "command": "get_path", "caption": "Copy path to the clipboard" }
         ]
     }
 ]

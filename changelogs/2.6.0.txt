@@ -1,0 +1,14 @@
+New Feature: Copy module path to the clipboard
+
+`Command + Shift + C` (OSX) or
+
+1. Within a file, right click to open the context menu
+2. Click on `Dependents -> Copy path to the clipboard`
+
+Copy the rootless path of the current module to the clipboard. (Sass and JS)
+
+For example, if the root is `assets/js` and the filename is `path/to/assets/js/myFeature/file.js`,
+then the command will copy `myFeature/file` to the clipboard.
+
+This is useful when you want to include the current module as a dependency of another module.
+
