@@ -1,14 +1,14 @@
 import sublime, sublime_plugin
-import subprocess
 import threading
 import os
 import re
 import time
 
+from .BaseCommand import BaseCommand
+from .BaseThread import BaseThread
+
 # TODO: Support Python 2 style imports
-from .lib.thread_progress import ThreadProgress
 from .lib.show_error import *
-from .lib.command_setup import command_setup
 from .lib.find_file_like import find_file_like
 from .lib.track import track as t
 from .lib.printer import p
@@ -18,26 +18,18 @@ from .lib.get_underscored_sass_path import get_underscored_sass_path
 
 from .node_dependents import alias_lookup
 
-class JumpToDependencyCommand(sublime_plugin.WindowCommand):
+class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
-        setup_was_successful = command_setup(self)
+        super(JumpToDependencyCommand, self).run()
+        self.init_thread(JumpToDependencyThread, 'Jumping to dependency')
 
-        if not setup_was_successful:
-            show_error('JumpToDependency: Setup was not successful. Please file an issue', True)
-            return
-
-        thread = JumpToDependencyThread(self.window, self.view)
-        thread.start();
-
-        ThreadProgress(thread, 'Jumping to dependency', '')
-
-class JumpToDependencyThread(threading.Thread):
+class JumpToDependencyThread(BaseThread):
     """
     A thread to prevent the jump to dependency from freezing the UI
     """
-    def __init__(self, window, view):
-        self.window = window
-        self.view = view
+    def __init__(self, command):
+        self.window = command.window
+        self.view = command.view
         threading.Thread.__init__(self)
 
     def run(self):
@@ -45,7 +37,7 @@ class JumpToDependencyThread(threading.Thread):
         Jumps to the file identified by the string under the cursor
         """
 
-        total_start_time = time.time()
+        self.start_timer()
 
         module = self.get_selected_module_name()
 
@@ -94,9 +86,7 @@ class JumpToDependencyThread(threading.Thread):
 
         self.open_file(file_to_open)
 
-        t('Run_JumpToDependency', {
-            'etime': time.time() - total_start_time
-        })
+        self.stop_timer('Run_JumpToDependency')
 
     def resolve_sass_import(self, filename):
         """
@@ -126,26 +116,6 @@ class JumpToDependencyThread(threading.Thread):
             return file_to_open
 
         return None
-
-    def open_file(self, filename):
-        """
-        Opens the passed file or shows an error error message
-        if the file cannot be found
-        """
-
-        p('Opening:', filename)
-
-        if not filename or not os.path.isfile(filename):
-            t('Missing file', {
-                'filename': filename
-            })
-            cant_find_file()
-            return
-
-        def open():
-            self.window.open_file(filename)
-
-        sublime.set_timeout(open, 10)
 
     def get_selected_module_region(self):
         """
