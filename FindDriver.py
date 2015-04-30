@@ -35,10 +35,10 @@ class FindDriverThread(BaseThread):
         if self.view.modifier and self.view.modifier == 'OPEN_ALL':
             for driver in self.drivers:
                 self.open_file(driver)
-            return
 
-        if len(self.drivers) == 1:
+        elif len(self.drivers) == 1:
             self.open_file(self.drivers[0])
+
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
 
@@ -69,11 +69,8 @@ class FindDriverThread(BaseThread):
         if self.window.exclude:
             args['exclude'] = ','.join(self.window.exclude)
 
-        fetch_time = time.time()
-
         drivers = [d for d in find_driver(args) if d]
 
-        p('Fetch time:', time.time() - fetch_time)
         p(len(drivers), 'drivers found:\n' + '\n'.join(drivers))
 
         return drivers
@@ -93,7 +90,6 @@ class FindDriverThread(BaseThread):
         self.open_file(driver)
 
     def open_file(self, driver):
-        # TODO: Duplicative of logic in get_drivers
         path = self.view.path
 
         # In case the root is the directory root (path)
@@ -103,14 +99,4 @@ class FindDriverThread(BaseThread):
         # We removed the root originally when populating the dependents list
         filename = path + driver
 
-        if not os.path.isfile(filename):
-            t('Missing file', {
-                "filename": filename
-            })
-            cant_find_file()
-            return
-
-        def open():
-            self.window.open_file(filename)
-
-        sublime.set_timeout(open, 10)
+        super(FindDriverThread, self).open_file(filename)
