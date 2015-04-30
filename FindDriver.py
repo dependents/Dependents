@@ -1,12 +1,10 @@
 import sublime, sublime_plugin
-import subprocess
 import threading
 import os
-import re
-import time
 
-from .lib.thread_progress import ThreadProgress
-from .lib.command_setup import command_setup
+from .BaseCommand import BaseCommand
+from .BaseThread import BaseThread
+
 from .lib.show_error import *
 from .lib.trim_paths_of_root import trim_paths_of_root
 from .lib.track import track as t
@@ -14,25 +12,15 @@ from .lib.printer import p
 
 from .node_taxicab import find_driver
 
-class FindDriverCommand(sublime_plugin.WindowCommand):
+class FindDriverCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
-        setup_was_successful = command_setup(self)
+        super(FindDriverCommand, self).run(modifier)
+        self.init_thread(FindDriverThread, 'Finding relevant entry points')
 
-        if not setup_was_successful:
-            show_error('Dependents: Setup was not successful. Please file an issue', True)
-            return
-
-        self.view.modifier = modifier
-
-        thread = FindDriverThread(self.window, self.view)
-        thread.start();
-
-        ThreadProgress(thread, 'Finding relevant entry points', '')
-
-class FindDriverThread(threading.Thread):
-    def __init__(self, window, view):
-        self.window = window
-        self.view = view
+class FindDriverThread(BaseThread):
+    def __init__(self, command):
+        self.window = command.window
+        self.view = command.view
         threading.Thread.__init__(self)
 
     def run(self):
@@ -40,7 +28,7 @@ class FindDriverThread(threading.Thread):
         Finds the driver scripts that depend on the current file and
         jumps to that driver file or shows a panel of relevant driver scripts
         """
-        total_start_time = time.time()
+        self.start_timer()
 
         self.drivers = trim_paths_of_root(self.get_drivers(), self.window.root)
 
@@ -54,14 +42,7 @@ class FindDriverThread(threading.Thread):
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
 
-        tracking_data = {
-            "etime": time.time() - total_start_time,
-        }
-
-        if self.view.modifier:
-            tracking_data["modifier"] = self.view.modifier
-
-        t('Run_Find_Driver', tracking_data)
+        self.stop_timer('Run_Find_Driver')
 
     def get_drivers(self):
         """

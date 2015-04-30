@@ -17,6 +17,8 @@ class BaseCommand():
 
         if modifier:
             self.view.modifier = modifier
+        else:
+            self.view.modifier = None
 
         if edit:
             self.view.edit = edit
@@ -35,5 +37,8 @@ class BaseCommand():
         tracking_data = {
             'etime': time.time() - self.total_start_time,
         }
+
+        if self.view.modifier:
+            tracking_data['modifier'] = self.view.modifier
 
         t(command_name, tracking_data)
