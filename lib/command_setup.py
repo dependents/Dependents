@@ -54,13 +54,13 @@ def _init(self):
     # use root or sass_root
     if is_sass_file(self.view.filename):
         if not self.window.sass_root:
-            show_error('Please set the "sass_root" setting in \nPreferences -> Package Settings -> Dependents -> Settings - User', True)
+            show_error('Please set the "sass_root" setting in your .deprc file', True)
             success = False
 
         self.window.root = self.window.sass_root
 
     elif not self.window.root:
-        show_error('Please set the "root" setting in \nPreferences -> Package Settings -> Dependents -> Settings - User', True)
+        show_error('Please set the "root" setting in your .deprc file', True)
         success = False
 
     return success
