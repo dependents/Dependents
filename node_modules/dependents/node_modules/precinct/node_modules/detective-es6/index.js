@@ -8,7 +8,8 @@ var Walker = require('node-source-walk');
  */
 module.exports = function(src) {
   var walker = new Walker({
-    ecmaVersion: 6
+    ecmaVersion: 6,
+    sourceType: 'module'
   });
 
   var dependencies = [];
