@@ -13,6 +13,11 @@
         "args": { "modifier": "OPEN_ALL"}
     },
     {
+        "caption": "Dependents: Copy all dependents to clipboard",
+        "command": "dependents",
+        "args": { "modifier": "COPY_ALL"}
+    },
+    {
         "caption": "Dependents: Find relevant app entry points",
         "command": "find_driver",
     },
@@ -24,5 +29,9 @@
     {
         "caption": "Dependents: View this file's dependency tree",
         "command": "tree"
+    },
+    {
+        "caption": "Dependents: Copy path to the clipboard",
+        "command": "get_path"
     }
 ]

@@ -34,9 +34,13 @@ class DependentsThread(BaseThread):
 
         self.dependents = trim_paths_of_root(self.get_dependents(), self.window.root)
 
-        if self.view.modifier and self.view.modifier == 'OPEN_ALL':
+        if self.view.modifier == 'OPEN_ALL':
             for dep in self.dependents:
                 self.open_file(dep)
+
+        elif self.view.modifier == 'COPY_ALL':
+            extLess = map(lambda d: os.path.splitext(d)[0], self.dependents)
+            sublime.set_clipboard('\n'.join(extLess))
 
         elif len(self.dependents) == 1:
             self.open_file(self.dependents[0])
