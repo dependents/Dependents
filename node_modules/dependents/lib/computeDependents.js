@@ -60,7 +60,7 @@ function resolveSassDepPath(dep, filename, directory) {
   var ext = path.extname(dep) ? '' : path.extname(filename);
   var sassDep;
 
-  if (dep.indexOf('..') === 0 || dep.indexOf('.') === 0) {
+  if (util.isRelativePath(dep)) {
     sassDep = path.resolve(filename, dep) + ext;
 
     if (fs.existsSync(sassDep)) { return sassDep; }

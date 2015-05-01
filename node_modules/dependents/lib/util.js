@@ -14,8 +14,6 @@ module.exports.getSassFiles = function(options) {
     exclude: /^\./
     },
     function(err, content, filename, next) {
-      if (err) { throw err; }
-
       if (options.contentCb) {
         options.contentCb(path.resolve(options.directory, filename), content);
       }
@@ -23,10 +21,7 @@ module.exports.getSassFiles = function(options) {
       next();
     },
     function(err, files) {
-      if (err) throw err;
-      if (options.filesCb) {
-        options.filesCb(files);
-      }
+      options.filesCb(files);
     });
 };
 
