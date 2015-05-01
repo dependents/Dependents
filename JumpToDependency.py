@@ -134,10 +134,14 @@ class JumpToDependencyThread(BaseThread):
         selected_region = self.view.word(region)
         selected_line = self.view.line(region)
 
+        print('region', selected_region)
+        print('line', selected_line)
+
         line = self.view.substr(selected_line)
         pattern = '[\'"]{1}([^"\']*)[\'"]{1}'
         strings_on_line = re.findall(pattern, line)
 
+        print('on_line', strings_on_line)
         if not len(strings_on_line):
             cant_find_file()
             return
@@ -145,11 +149,17 @@ class JumpToDependencyThread(BaseThread):
         # Get the locations of the strings within the buffer
         regions = map(lambda string: self.view.find_all(string), strings_on_line)
         regions = flatten(list(regions))
+        print('regions', regions)
         # Get the regions that intersect with the clicked region
         region = list(filter(lambda r: r.contains(selected_region), regions))
 
         if not len(region):
-            return None
+            # If they didn't click within the line and there's a path
+            # on the line, just use the path
+            if len(regions) == 1:
+                region = regions
+            else:
+                return None
 
         return region[0]
 
