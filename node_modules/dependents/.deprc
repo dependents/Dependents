@@ -1,0 +1,6 @@
+{
+  "root": "./",
+  "exclude": [
+    "node_modules"
+  ]
+}
