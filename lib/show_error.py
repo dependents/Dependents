@@ -3,7 +3,7 @@ import sublime
 def show_error(string, should_show_more_info=False):
     message = 'Dependents\n\n%s' % string
 
-    more_info = "For more info visit: https://github.com/mrjoelkemp/sublime-dependents"
+    more_info = "For more info visit: https://github.com/mrjoelkemp/Dependents"
 
     if should_show_more_info:
         message += '\n\n%s' % more_info
