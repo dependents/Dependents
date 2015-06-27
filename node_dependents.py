@@ -14,15 +14,3 @@ def get_dependents(options):
         args.append(options['filename'])
 
     return exec_script('dependents', 'dependents.js', args).split('\n')
-
-
-def alias_lookup(options):
-    args = []
-
-    if 'config' in options:
-        args.append('--config=' + options['config'])
-
-    if 'module' in options:
-        args.append(options['module'])
-
-    return exec_script('dependents', 'dependencyLookup.js', args).strip()

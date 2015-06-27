@@ -16,7 +16,7 @@ from .lib.flatten import flatten
 from .lib.is_sass_file import is_sass_file
 from .lib.get_underscored_sass_path import get_underscored_sass_path
 
-from .node_dependents import alias_lookup
+from .node_module_lookup_amd import module_lookup_amd
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -46,11 +46,14 @@ class JumpToDependencyThread(BaseThread):
 
         p('Extracted Path', { 'path': module })
 
-        module = self.handleRelativePaths(module)
+        # Requirejs lookup handles this automatically
+        # Other lookups need a manual resolution
+        if not self.window.config:
+            module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
         if self.window.config and not is_sass_file(self.view.filename):
-            result = self.aliasLookup(module, self.window.config)
+            result = self.aliasLookup(module, self.window.config, self.view.filename)
 
             if result:
                 module = result
@@ -58,6 +61,7 @@ class JumpToDependencyThread(BaseThread):
         extension = os.path.splitext(module)[1]
         p('Extension found', extension)
 
+        # TODO: Move this lookup logic into a node tool
         # Use the current file's extension if not supplied
         if not extension:
             extension = os.path.splitext(self.view.filename)[1]
@@ -88,6 +92,7 @@ class JumpToDependencyThread(BaseThread):
 
         self.stop_timer('Run_JumpToDependency')
 
+    # TODO: Move this to a node tool
     def resolve_sass_import(self, filename):
         """
         Looks for the appropriate filename to open
@@ -212,15 +217,16 @@ class JumpToDependencyThread(BaseThread):
         filename = os.path.normpath(os.path.join(filename, module))
         return filename
 
-    def aliasLookup(self, module, config):
+    def aliasLookup(self, module, config, filename):
         """
         Looks up the (possibly aliased) filename via the supplied config
         """
         lookup_start_time = time.time()
 
-        result =  alias_lookup({
+        result =  module_lookup_amd({
             'config': os.path.normpath(os.path.join(self.view.path, config)),
-            'module': module
+            'module': module,
+            'filename': filename
         })
 
         p('Alias Lookup', {
