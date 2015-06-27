@@ -46,7 +46,10 @@ class JumpToDependencyThread(BaseThread):
 
         p('Extracted Path', { 'path': module })
 
-        # module = self.handleRelativePaths(module)
+        # Requirejs lookup handles this automatically
+        # Other lookups need a manual resolution
+        if not self.window.config:
+            module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
         if self.window.config and not is_sass_file(self.view.filename):
