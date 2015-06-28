@@ -1,5 +1,6 @@
+//jscs: disable
 /**
- * Source code extracted from requirejs
+ * Source code extracted from requirejs and modified
  *
  * @license RequireJS 2.1.18 Copyright (c) 2010-2015, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
