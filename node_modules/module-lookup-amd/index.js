@@ -7,7 +7,7 @@ var normalize = require('./lib/normalize');
  * via the paths section of a require config
  *
  * @param  {String|Object} config - Pass a loaded config object if you'd like to avoid rereading the config
- * @param  {String} depPath
+ * @param  {String} depPath - the dependency name
  * @param  {String} filepath - the file containing the dependency
  *
  * @return {String}
@@ -25,6 +25,7 @@ module.exports = function(config, depPath, filepath) {
   }
 
   // Uses a plugin loader
+  var exclamationLocation;
   if ((exclamationLocation = depPath.indexOf('!')) !== -1) {
     depPath = depPath.slice(exclamationLocation + 1);
   }

@@ -3,6 +3,6 @@ define([
   './b',
   './c',
   'hgn!templates/a'
-], function (B, C) {
+], function(B, C) {
 
 });
