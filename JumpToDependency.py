@@ -17,6 +17,7 @@ from .lib.is_sass_file import is_sass_file
 from .lib.get_underscored_sass_path import get_underscored_sass_path
 
 from .node_module_lookup_amd import module_lookup_amd
+from .node_sass_lookup import sass_lookup
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -52,14 +53,14 @@ class JumpToDependencyThread(BaseThread):
             module = self.handleRelativePaths(module)
 
         # Lookup the module name, if aliased
-        if self.window.config and not is_sass_file(self.view.filename):
+        if self.window.config and os.path.splitext(self.view.filename)[1] == '.js':
             result = self.aliasLookup(module, self.window.config, self.view.filename)
 
             if result:
                 module = result
 
         extension = os.path.splitext(module)[1]
-        p('Extension found', extension)
+        p('Extension found in dependency name', extension)
 
         # TODO: Move this lookup logic into a node tool
         # Use the current file's extension if not supplied
@@ -70,7 +71,11 @@ class JumpToDependencyThread(BaseThread):
             module_with_extension = module
 
         if is_sass_file(module_with_extension):
-            file_to_open = self.resolve_sass_import(module_with_extension)
+            file_to_open = sass_lookup({
+                'filename': self.view.filename,
+                'directory': self.window.sass_root,
+                'path': module_with_extension
+            })
         else:
             p('Before abs path resolution', module_with_extension)
 
@@ -91,36 +96,6 @@ class JumpToDependencyThread(BaseThread):
         self.open_file(file_to_open)
 
         self.stop_timer('Run_JumpToDependency')
-
-    # TODO: Move this to a node tool
-    def resolve_sass_import(self, filename):
-        """
-        Looks for the appropriate filename to open
-        by checking the same folder as the current file and
-        if the file isn't found, looking for an underscored
-        partial with the expected name.
-        """
-        # Check current file's directory
-        file_dir = os.path.dirname(self.view.filename)
-
-        p('Looking within', file_dir, 'for', filename)
-
-        file_to_open = os.path.normpath(os.path.join(file_dir, filename))
-        if os.path.isfile(file_to_open):
-            return file_to_open
-
-        # Check underscored file within current file's directory
-        file_to_open = get_underscored_sass_path(file_to_open)
-        p('Now looking for underscored sass path', file_to_open)
-        if os.path.isfile(file_to_open):
-            return file_to_open
-
-        # If all else fails, check the root
-        file_to_open = self.get_absolute_path(filename)
-        if os.path.isfile(file_to_open):
-            return file_to_open
-
-        return None
 
     def get_selected_module_region(self):
         """

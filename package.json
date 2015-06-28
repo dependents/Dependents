@@ -7,6 +7,7 @@
     "dependency-tree": "~3.0.0",
     "dependents": "~2.0.9",
     "module-lookup-amd": "~2.0.0",
+    "sass-lookup": "~1.0.1",
     "taxicab": "~2.0.3"
   },
   "devDependencies": {
