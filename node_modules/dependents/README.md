@@ -8,12 +8,13 @@
 
 * Supports JS module systems: AMD, CommonJS, and ES6 modules.
 * Supports SASS imports.
+* Support Stylus import/require
 
 ### Usage
 
 ##### JS Example:
 
-```javascript
+```js
 var dependents = require('dependents');
 
 // Find all modules that require (depend on) ./a.js
@@ -29,6 +30,8 @@ dependents({
 ```
 
 ##### SASS Example:
+
+* Other CSS preprocessors follow the usage pattern
 
 ```javascript
 var dependents = require('dependents');

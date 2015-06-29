@@ -244,4 +244,18 @@ describe('dependents', function() {
       });
     });
   });
+
+  describe('stylus', function() {
+    it('finds the dependents of stylus files', function(done) {
+      dependents({
+        filename: __dirname + '/example/stylus/another.styl',
+        directory: __dirname + '/example/stylus',
+        success: function(err, dependents) {
+          assert.equal(dependents.length, 1);
+          assert(listHasFile(dependents, 'main.styl'));
+          done();
+        }
+      });
+    });
+  });
 });

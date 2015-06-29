@@ -5,7 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "dependency-tree": "~3.0.0",
-    "dependents": "~2.0.9",
+    "dependents": "~2.1.0",
     "module-lookup-amd": "~2.0.0",
     "sass-lookup": "~1.0.2",
     "stylus-lookup": "~1.0.0",
