@@ -34,6 +34,7 @@ def get_settings_from_source(source):
         p('setting sass_root for backCompat', settings['styles_root'])
         settings['sass_root'] = settings['styles_root']
 
+    p('Using these settings: ', settings)
     return settings
 
 def get_project_settings():
@@ -41,18 +42,22 @@ def get_project_settings():
     Returns a settings map that contains project settings
     either from a .deprc file or the plugin's sublime-settings file
     """
-    project_settings_path = find_base_path() + '.deprc'
+    project_settings_path = os.path.join(find_base_path(), '.deprc')
 
     settings = {}
 
+    p('Using found .deprc within: ', project_settings_path)
+
     if os.path.exists(project_settings_path):
-        p('Using found .deprc')
+        p('Using found .deprc within: ', project_settings_path)
         json_data = open(project_settings_path)
         data = json.load(json_data)
         json_data.close()
 
         settings = get_settings_from_source(data)
     else:
+        p('Using default settings instead')
+
         settings = get_settings_from_source(sublime.load_settings('Dependents.sublime-settings'))
 
     return settings
