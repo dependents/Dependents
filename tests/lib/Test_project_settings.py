@@ -5,6 +5,7 @@ import platform
 source = {
     'root': 'public/assets/js',
     'sass_root': 'public/assets/sass',
+    'styles_root': 'public/assets/sass',
     'config': 'public/assets/my/config.js',
     'build_config': 'path/to/my/build.json',
     'node_path': '/usr/bin/local',
@@ -14,6 +15,7 @@ source = {
 expected = {
     'root': 'public/assets/js/',
     'sass_root': 'public/assets/sass/',
+    'styles_root': 'public/assets/sass/',
     'config': 'public/assets/my/config.js',
     'build_config': 'path/to/my/build.json',
     # Auto adds a colon
@@ -29,6 +31,7 @@ class Test(object):
         assert get_settings_from_source({}) == {
             'root': '',
             'sass_root': '',
+            'styles_root': '',
             'config': '',
             'exclude': [],
             'build_config': '',
@@ -44,3 +47,20 @@ class Test(object):
             # Should be untouched
             assert results['node_path'] == example_path
 
+    def test_sass_root_to_styles_root(self):
+        sass_root = 'public/assets/sass/'
+
+        results = get_settings_from_source({
+            'sass_root': sass_root
+        })
+
+        assert results['styles_root'] == sass_root
+
+    def test_sass_root_back_compat(self):
+        styles_root = 'public/assets/sass/'
+
+        results = get_settings_from_source({
+            'styles_root': styles_root
+        })
+
+        assert results['sass_root'] == styles_root
