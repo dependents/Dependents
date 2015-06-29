@@ -104,7 +104,7 @@ Works the same for Sass and other CSS preprocessors but use `styles_root`
 ```
 
 
-Here is an example of using some other optional settings.  You can also combine js and sass roots in the same `.deprc`.
+Here is an example of using some other optional settings.  You can also combine js and styles roots in the same `.deprc`.
 See below for all possible settings. At a minimum, you will need at last a `root` or `styles_root` in any `.deprc` file.
 
 ```

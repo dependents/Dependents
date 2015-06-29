@@ -14,10 +14,12 @@ from .lib.track import track as t
 from .lib.printer import p
 from .lib.flatten import flatten
 from .lib.is_sass_file import is_sass_file
+from .lib.is_stylus_file import is_stylus_file
 from .lib.get_underscored_sass_path import get_underscored_sass_path
 
 from .node_module_lookup_amd import module_lookup_amd
 from .node_sass_lookup import sass_lookup
+from .node_stylus_lookup import stylus_lookup
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -73,8 +75,15 @@ class JumpToDependencyThread(BaseThread):
         if is_sass_file(module_with_extension):
             file_to_open = sass_lookup({
                 'filename': self.view.filename,
-                'directory': self.window.sass_root,
+                'directory': self.window.styles_root,
                 'path': module_with_extension
+            })
+        elif is_stylus_file(module_with_extension):
+            file_to_open = stylus_lookup({
+                'filename': self.view.filename,
+                'directory': self.window.styles_root,
+                # We don't want the implicit extension to support index.styl lookups
+                'path': module
             })
         else:
             p('Before abs path resolution', module_with_extension)
