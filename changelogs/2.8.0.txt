@@ -1,0 +1,7 @@
+Bug fix: Now supporting nested deprc files. If you have a deprc file within a subdirectory, Dependents uses it.
+This is pretty huge for folks who have multiple projects/repos open within a single sublime window.
+
+New Feature: Now supporting the popular CSS preprocessor, Stylus. All of the features should work for Stylus codebases.
+
+New setting: `styles_root` for setting the location of all stylesheets. It replaces `sass_root` since Dependents
+supports more than just Sass, but you can keep using `sass_root` without a problem.
