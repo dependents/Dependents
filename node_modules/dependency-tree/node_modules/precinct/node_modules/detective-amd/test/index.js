@@ -45,6 +45,12 @@ describe('detective-amd', function() {
     assert(!deps.length);
   });
 
+  it('supports es6', function() {
+    assert.doesNotThrow(function() {
+      getDependencies('define({ foo() {}});');
+    });
+  });
+
   it('returns the dependencies of the factory form', function() {
     var deps = getDepsOf('./amd/factory.js');
     assert(deps.length === 2);
