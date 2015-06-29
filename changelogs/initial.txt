@@ -7,7 +7,7 @@ settings in the root directory of your codebase:
 {
   "root": "public/assets/js",
   "config": "public/assets/js/config.js",  # Optional
-  "sass_root": "public/assets/sass",       # Optional
+  "styles_root": "public/assets/sass",       # Optional
   "exclude": ['jquery.js', 'require.js'],  # Optional
   "build_config": "public/assets/js/build.json", # Optional
   "node_path": "/my/node/install/folder"   # Optional
@@ -15,12 +15,12 @@ settings in the root directory of your codebase:
 
 * "root": the location where your JS files reside
 * "config": the location of your RequireJS configuration for AMD codebases
-* "sass_root": the location of your SASS files
+* "styles_root": the location of your stylesheets (Sass, Stylus)
 * "exclude": a list of files and folder names to exclude in the search for dependents
 * "build_config": the location of your requirejs build configuration file
 * "node_path": the location of your node executable
 
-**Please modify the values according to your codebase.**
+Please modify the values according to your codebase. See https://github.com/mrjoelkemp/Dependents for more information.
 
 ---
 Default key bindings
