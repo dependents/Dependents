@@ -10,10 +10,10 @@
   // Example: 'path/to/my/config.js'
   "config": "",
 
-  // The location of your sass files
+  // The location of your style files
   //
   // Example: 'public/assets/sass'
-  "sass_root": "",
+  "styles_root": "",
 
   // File and folder names to exclude from dependents search
   "exclude": [],

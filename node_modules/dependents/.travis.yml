@@ -6,3 +6,5 @@ notifications:
   email: false
 
 script: "npm run travis"
+
+sudo: false

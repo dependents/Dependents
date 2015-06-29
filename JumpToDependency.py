@@ -14,10 +14,12 @@ from .lib.track import track as t
 from .lib.printer import p
 from .lib.flatten import flatten
 from .lib.is_sass_file import is_sass_file
+from .lib.is_stylus_file import is_stylus_file
 from .lib.get_underscored_sass_path import get_underscored_sass_path
 
 from .node_module_lookup_amd import module_lookup_amd
 from .node_sass_lookup import sass_lookup
+from .node_stylus_lookup import stylus_lookup
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -73,8 +75,15 @@ class JumpToDependencyThread(BaseThread):
         if is_sass_file(module_with_extension):
             file_to_open = sass_lookup({
                 'filename': self.view.filename,
-                'directory': self.window.sass_root,
+                'directory': self.window.styles_root,
                 'path': module_with_extension
+            })
+        elif is_stylus_file(module_with_extension):
+            file_to_open = stylus_lookup({
+                'filename': self.view.filename,
+                'directory': self.window.styles_root,
+                # We don't want the implicit extension to support index.styl lookups
+                'path': module
             })
         else:
             p('Before abs path resolution', module_with_extension)
@@ -114,22 +123,26 @@ class JumpToDependencyThread(BaseThread):
         selected_region = self.view.word(region)
         selected_line = self.view.line(region)
 
-        print('region', selected_region)
-        print('line', selected_line)
+        p('region', selected_region)
+        p('line', selected_line)
 
         line = self.view.substr(selected_line)
         pattern = '[\'"]{1}([^"\']*)[\'"]{1}'
         strings_on_line = re.findall(pattern, line)
 
-        print('on_line', strings_on_line)
+        p('strings on line', strings_on_line)
         if not len(strings_on_line):
+            if selected_region:
+                p('No strings found using word region:', self.view.substr(selected_region))
+                return selected_region
+
             cant_find_file()
             return
 
         # Get the locations of the strings within the buffer
         regions = map(lambda string: self.view.find_all(string), strings_on_line)
         regions = flatten(list(regions))
-        print('regions', regions)
+        p('regions', regions)
         # Get the regions that intersect with the clicked region
         region = list(filter(lambda r: r.contains(selected_region), regions))
 

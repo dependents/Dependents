@@ -185,12 +185,18 @@ if (cluster.isMaster) {
     config = new ConfigFile(config).read();
   }
 
+  // TODO: Reduce this duplication with index.js
   if (util.isSassFile(filename)) {
-    util.getSassFiles({
+    util.getFiles(['.scss', '.sass'], {
       directory: directory,
       filesCb: filesCb
     });
 
+  } else if (util.isStylusFile(filename)) {
+    util.getFiles(['.styl'], {
+      directory: directory,
+      filesCb: filesCb
+    });
   } else {
     getJSFiles({
       directory: directory,

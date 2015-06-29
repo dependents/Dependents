@@ -1,8 +1,8 @@
 ### Dependents
 
-> Sublime Text 3 plugin for navigating front-end (JS/Sass) codebases
+> Navigate front-end codebases in Sublime Text
 
-Currently supporting: AMD, CommonJS, ES6, and Sass codebases.
+Currently supporting JavaScript (AMD, CommonJS, and ES6) and CSS Preprocessor (Sass and Stylus) codebases.
 
 1. [Installation](#installation)
  - [Nodejs Dependency](#nodejs-dependency)
@@ -96,16 +96,16 @@ But if your JS code was all contained within a subdirectory of `/someproject` yo
 }
 ```
 
-Works the same for sass but use `sass_root`
+Works the same for Sass and other CSS preprocessors but use `styles_root`
 ```
 {
-  "sass_root": "assets/sass",
+  "styles_root": "assets/sass",
 }
 ```
 
 
-Here is an example of using some other optional settings.  You can also combine js and sass roots in the same `.deprc`.
-See below for all possible settings. At a minimum, you will need at last a `root` or `sass_root` in any `.deprc` file.
+Here is an example of using some other optional settings.  You can also combine js and styles roots in the same `.deprc`.
+See below for all possible settings. At a minimum, you will need at last a `root` or `styles_root` in any `.deprc` file.
 
 ```
 {
@@ -113,7 +113,7 @@ See below for all possible settings. At a minimum, you will need at last a `root
   "config": "assets/js/config.js",
   "exclude": ['jquery.js', 'require.js'],
   "build_config": "assets/js/build.json",
-  "sass_root": "assets/sass",
+  "styles_root": "assets/sass",
 }
 ```
 
@@ -139,7 +139,7 @@ file there too with the reduced/correct relative paths.
 
 
 **Sass settings**
-* `sass_root`: the ultimate/root path for your sass file architecture at which to limit dependent searching.
+* `styles_root`: the ultimate/root path for your sass file architecture at which to limit dependent searching.
  * This package works swell if you follow the architecture guidelines at [sass-guidelines](http://sass-guidelin.es/#architecture).
 
 ### Usage

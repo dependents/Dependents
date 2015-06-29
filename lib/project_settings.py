@@ -11,7 +11,9 @@ def get_settings_from_source(source):
     settings = {}
 
     settings['root'] = normalize_trailing_slash(source.get('root', ''))
+    # Kept for backCompat before other preprocessors were supported
     settings['sass_root'] = normalize_trailing_slash(source.get('sass_root', ''))
+    settings['styles_root'] = normalize_trailing_slash(source.get('styles_root', ''))
     settings['config'] = source.get('config', '')
     settings['exclude'] = source.get('exclude', '')
     settings['build_config'] = source.get('build_config', '')
@@ -23,6 +25,14 @@ def get_settings_from_source(source):
 
     if not settings['exclude']:
         settings['exclude'] = []
+
+    if settings['sass_root'] and not settings['styles_root']:
+        settings['styles_root'] = settings['sass_root']
+
+    # TODO: Remove all usage of sass_root
+    if settings['styles_root'] and not settings['sass_root']:
+        p('setting sass_root for backCompat', settings['styles_root'])
+        settings['sass_root'] = settings['styles_root']
 
     return settings
 

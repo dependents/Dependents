@@ -91,8 +91,13 @@ function processFiles(options) {
 
   if (!files) {
     if (util.isSassFile(filename)) {
-      util.getSassFiles(fileOptions);
+      util.getFiles(['.scss', '.sass'], fileOptions);
+
+    } else if (util.isStylusFile(filename)) {
+      util.getFiles(['.styl'], fileOptions);
+
     } else {
+      // TODO: Use glob
       getJSFiles(fileOptions);
     }
 

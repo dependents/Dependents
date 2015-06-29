@@ -1,6 +1,7 @@
 import sys
 from .project_settings import get_project_settings
 from .is_sass_file import is_sass_file
+from .is_stylus_file import is_stylus_file
 from .show_error import show_error
 from .track import track as t
 from .printer import p
@@ -37,6 +38,7 @@ def _init(self):
 
     self.window.root = settings['root']
     self.window.sass_root = settings['sass_root']
+    self.window.styles_root = settings['styles_root']
     self.window.config = settings['config']
     self.window.exclude = settings['exclude']
     self.window.build_config = settings['build_config']
@@ -52,12 +54,12 @@ def _init(self):
     # All subsequent actions will be about the sass_root so just
     # switch the root to reduce the redundant checking if we should
     # use root or sass_root
-    if is_sass_file(self.view.filename):
-        if not self.window.sass_root:
-            show_error('Please set the "sass_root" setting in your .deprc file', True)
+    if is_sass_file(self.view.filename) or is_stylus_file(self.view.filename):
+        if not self.window.styles_root:
+            show_error('Please set the "styles_root" setting in your .deprc file', True)
             success = False
 
-        self.window.root = self.window.sass_root
+        self.window.root = self.window.styles_root
 
     elif not self.window.root:
         show_error('Please set the "root" setting in your .deprc file', True)
