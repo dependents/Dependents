@@ -46,8 +46,6 @@ def get_project_settings():
 
     settings = {}
 
-    p('Using found .deprc within: ', project_settings_path)
-
     if os.path.exists(project_settings_path):
         p('Using found .deprc within: ', project_settings_path)
         json_data = open(project_settings_path)

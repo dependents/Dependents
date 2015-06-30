@@ -43,6 +43,7 @@ class DependentsThread(BaseThread):
             sublime.set_clipboard('\n'.join(extLess))
 
         elif len(self.dependents) == 1:
+            p('Opening the only dependent: ', self.dependents[0])
             self.open_file(self.dependents[0])
 
         else:
@@ -98,7 +99,7 @@ class DependentsThread(BaseThread):
 
         # In case the root is the directory root (path)
         if path != self.window.root:
-            path += self.window.root
+            path = os.path.join(path, self.window.root)
 
         # We removed the root originally when populating the dependents list
         filename = os.path.normpath(os.path.join(path, dependent))
