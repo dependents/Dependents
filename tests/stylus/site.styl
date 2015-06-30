@@ -1,7 +1,7 @@
 /*************************/
-/*   This is the main scss file that pulls in all other sytlesheets into a single
+/*   This is the main Stylus file that pulls in all other sytlesheets into a single
 /*   site style sheet that can later be minified.
-/*   This is here as a scss testbed for Dependents 
+/*   This is here as a Stylus testbed for Dependents 
 /*************************/
 
 
@@ -13,10 +13,14 @@
 
 /* CUSTOM SASS CODES USED FOR THIS SITE.  */
 //  Commonly useful ones could later be put into a library for use in other sites
-@import 'utils/_debug'  // comment out to turn off debugging.
-@import 'utils/_functions'
-@import 'utils/_mixins'
-@import 'utils/_placeholders'
+@import 'debug/_debug'  // comment out to turn off debugging.
+
+// @import 'utils/_functions'
+// @import 'utils/_mixins'
+// @import 'utils/_placeholders'
+// for the three above can now use a glob.
+@import 'utils/*'
+
 /* END - CUSTOM SASS CODES USED FOR THIS SITE.  */
 
 /* BASE STYLING INCLUDING THE BASE(DEFAULT) THEME  */
