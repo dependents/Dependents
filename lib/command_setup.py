@@ -19,9 +19,11 @@ def command_setup(self):
 
     try:
         return _init(self)
-    except:
+    except Exception as e:
+        p(e)
+
         t("Setup Exception", {
-            "message": str(sys.exc_info()[0])
+            "message": e
         })
 
     return False

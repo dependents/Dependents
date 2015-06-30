@@ -73,12 +73,16 @@ class JumpToDependencyThread(BaseThread):
             module_with_extension = module
 
         if is_sass_file(module_with_extension):
+            p('Sass lookup for:', module_with_extension)
+
             file_to_open = sass_lookup({
                 'filename': self.view.filename,
                 'directory': self.window.styles_root,
                 'path': module_with_extension
             })
         elif is_stylus_file(module_with_extension):
+            p('Stylus lookup for:', module_with_extension)
+
             file_to_open = stylus_lookup({
                 'filename': self.view.filename,
                 'directory': self.window.styles_root,
