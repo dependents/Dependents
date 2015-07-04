@@ -33,7 +33,7 @@ module.exports = function(options) {
     // Look up the dep to see if it's aliased in the config
     // TODO: Generate a precinct-like lookup factory
     if (config && util.isJSFile(filename)) {
-      dep = lookup(config, dep);
+      dep = lookup(config, dep, filename);
     }
 
     // TODO: Possibly a switch statement about the file extensions

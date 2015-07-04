@@ -1,7 +1,15 @@
 require.config({
+  "baseUrl": "/js",
+
   "paths": {
-    "a": "./a",
-    "foobar": "./b",
-    "templates": "./templates"
+    "a": "foo/a",
+    "foobar": "foo/bar/b",
+    "templates": "../templates"
+  },
+
+  "map": {
+    "poet": {
+      "poet/templates": "templates/poet"
+    }
   }
 });

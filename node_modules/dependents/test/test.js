@@ -22,7 +22,7 @@ describe('dependents', function() {
       config: config
     },
     function(err, dependents) {
-      assert(!spy.called);
+      assert.ok(!spy.called);
       done();
     });
   });
@@ -134,8 +134,8 @@ describe('dependents', function() {
   describe('amd', function() {
     it('returns the (non-aliased) dependents', function(done) {
       dependents({
-        filename: __dirname + '/example/amd/b.js',
-        directory: __dirname + '/example/amd'
+        filename: __dirname + '/example/amd/js/b.js',
+        directory: __dirname + '/example/amd/js'
       },
       function(err, dependents) {
         assert.equal(dependents.length, 1);
@@ -146,8 +146,8 @@ describe('dependents', function() {
 
     it('resolves aliased modules if given a requirejs config', function(done) {
       dependents({
-        filename: __dirname + '/example/amd/b.js',
-        directory: __dirname + '/example/amd',
+        filename: __dirname + '/example/amd/js/b.js',
+        directory: __dirname + '/example/amd/js',
         config: __dirname + '/example/amd/config.json'
       },
       function(err, dependents) {
