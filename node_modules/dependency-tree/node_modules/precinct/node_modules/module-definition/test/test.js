@@ -1,8 +1,8 @@
-var getModuleType = require('../'),
-    path = require('path'),
-    fs = require('fs'),
-    assert = require('assert'),
-    amdAST = require('./amdAST');
+var getModuleType = require('../');
+var path = require('path');
+var fs = require('fs');
+var assert = require('assert');
+var amdAST = require('./amdAST');
 
 describe('module-definition', function() {
   var expected = {
@@ -45,8 +45,9 @@ describe('module-definition', function() {
 
   function sourceTest(filename, result) {
     it('should return `' + result + '` as type of ' + filename, function() {
-      var source = fs.readFileSync(path.resolve(__dirname, filename), 'utf8'),
-          type = getModuleType.fromSource(source);
+      var source = fs.readFileSync(path.resolve(__dirname, filename), 'utf8');
+      var type = getModuleType.fromSource(source);
+
       assert.equal(type, result);
     });
   }

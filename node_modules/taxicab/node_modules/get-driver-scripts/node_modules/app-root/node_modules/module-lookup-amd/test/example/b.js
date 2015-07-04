@@ -1,0 +1,2 @@
+// Dependent: a.js
+define({});

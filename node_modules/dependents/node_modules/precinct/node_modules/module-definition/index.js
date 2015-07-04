@@ -1,6 +1,6 @@
-var Walker  = require('node-source-walk'),
-    types   = require('ast-module-types'),
-    fs      = require('fs');
+var Walker  = require('node-source-walk');
+var types   = require('ast-module-types');
+var fs      = require('fs');
 
 /**
  * Determines the type of the module from the supplied source code or AST
@@ -9,18 +9,20 @@ var Walker  = require('node-source-walk'),
  * @return {String}
  */
 function fromSource(source) {
-  if (typeof source === 'undefined') throw new Error('source not supplied');
+  if (typeof source === 'undefined') {
+    throw new Error('source not supplied');
+  }
 
-  var walker = new Walker({
-        ecmaVersion: 6
-      }),
-      hasDefine = false,
-      hasAMDTopLevelRequire = false,
-      hasRequire = false,
-      hasExports = false,
-      hasES6Import = false,
-      hasES6Export = false,
-      isAMD, isCommonJS, isES6;
+  var walker = new Walker();
+  var hasDefine = false;
+  var hasAMDTopLevelRequire = false;
+  var hasRequire = false;
+  var hasExports = false;
+  var hasES6Import = false;
+  var hasES6Export = false;
+  var isAMD;
+  var isCommonJS;
+  var isES6;
 
   // Walker accepts as AST to avoid reparsing
   walker.walk(source, function(node) {
@@ -53,8 +55,7 @@ function fromSource(source) {
   isCommonJS = hasExports || (hasRequire && !hasDefine);
   isES6 = hasES6Import || hasES6Export;
 
-  // ES6 features are so unique that we can
-  // eagerly exit. (#19)
+  // ES6 features are so unique that we can eagerly exit. (#19)
   if (isES6) {
     return 'es6';
   }
@@ -77,9 +78,11 @@ function fromSource(source) {
  * @return {String}
  */
 function sync(file) {
-  if (!file) throw new Error('filename missing');
+  if (!file) {
+    throw new Error('filename missing');
+  }
 
-  var data = fs.readFileSync(file);
+  var data = fs.readFileSync(file, 'utf8');
   return fromSource(data.toString());
 }
 
@@ -98,7 +101,9 @@ module.exports = function(filepath, cb) {
     throw new Error('callback missing');
   }
 
-  fs.readFile(filepath, { encoding: 'utf8' }, function(err, data) {
+  var opts = {encoding: 'utf8'};
+
+  fs.readFile(filepath, opts, function(err, data) {
     if (err) {
       return cb(err);
     }
