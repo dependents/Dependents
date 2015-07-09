@@ -1,0 +1,1 @@
+Bug fix: Folks were seeing a trimmedBase error for AMD codebases
