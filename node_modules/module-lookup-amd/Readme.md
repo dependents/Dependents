@@ -11,20 +11,21 @@ and open the file that name resolves to.
 ### Usage
 
 ```js
-
 var lookup = require('module-lookup-amd');
 
 var realPath = lookup('path/to/my/config.js', 'dependency/path', 'path/to/file/containing/dependency');
 ```
 
-### `lookup(configPath, dependencyPath, filepath)`
+### `lookup(configPath, dependencyPath, filepath, directory)`
 
 * `configPath`: the path to your RequireJS configuration file
 * `dependencyPath`: the (potentially aliased) dependency that you want to lookup
 * `filepath`: the filepath of the file that contains the dependency (i.e., parent module)
+* `directory`: (Optional) the path to all files
+  * Used as a last resort for resolving paths from files that are not within the config's base url (like test files that import a module)
 
 ### Shell usage
 
 *Assumes a global `-g` installation*
 
-`lookup-amd -c path/to/my/config.js -f path/to/file/containing/dependency my/dependency/name`
+`lookup-amd -c path/to/my/config.js -f path/to/file/containing/dependency -d path/containing/all/files my/dependency/name`

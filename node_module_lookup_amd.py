@@ -9,6 +9,9 @@ def module_lookup_amd(options):
     if 'filename' in options:
         args.append('--filename=' + options['filename'])
 
+    if 'directory' in options:
+        args.append('--directory=' + options['directory'])
+
     if 'module' in options:
         args.append(options['module'])
 
