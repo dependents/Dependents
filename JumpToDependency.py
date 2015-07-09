@@ -218,7 +218,8 @@ class JumpToDependencyThread(BaseThread):
         result =  module_lookup_amd({
             'config': os.path.normpath(os.path.join(self.view.path, config)),
             'module': module,
-            'filename': filename
+            'filename': filename,
+            'directory': self.window.root
         })
 
         p('Alias Lookup', {

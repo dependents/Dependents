@@ -6,7 +6,7 @@
   "dependencies": {
     "dependency-tree": "~3.1.0",
     "dependents": "~2.1.0",
-    "module-lookup-amd": "~2.0.0",
+    "module-lookup-amd": "~2.0.4",
     "sass-lookup": "~1.0.2",
     "stylus-lookup": "~1.0.0",
     "taxicab": "~2.0.3"

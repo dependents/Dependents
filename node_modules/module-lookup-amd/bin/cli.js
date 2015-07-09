@@ -11,6 +11,7 @@ program
   .usage('[options] <path>')
   .option('-c, --config <path>', 'location of a RequireJS config file for AMD')
   .option('-f, --filename <path>', 'file containing the dependency')
+  .option('-d, --directory <path>', 'directory containing all files')
   .parse(process.argv);
 
 var config = program.config;
