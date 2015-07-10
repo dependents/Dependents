@@ -1,5 +1,5 @@
-var acorn = require('acorn/acorn');
-var acornLoose = require('acorn/acorn_loose');
+var acorn = require('acorn');
+var acornLoose = require('acorn/dist/acorn_loose');
 
 /**
  * Parse with strict mode then with loose mode as a fallback

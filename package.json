@@ -4,12 +4,12 @@
   "description": "Sublime Text plugin to navigate front-end codebases",
   "main": "index.js",
   "dependencies": {
-    "dependency-tree": "~3.1.0",
-    "dependents": "~2.1.0",
-    "module-lookup-amd": "~2.0.4",
-    "sass-lookup": "~1.0.2",
-    "stylus-lookup": "~1.0.0",
-    "taxicab": "~2.0.3"
+    "dependency-tree": "^3.1.0",
+    "dependents": "~3.0.1",
+    "module-lookup-amd": "^2.0.0",
+    "sass-lookup": "^1.0.2",
+    "stylus-lookup": "^1.0.0",
+    "taxicab": "^2.0.3"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

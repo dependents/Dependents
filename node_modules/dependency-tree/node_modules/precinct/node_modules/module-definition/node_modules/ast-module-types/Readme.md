@@ -28,8 +28,10 @@ Detecting the various forms of defining an AMD module
 
 ES6 Types
 
-* `isES6Import`: if the node is of the form: `import 'mylib'` or `import {something} from 'mylib'`
-* `isES6Export`: if the node is of any es6 export form: ex: `export default 123;` or `export { D as default };`
+*All types abide by the [EStree spec](https://github.com/estree/estree/blob/master/es6.md)*
+
+* `isES6Import`: if the node is any of the es6 import forms
+* `isES6Export`: if the node is of any es6 export forms
 
 ### Usage
 

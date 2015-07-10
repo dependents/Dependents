@@ -1,29 +1,7 @@
-var dir = require('node-dir');
 var path = require('path');
 var fs = require('fs');
 
-/**
- * @param  {Object} options
- * @param  {String} options.directory
- * @param  {Function} options.contentCb
- * @param  {Function} options.filesCb
- */
-module.exports.getFiles = function(extensions, options) {
-  dir.readFiles(options.directory, {
-    match: new RegExp('(' + extensions.join('|') + ')$'),
-    exclude: /^\./
-  },
-  function(err, content, filename, next) {
-    if (options.contentCb) {
-      options.contentCb(path.resolve(options.directory, filename), content);
-    }
-
-    next();
-  },
-  function(err, files) {
-    options.filesCb(files);
-  });
-};
+var debug = require('debug')('dependents');
 
 /**
  * @param  {String}  filename
@@ -43,14 +21,12 @@ module.exports.isStylusFile = function(filename) {
 };
 
 /**
- * Set of directories to ignore by default
- * @type {Array}
+ * @param  {String}  filename
+ * @return {Boolean}
  */
-module.exports.DEFAULT_EXCLUDE_DIR = [
-  'node_modules',
-  'bower_components',
-  'vendor'
-];
+module.exports.isJSFile = function(filename) {
+  return path.extname(filename) === '.js';
+};
 
 /**
  * Separates out the excluded directories and files
@@ -59,47 +35,54 @@ module.exports.DEFAULT_EXCLUDE_DIR = [
  * @param  {String} directory - Used for resolving the exclusion to the filesystem
  *
  * @return {Object} results
- * @return {String} results.directories - regex representing the directories
- * @return {String} results.files - regex representing the files
+ * @return {String} results.directoriesPattern - regex representing the directories
+ * @return {String[]} results.directories
+ * @return {String} results.filesPattern - regex representing the files
+ * @return {String[]} results.files
  */
 module.exports.processExcludes = function(excludes, directory) {
   var results = {
-    directories: '',
-    files: ''
+    directories: [],
+    directoriesPattern: '',
+    files: [],
+    filesPattern: ''
   };
-
-  var self = this;
-
-  var dirs = [];
-  var files = [];
-  var dirsPattetn;
-  var filesPattern;
 
   if (!excludes) { return results; }
 
+  var dirs = [];
+  var files = [];
+
   excludes.forEach(function(exclude) {
+    // Globbing breaks with excludes like foo/bar
+    if (this.stripTrailingSlash(exclude).indexOf('/') !== -1) {
+      debug('excluding from processing: ' + exclude);
+      return;
+    }
+
     try {
       var resolved = path.resolve(directory, exclude);
       var stats = fs.lstatSync(resolved);
 
       if (stats.isDirectory()) {
-        dirs.push(self.stripTrailingSlash(exclude));
+        dirs.push(this.stripTrailingSlash(exclude));
+
       } else if (stats.isFile()) {
-        exclude = path.basename(exclude, path.extname(exclude));
+        exclude = path.basename(exclude);
         files.push(exclude);
       }
     // Ignore files that don't exist
     } catch (e) {}
-  });
+  }, this);
 
   if (dirs.length) {
-    dirsPattern = dirs.join('|');
-    results.directories = new RegExp(dirsPattern);
+    results.directoriesPattern = new RegExp(dirs.join('|'));
+    results.directories = dirs;
   }
 
   if (files.length) {
-    filesPattern = files.join('|');
-    results.files = new RegExp(filesPattern);
+    results.filesPattern = new RegExp(files.join('|'));
+    results.files = files;
   }
 
   return results;

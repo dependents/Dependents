@@ -4,55 +4,31 @@ var path = require('path');
 var util = require('../../lib/util');
 
 describe('lib/util', function() {
-  describe('getFiles', function() {
-    beforeEach(function() {
-      this.exts = ['.scss', '.sass'];
-    });
-
-    it('returns the sass files in a given directory', function(done) {
-      util.getFiles(this.exts, {
-        directory: path.resolve(__dirname, '../'),
-        filesCb: function(files) {
-          assert.ok(files.length);
-          done();
-        }
-      });
-    });
-
-    it('executes the contentCb with the file name and contents if given', function(done) {
-      util.getFiles(this.exts, {
-        directory: path.resolve(__dirname, '../example/sass'),
-        contentCb: function(filename, content) {
-          assert.ok(filename);
-          assert.ok(content);
-        },
-        filesCb: function() {
-          done();
-        }
-      });
-    });
-  });
-
   describe('processExcludes', function() {
     it('returns an bare object if no excludes were supplied', function() {
       var results = util.processExcludes(null, null);
-      assert.ok(!results.directories);
-      assert.ok(!results.files);
+      assert.ok(!results.directories.length);
+      assert.ok(!results.directoriesPattern);
+      assert.ok(!results.files.length);
+      assert.ok(!results.filesPattern);
     });
 
     it('returns a regexp of the excluded directories', function() {
       var results = util.processExcludes(['example'], path.resolve(__dirname, '../'));
 
-      assert.ok(results.directories);
-      assert.ok(results.directories instanceof RegExp);
-      assert.ok(!results.files);
+      assert.ok(results.directories.length);
+      assert.ok(results.directoriesPattern instanceof RegExp);
+      assert.ok(!results.files.length);
+      assert.ok(!results.filesPattern);
     });
 
     it('returns a regexp of the excluded files', function() {
       var results = util.processExcludes(['error.js'], path.resolve(__dirname, '../example'));
 
-      assert.ok(!results.directories);
-      assert.ok(results.files instanceof RegExp);
+      assert.ok(!results.directories.length);
+      assert.ok(!results.directoriesPattern);
+      assert.ok(results.filesPattern instanceof RegExp);
+      assert.ok(results.files.length);
     });
 
     it('does not throw for excludes that do not exist', function() {
@@ -73,6 +49,24 @@ describe('lib/util', function() {
     });
   });
 
+  describe('isStylusFile', function() {
+    it('returns true if the filename has a styl extension', function() {
+      assert.ok(util.isStylusFile('foo.styl'));
+      assert.ok(util.isStylusFile('_foo.styl'));
+      assert.ok(!util.isStylusFile('foo.sass'));
+      assert.ok(!util.isStylusFile('_foo.js'));
+    });
+  });
+
+  describe('isJSFile', function() {
+    it('returns true if the filename has a js extension', function() {
+      assert.ok(util.isJSFile('foo.js'));
+      assert.ok(util.isJSFile('_foo.js'));
+      assert.ok(util.isJSFile('bar/foo.js'));
+      assert.ok(!util.isJSFile('bar/foo.scss'));
+    });
+  });
+
   describe('stripTrailingSlash', function() {
     it('returns the string without its trailing slash', function() {
       assert.equal(util.stripTrailingSlash('./'), '.');
@@ -83,6 +77,10 @@ describe('lib/util', function() {
     it('returns the original string if it does not have a trailing slash', function() {
       assert.equal(util.stripTrailingSlash('foo'), 'foo');
       assert.equal(util.stripTrailingSlash('.'), '.');
+    });
+
+    it('does not strip nested slashes', function() {
+      assert.equal(util.stripTrailingSlash('foo/bar/'), 'foo/bar');
     });
   });
 });

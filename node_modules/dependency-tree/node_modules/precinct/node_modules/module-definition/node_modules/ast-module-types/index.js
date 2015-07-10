@@ -158,12 +158,26 @@ module.exports.isREMForm = function(node) {
         third.type === 'Identifier' && third.name === 'module';
 };
 
-// import 'mylib' or import {foo, bar} from 'mylib'
 module.exports.isES6Import = function(node) {
-  return node.type === 'ImportDeclaration' && node.source && node.source.value;
+  switch(node.type) {
+    case 'ImportDeclaration':
+    case 'ImportDefaultSpecifier':
+    case 'ImportNamespaceSpecifier':
+      return true;
+  };
+
+  return false;
 };
 
-// Any form of es6 export
 module.exports.isES6Export = function (node) {
-  return node.type === 'ExportDeclaration';
+  switch(node.type) {
+    case 'ExportDeclaration':
+    case 'ExportNamedDeclaration':
+    case 'ExportSpecifier':
+    case 'ExportDefaultDeclaration':
+    case 'ExportAllDeclaration':
+      return true;
+  };
+
+  return false;
 };

@@ -1,37 +1,38 @@
 var assert = require('assert');
 var computeDependents = require('../../lib/computeDependents');
-var fs = require('fs');
 var path = require('path');
 
 describe('lib/computeDependents', function() {
   var dir = path.resolve(__dirname, '../example/commonjs');
-  var dependents;
-
-  beforeEach(function() {
-    dependents = {};
-  });
 
   it('computes the dependents of the given file', function() {
     var filename = dir + '/a.js';
 
-    computeDependents({
+    var dependents = computeDependents({
       filename: filename,
-      content: fs.readFileSync(filename, 'utf8'),
-      directory: dir,
-      dependents: dependents
+      directory: dir
     });
 
-    assert(Object.keys(dependents[dir + '/b.js'])[0] === filename);
+    assert.equal(Object.keys(dependents[dir + '/b.js'])[0], filename);
   });
 
-  it('does nothing for an empty file', function() {
-    computeDependents({
-      filename: dir + '/a.js',
-      content: '',
-      directory: dir,
-      dependents: dependents
+  it('returns an empty object for a file with no dependents', function() {
+    var filename = dir + '/a.js';
+    var dependents = computeDependents({
+      filename: filename,
+      directory: dir
     });
 
-    assert(!Object.keys(dependents).length);
+    assert.equal(Object.keys(dependents[filename]).length, 0);
+  });
+
+  it('returns an empty object for a non-existent file', function() {
+    var filename = dir + '/foobar.js';
+    var dependents = computeDependents({
+      filename: filename,
+      directory: dir
+    });
+
+    assert.equal(Object.keys(dependents[filename]).length, 0);
   });
 });

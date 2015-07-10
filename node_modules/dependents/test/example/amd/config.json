@@ -1,4 +1,5 @@
 require.config({
+  "baseUrl": "js",
   "paths": {
     "a": "./a",
     "foobar": "./b",
