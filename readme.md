@@ -1,4 +1,4 @@
-### Dependents
+### Dependents [![Gitter](https://img.shields.io/badge/gitter-join%20chat-green.svg?style=flat)](https://gitter.im/mrjoelkemp/Dependents?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 > Navigate front-end codebases in Sublime Text
 
@@ -395,4 +395,4 @@ You can get console logs via `View -> Show Console`.
 
 Paste those logs into the body of your issue.
 
-Or ping me [@mrjoelkemp](https://twitter.com/mrjoelkemp)
+Feel free to chat with me on [Gitter](https://gitter.im/mrjoelkemp/Dependents) if you need help or ping me [@mrjoelkemp](https://twitter.com/mrjoelkemp).
