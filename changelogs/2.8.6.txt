@@ -1,0 +1,5 @@
+Did a major overhaul of the backend code for the Find Dependents feature.
+You shouldn't notice anything different, but let me know if you encounter
+any bugs.
+
+Feel free to ping @mrjoelkemp or file an issue https://github.com/mrjoelkemp/Dependents/issues/new
