@@ -1,4 +1,6 @@
 import sys
+import os
+
 from .project_settings import get_project_settings
 from .is_sass_file import is_sass_file
 from .is_stylus_file import is_stylus_file
@@ -67,4 +69,24 @@ def _init(self):
         show_error('Please set the "root" setting in your .deprc file', True)
         success = False
 
+    if not assert_paths_exist(settings):
+        p('Found settings that do no exist')
+        return False
+
     return success
+
+def assert_paths_exist(paths):
+    msg = 'The following setting paths do not exist:\n'
+    found_non_existent_path = False
+
+    for setting, path in paths.items():
+        p('setting: ', setting, ' | path: ', path)
+        if not os.path.lexists(path):
+            found_non_existent_path = True
+            msg += setting + ' - ' + path + '\n'
+
+    if found_non_existent_path:
+        show_error(msg)
+        return False
+
+    return True
