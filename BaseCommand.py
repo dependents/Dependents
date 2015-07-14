@@ -6,14 +6,14 @@ from .lib.thread_progress import ThreadProgress
 from .lib.show_error import *
 from .lib.command_setup import command_setup
 from .lib.track import track as t
+from .lib.printer import p
 
 class BaseCommand():
     def run(self, modifier='', edit=None):
         setup_was_successful = command_setup(self)
 
         if not setup_was_successful:
-            show_error('Setup was not successful. Please file an issue', True)
-            return
+            p('Setup was not successful')
 
         if modifier:
             self.view.modifier = modifier
@@ -22,6 +22,8 @@ class BaseCommand():
 
         if edit:
             self.view.edit = edit
+
+        return setup_was_successful
 
     def init_thread(self, Thread, progress_message):
         thread = Thread(self)

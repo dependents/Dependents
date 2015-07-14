@@ -17,8 +17,8 @@ from .node_callers import find_callers
 
 class FindCallersCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
-        super(FindCallersCommand, self).run(modifier)
-        self.init_thread(FindCallersThread, 'Finding callers')
+        if super(FindCallersCommand, self).run(modifier):
+            self.init_thread(FindCallersThread, 'Finding callers')
 
 class FindCallersThread(BaseThread):
     def __init__(self, command):

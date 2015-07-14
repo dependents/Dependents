@@ -14,8 +14,8 @@ from .node_taxicab import find_driver
 
 class FindDriverCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
-        super(FindDriverCommand, self).run(modifier)
-        self.init_thread(FindDriverThread, 'Finding relevant entry points')
+        if super(FindDriverCommand, self).run(modifier):
+            self.init_thread(FindDriverThread, 'Finding relevant entry points')
 
 class FindDriverThread(BaseThread):
     def __init__(self, command):
