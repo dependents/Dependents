@@ -98,7 +98,8 @@ module.exports = function dependents(options, cb) {
     extend(true, dependents, results);
   });
 
-  cb(null, Object.keys(dependents[filename]));
+  // Default to empty object if the given file isn't in the map
+  cb(null, Object.keys(dependents[filename] || {}));
 };
 
 /**

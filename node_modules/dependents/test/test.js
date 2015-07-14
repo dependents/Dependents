@@ -13,12 +13,20 @@ function listHasFile(list, file) {
 
 describe('dependents', function() {
   it('reuses a given configuration object config', function(done) {
-    var config = dependents._readConfig(__dirname + '/example/amd/config.json');
+    var config = {
+      baseUrl: 'js',
+      paths: {
+        a: './a',
+        foobar: './b',
+        templates: './templates'
+      }
+    };
+
     var spy = sinon.spy(dependents, '_readConfig');
 
     dependents({
-      filename: __dirname + '/example/error.js',
-      directory: __dirname + '/example',
+      filename: __dirname + '/amd/js/a.js',
+      directory: __dirname + '/amd/js',
       config: config
     },
     function(err, dependents) {
@@ -56,13 +64,27 @@ describe('dependents', function() {
 
     it('does not throw on esprima errors', function(done) {
       dependents({
-        filename: __dirname + '/example/error.js',
-        directory: __dirname + '/example'
+        filename: __dirname + '/example/amd/a.js',
+        directory: __dirname + '/example/amd/'
       },
       function(err, dependents) {
         assert(!err);
         assert(!dependents.length);
         done();
+      });
+    });
+
+    it('does not throw if the filename is not in the resulting dependents map', function(done) {
+      assert.doesNotThrow(function() {
+        dependents({
+          filename: __dirname + '/mocha.opts',
+          directory: __dirname + '/example'
+        },
+        function(err, dependents) {
+          assert(!err);
+          assert.ok(!dependents.length);
+          done();
+        });
       });
     });
   });
