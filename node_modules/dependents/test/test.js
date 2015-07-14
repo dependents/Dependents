@@ -35,6 +35,18 @@ describe('dependents', function() {
     });
   });
 
+  it('does not hang when a directory contains a node binary script', function(done) {
+    dependents({
+      filename: __dirname + '/amd/js/script.js',
+      directory: __dirname + '/amd/js'
+    },
+    function(err, dependents) {
+      assert(!err);
+      assert.ok(!dependents.length);
+      done();
+    });
+  });
+
   describe('exceptions', function() {
     it('throws if a success callback was not supplied', function() {
       assert.throws(function() {
