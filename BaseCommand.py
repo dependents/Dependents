@@ -14,7 +14,6 @@ class BaseCommand():
 
         if not setup_was_successful:
             p('Setup was not successful')
-            return
 
         if modifier:
             self.view.modifier = modifier
@@ -23,6 +22,8 @@ class BaseCommand():
 
         if edit:
             self.view.edit = edit
+
+        return setup_was_successful
 
     def init_thread(self, Thread, progress_message):
         thread = Thread(self)

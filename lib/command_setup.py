@@ -68,6 +68,10 @@ def _init(self):
         show_error('Please set the "root" setting in your .deprc file', True)
         success = False
 
+    if not assert_paths_exist(settings):
+        p('Found settings that do no exist')
+        return False
+
     return success
 
 def assert_paths_exist(paths):

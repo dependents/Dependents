@@ -14,8 +14,8 @@ from .node_dependents import get_dependents
 
 class DependentsCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
-        super(DependentsCommand, self).run(modifier)
-        self.init_thread(DependentsThread, 'Finding dependents')
+        if super(DependentsCommand, self).run(modifier):
+            self.init_thread(DependentsThread, 'Finding dependents')
 
 class DependentsThread(BaseThread):
     """

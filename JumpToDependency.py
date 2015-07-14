@@ -23,8 +23,8 @@ from .node_stylus_lookup import stylus_lookup
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
-        super(JumpToDependencyCommand, self).run()
-        self.init_thread(JumpToDependencyThread, 'Jumping to dependency')
+        if super(JumpToDependencyCommand, self).run():
+            self.init_thread(JumpToDependencyThread, 'Jumping to dependency')
 
 class JumpToDependencyThread(BaseThread):
     """

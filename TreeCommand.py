@@ -16,8 +16,8 @@ from .node_dependency_tree import get_tree
 
 class TreeCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
-        super(TreeCommand, self).run()
-        self.init_thread(TreeThread, 'Generating Tree')
+        if super(TreeCommand, self).run():
+            self.init_thread(TreeThread, 'Generating Tree')
 
 class TreeThread(BaseThread):
     def __init__(self, command):

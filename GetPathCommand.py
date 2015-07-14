@@ -10,7 +10,9 @@ from .node_dependency_tree import get_tree
 
 class GetPathCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
-        super(GetPathCommand, self).run()
+        if not super(GetPathCommand, self).run():
+            return
+
         self.start_timer()
 
         root = normalize_trailing_slash(self.window.root)
