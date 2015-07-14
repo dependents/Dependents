@@ -41,7 +41,6 @@ def _init(self):
     settings = get_project_settings()
 
     self.window.root = settings['root']
-    self.window.sass_root = settings['sass_root']
     self.window.styles_root = settings['styles_root']
     self.window.config = settings['config']
     self.window.exclude = settings['exclude']
@@ -51,13 +50,13 @@ def _init(self):
         self.window.root = self.view.path
         p('Relative root set set to', self.window.root)
 
-    if is_relative_path(self.window.sass_root):
-        self.window.sass_root = self.view.path
-        p('Relative sass_root set to', self.window.sass_root)
+    if is_relative_path(self.window.styles_root):
+        self.window.styles_root = self.view.path
+        p('Relative styles_root set to', self.window.styles_root)
 
-    # All subsequent actions will be about the sass_root so just
+    # All subsequent actions will be about the styles_root so just
     # switch the root to reduce the redundant checking if we should
-    # use root or sass_root
+    # use root or styles_root
     if is_sass_file(self.view.filename) or is_stylus_file(self.view.filename):
         if not self.window.styles_root:
             show_error('Please set the "styles_root" setting in your .deprc file', True)
@@ -69,24 +68,24 @@ def _init(self):
         show_error('Please set the "root" setting in your .deprc file', True)
         success = False
 
-    if not assert_paths_exist(settings):
-        p('Found settings that do no exist')
-        return False
-
     return success
 
 def assert_paths_exist(paths):
-    msg = 'The following setting paths do not exist:\n'
+    msg = 'The following setting paths do not exist:\n\n'
     found_non_existent_path = False
+
+    p('asserting settings', paths)
 
     for setting, path in paths.items():
         p('setting: ', setting, ' | path: ', path)
-        if not os.path.lexists(path):
+        if type(path) == str and path and not os.path.lexists(path):
             found_non_existent_path = True
-            msg += setting + ' - ' + path + '\n'
+            msg += setting + ': ' + path + '\n'
+
+    msg += '\nPlease correct your paths.'
 
     if found_non_existent_path:
-        show_error(msg)
+        show_error(msg, True)
         return False
 
     return True

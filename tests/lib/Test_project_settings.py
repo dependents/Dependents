@@ -4,7 +4,6 @@ import platform
 
 source = {
     'root': 'public/assets/js',
-    'sass_root': 'public/assets/sass',
     'styles_root': 'public/assets/sass',
     'config': 'public/assets/my/config.js',
     'build_config': 'path/to/my/build.json',
@@ -14,7 +13,6 @@ source = {
 
 expected = {
     'root': 'public/assets/js/',
-    'sass_root': 'public/assets/sass/',
     'styles_root': 'public/assets/sass/',
     'config': 'public/assets/my/config.js',
     'build_config': 'path/to/my/build.json',
@@ -30,7 +28,6 @@ class Test(object):
     def test_get_settings_from_source_defaults(self):
         assert get_settings_from_source({}) == {
             'root': '',
-            'sass_root': '',
             'styles_root': '',
             'config': '',
             'exclude': [],
@@ -55,12 +52,4 @@ class Test(object):
         })
 
         assert results['styles_root'] == sass_root
-
-    def test_sass_root_back_compat(self):
-        styles_root = 'public/assets/sass/'
-
-        results = get_settings_from_source({
-            'styles_root': styles_root
-        })
-
-        assert results['sass_root'] == styles_root
+        assert 'sass_root' not in results

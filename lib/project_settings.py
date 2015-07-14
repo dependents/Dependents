@@ -29,10 +29,8 @@ def get_settings_from_source(source):
     if settings['sass_root'] and not settings['styles_root']:
         settings['styles_root'] = settings['sass_root']
 
-    # TODO: Remove all usage of sass_root
-    if settings['styles_root'] and not settings['sass_root']:
-        p('setting sass_root for backCompat', settings['styles_root'])
-        settings['sass_root'] = settings['styles_root']
+    # Remove the legacy setting
+    del settings['sass_root']
 
     p('Using these settings: ', settings)
     return settings
