@@ -33,7 +33,9 @@ module.exports = function(options) {
     // Look up the dep to see if it's aliased in the config
     // TODO: Generate a precinct-like lookup factory
     if (config && util.isJSFile(filename)) {
+      debug('pre-lookup path: ' + dep);
       dep = lookup(config, dep, filename);
+      debug('post-lookup path: ' + dep);
     }
 
     // TODO: Possibly a switch statement about the file extensions
@@ -44,7 +46,9 @@ module.exports = function(options) {
       dep = stylusLookup(dep, filename, directory);
 
     } else {
+      debug('pre path resolution: ' + dep);
       dep = resolveDepPath(dep, filename, directory);
+      debug('post path resolution: ' + dep);
     }
 
     dependents[dep] = dependents[dep] || {};
