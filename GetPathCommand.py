@@ -21,7 +21,12 @@ class GetPathCommand(BaseCommand, sublime_plugin.WindowCommand):
         filename_no_ext = os.path.splitext(self.view.filename)[0]
         p('File w/o ext:', filename_no_ext)
 
-        path = filename_no_ext.split(root)[1]
+        path = filename_no_ext.replace(root, '')
+        path = path.replace(self.view.path, '')
+
+        if path and path[0] == '/':
+            path = path[1:]
+
         p('Path:', path)
 
         sublime.set_clipboard(path);
