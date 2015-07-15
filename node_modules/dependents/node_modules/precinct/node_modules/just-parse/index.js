@@ -20,7 +20,7 @@ module.exports = function(content) {
 
   } catch (err) {
     debug('using the loose parser');
-    ast = acornLoose.parse_dammit(content);
+    ast = acornLoose.parse_dammit(content, parserOptions);
   }
 
   debug('parsed ast: ', ast);
