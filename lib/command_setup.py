@@ -68,13 +68,13 @@ def _init(self):
         show_error('Please set the "root" setting in your .deprc file', True)
         success = False
 
-    if not assert_paths_exist(settings):
+    if not assert_paths_exist(settings, self.view.path):
         p('Found settings that do no exist')
         return False
 
     return success
 
-def assert_paths_exist(paths):
+def assert_paths_exist(paths, base_path):
     msg = 'The following setting paths do not exist:\n\n'
     found_non_existent_path = False
 
@@ -82,9 +82,15 @@ def assert_paths_exist(paths):
 
     for setting, path in paths.items():
         p('setting: ', setting, ' | path: ', path)
-        if type(path) == str and path and not os.path.lexists(path):
-            found_non_existent_path = True
-            msg += setting + ': ' + path + '\n'
+
+        # Avoids array items for now
+        if path and type(path) == str:
+            resolved_path = os.path.join(base_path, path)
+            p('setting: ', setting, ' | resolved path: ', resolved_path)
+
+            if not os.path.lexists(resolved_path):
+                found_non_existent_path = True
+                msg += setting + ': ' + path + '\n'
 
     msg += '\nPlease correct your paths.'
 
