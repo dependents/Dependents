@@ -155,6 +155,8 @@ There are four ways to trigger the package's commands
 
 Quickly jump to a file that the current file @imports (sass) or requires (js)
 
+![Jump to Dependency gif](http://i.imgur.com/GGlD8Uf.gif?1)
+
 1. Within a file, place your cursor over the dependency path you want to go to
 2. Then trigger the `Jump to dependency` command in one of the four ways noted above.
 
@@ -163,6 +165,8 @@ Quickly jump to a file that the current file @imports (sass) or requires (js)
 #### Find the dependents of the current module
 
 Dependents are files that immediately depend/require/import the current file.
+
+![Find Dependents gif](http://i.imgur.com/Ol4i7a5.gif)
 
 Trigger the `Find dependents` command in one of the four ways noted above.
 
@@ -193,12 +197,16 @@ You can also open all relevant app entry points at once via:
 
 View a snapshot of the current file's dependency tree (as a JSON file)
 
+![View Dependency Tree gif](http://i.imgur.com/DVwRHbp.gif)
+
 1. Within a file, right click to open the context menu
 2. Click on `Dependents -> View this file's dependency tree`
 
 #### Copy path to clipboard
 
 Copy the rootless path of the current module to the clipboard. (JS and Sass)
+
+![Copy Path gif](http://i.imgur.com/iDNeMUP.gif)
 
 For example, if the root is `assets/js` and the filename is `path/to/assets/js/myFeature/file.js`,
 then the command will copy `myFeature/file` to the clipboard.
