@@ -34,7 +34,7 @@ describe('just-parse', function() {
     stub.restore();
   });
 
-  it.skip('does not hang on ios includes', function() {
+  it('does not hang on ios includes', function() {
     var ast = justParse(fs.readFileSync(__dirname + '/example/ios_includes.js', 'utf8'));
     assert(ast instanceof Object);
   });
