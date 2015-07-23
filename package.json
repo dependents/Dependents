@@ -1,6 +1,6 @@
 {
   "name": "Dependents",
-  "version": "2.9.6",
+  "version": "2.9.7",
   "description": "Sublime Text plugin to navigate front-end codebases",
   "main": "index.js",
   "dependencies": {
