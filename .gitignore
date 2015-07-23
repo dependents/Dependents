@@ -8,13 +8,10 @@ __pycache__/
 # Distribution / packaging
 .Python
 env/
-build/
 develop-eggs/
-dist/
 downloads/
 eggs/
 parts/
-sdist/
 var/
 *.egg-info/
 .installed.cfg
@@ -41,15 +38,6 @@ coverage.xml
 # Translations
 *.mo
 *.pot
-
-# Django stuff:
-*.log
-
-# Sphinx documentation
-docs/_build/
-
-# PyBuilder
-target/
 
 # Node specific exclusions
 .bin
