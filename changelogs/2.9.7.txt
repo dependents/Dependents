@@ -1,0 +1,2 @@
+Bug fix for Find Dependents: Fixed issue where acorn wasn't being found.
+
