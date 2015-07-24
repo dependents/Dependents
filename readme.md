@@ -58,12 +58,10 @@ Be sure to remove the package via package control first to avoid package control
 
 #### Windows Install
 
-Currently because `node_modules` creates an extensively deep set of folder paths,
-the package will fail to load completely into the normal Sublime packages directory.
-This is due to the limit of 256 characters for file paths in Windows.
-Thus you can **not** install this packages via package control.
+In order to get Dependents to work on the Windows operating system, the 256 character filepath length restriction of the OS needs to
+be bypassed. Dependents tries to achieve this using npm dedupe to flattten the list of node tool dependencies.
 
-To beat the 256 character limitation:
+If the plugin still doesn't work on Windows, try the following to beat the 256 character limitation:
 
 * git clone the repository `https://github.com/mrjoelkemp/Dependents` to a dependents folder in the root of your C drive, `C:\dependents`
 * Make a symbolic link from there to a folder of the same name `depdendents` in your sublime packages directory.
@@ -71,7 +69,6 @@ To beat the 256 character limitation:
 
 Hopefully in the future, a version can be released that shortens the file paths and thus overcomes Window's limitation.
 Sorry for the hassle but being able to use Dependents is worth it!
-
 
 ### Configuring settings
 

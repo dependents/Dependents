@@ -1,0 +1,8 @@
+Windows users rejoice?
+
+I landed a deduplication of the node tools that power this plugin. This should avoid Windows users hitting the
+maximum filepath length bug that prevented the plugin from working.
+
+This resulted in the deletion/move of 117k files, so let me know if anything breaks.
+
+- @mrjoelkemp
