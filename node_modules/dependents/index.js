@@ -1,10 +1,8 @@
 var path = require('path');
-var fs = require('fs');
 var ConfigFile = require('requirejs-config-file').ConfigFile;
-var glob = require('glob');
+var glob = require('glob-all');
 var debug = require('debug')('dependents');
 var extend = require('extend');
-var diff = require('lodash.difference');
 
 var computeDependents = require('./lib/computeDependents');
 var util = require('./lib/util');
@@ -21,7 +19,7 @@ var WorkerManager = require('./lib/WorkerManager');
  * @param  {String[]}     [options.files] - Allows workers to process predetermined sets of files
  *
  */
-module.exports = function dependents(options, cb) {
+module.exports = function(options, cb) {
   if (!cb) { throw new Error('expected success callback'); }
 
   if (!options || !options.filename) {
@@ -148,32 +146,20 @@ function getFilesToProcess(options) {
                    '+(' + exts.join('|') + ')' :
                    exts[0];
 
-  var pattern = directory + '/**/*' + extensions;
+  var globbers = [
+    directory + '/**/*' + extensions
+  ];
 
-  var globOptions = {
-    silent: true
-  };
+  globbers = globbers.concat(exclusions.directories.map(function(d) {
+    return '!' + directory + '/' + d + '/**/*';
+  })
+  .concat(exclusions.files.map(function(f) {
+    return '!' + directory + '/**/' + f;
+  })));
 
-  var allFiles = glob.sync(directory + '/**/*' + extensions, globOptions);
-  debug('pattern ' + pattern + ' | globbed all ' + allFiles.length + ' files');
-  debug('all files', allFiles);
+  debug('globbers: ' + globbers.join('\n'));
 
-  pattern = directory + '/+(' + exclusions.directories.join('|') + ')/**/*' + extensions;
-
-  var filesWithinBadDirs = exclusions.directories.length ? glob.sync(pattern, globOptions) : [];
-  debug('pattern ' + pattern + ' | globbed ' + filesWithinBadDirs.length + ' files within bad dirs');
-  debug('filesWithinBadDirs', filesWithinBadDirs);
-
-  pattern = directory + '/**/+(' + exclusions.files.join('|') + ')';
-  var filesToExclude = exclusions.files.length ? glob.sync(pattern, globOptions) : [];
-  debug('pattern ' + pattern + ' | globbed ' + filesToExclude.length + ' files to exclude');
-  debug('filesToExclude', filesToExclude);
-
-  var difference = diff(allFiles, filesWithinBadDirs, filesToExclude);
-  debug('should only process ' + difference.length + ' files');
-  debug('difference', difference);
-
-  return difference;
+  return glob.sync(globbers);
 }
 
 /**
@@ -194,7 +180,7 @@ function getExtensionsToProcess(filename) {
   // TODO: If we wanted to support mustache dependent lookup,
   // we could add ['.js', '.mustache']
   } else {
-    exts = ['.js']
+    exts = ['.js'];
   }
 
   return exts;

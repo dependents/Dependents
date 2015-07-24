@@ -29,7 +29,7 @@ describe('dependents', function() {
       directory: __dirname + '/amd/js',
       config: config
     },
-    function(err, dependents) {
+    function() {
       assert.ok(!spy.called);
       done();
     });
@@ -68,8 +68,7 @@ describe('dependents', function() {
     it('throws if a directory was not supplied', function() {
       assert.throws(function() {
         dependents({
-          filename: __dirname + '/example/error.js',
-          success: function(err, dependents) {}
+          filename: __dirname + '/example/error.js'
         }, sinon.spy());
       });
     });
@@ -108,9 +107,14 @@ describe('dependents', function() {
         directory: __dirname + '/example/exclusions'
       },
       function(err, dependents) {
-        assert(!dependents.some(function(dependent) {
-          return defaultExclusions.indexOf(dependents) !== -1;
-        }));
+        dependents.forEach(function(dep) {
+          defaultExclusions.map(function(e) {
+            return e.split('/')[0];
+          })
+          .forEach(function(folder) {
+            assert.equal(dep.indexOf(folder), -1, folder);
+          });
+        });
         done();
       });
     });
@@ -332,7 +336,7 @@ describe('dependents', function() {
       dependents({
         filename: __dirname + '/example/commonjs/b.js',
         directory: __dirname + '/example/commonjs'
-      }, function(err, deps) {
+      }, function() {
         dependents._shouldParallelize.restore();
         stub.restore();
         done();
