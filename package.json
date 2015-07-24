@@ -10,7 +10,7 @@
     "module-lookup-amd": "^2.0.0",
     "sass-lookup": "^1.0.2",
     "stylus-lookup": "^1.0.0",
-    "taxicab": "^2.0.3"
+    "taxicab": "~2.0.4"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

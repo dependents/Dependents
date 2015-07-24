@@ -140,7 +140,7 @@ describe('app-root', function() {
 
     it('handles aliased modules with a supplied config', function(done) {
       var opts = {
-        directory: __dirname + '/aliased',
+        directory: __dirname + '/aliased/js',
         config: __dirname + '/aliased/config.json',
         success: function(root) {
           assert(root.length === 1);
