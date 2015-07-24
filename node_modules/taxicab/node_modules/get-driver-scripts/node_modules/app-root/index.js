@@ -119,7 +119,7 @@ function getIndependentFiles(files, options) {
 
     deps.forEach(function(dep) {
       if (file.type === 'amd' && options.config) {
-        dep = lookup(options.config, dep);
+        dep = lookup(options.config, dep, file.path);
       }
 
       dep = resolveDep(dep, file.path, options.directory);
