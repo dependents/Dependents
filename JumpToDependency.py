@@ -135,6 +135,14 @@ class JumpToDependencyThread(BaseThread):
         strings_on_line = re.findall(pattern, line)
 
         p('strings on line', strings_on_line)
+
+        # Try just grabbing an entire space-delimited word (potentially including slashes)
+        if not len(strings_on_line):
+            pattern = '[\s]{1}([^\s]*)'
+            strings_on_line = re.findall(pattern, line)
+
+        p('space delimited words on line', strings_on_line)
+
         if not len(strings_on_line):
             if selected_region:
                 p('No strings found using word region:', self.view.substr(selected_region))
