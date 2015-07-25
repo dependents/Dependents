@@ -59,16 +59,7 @@ Be sure to remove the package via package control first to avoid package control
 #### Windows Install
 
 In order to get Dependents to work on the Windows operating system, the 256 character filepath length restriction of the OS needs to
-be bypassed. Dependents tries to achieve this using npm dedupe to flattten the list of node tool dependencies.
-
-If the plugin still doesn't work on Windows, try the following to beat the 256 character limitation:
-
-* git clone the repository `https://github.com/mrjoelkemp/Dependents` to a dependents folder in the root of your C drive, `C:\dependents`
-* Make a symbolic link from there to a folder of the same name `depdendents` in your sublime packages directory.
- * You can use [mklink](http://www.sevenforums.com/tutorials/278262-mklink-create-use-links-windows.html) or install this [tool](http://schinagl.priv.at/nt/hardlinkshellext/linkshellextension.html) which makes creating symbolic links easy.
-
-Hopefully in the future, a version can be released that shortens the file paths and thus overcomes Window's limitation.
-Sorry for the hassle but being able to use Dependents is worth it!
+be bypassed. Dependents tries to achieve this using npm dedupe to flatten the list of node tool dependencies.
 
 ### Configuring settings
 
