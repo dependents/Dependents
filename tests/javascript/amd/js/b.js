@@ -1,5 +1,6 @@
 define([
-  'hgn!templates/face'
+  'hgn!templates/face',
+  'css!styles/styles'
 ], function(templ) {
 
 });

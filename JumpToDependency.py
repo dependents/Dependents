@@ -78,7 +78,6 @@ class JumpToDependencyThread(BaseThread):
         if not file_exists:
             p('Module: ', module)
             p('Now searching for a file like', file_to_open)
-            # Is relative to the module
             extensionless = os.path.splitext(file_to_open)[0]
             p('extensionless', extensionless)
             actual_file = find_file_like(extensionless)
