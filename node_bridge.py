@@ -6,6 +6,7 @@ from subprocess import Popen, PIPE
 from os.path import dirname, realpath, join
 
 from .lib.track import track as t
+from .lib.printer import p
 from .lib.show_error import show_error
 from .lib.project_settings import get_project_settings
 
@@ -27,7 +28,7 @@ def node_bridge(bin, args=[], data=''):
         if not node_path:
             node_path = ':/usr/local/bin'
 
-        print('Node path: ', node_path)
+        p('Node path: ', node_path)
 
         env['PATH'] += node_path
 
@@ -36,14 +37,14 @@ def node_bridge(bin, args=[], data=''):
 
         print('Executing: ', ' '.join(cmd))
 
-        p = Popen(cmd,
+        proc = Popen(cmd,
             stdout=PIPE, stdin=PIPE, stderr=PIPE,
             env=env, shell=IS_WINDOWS)
 
     except OSError:
         raise Exception('Couldn\'t find Node.js. Make sure it\'s in your $PATH by running `node -v` in your command-line.')
 
-    stdout, stderr = p.communicate(input=data.encode('utf-8'))
+    stdout, stderr = proc.communicate(input=data.encode('utf-8'))
     stdout = stdout.decode('utf-8')
     stderr = stderr.decode('utf-8')
 
