@@ -2,6 +2,6 @@ require.config({
   "baseUrl": "js",
   "paths": {
     "foobar": "./b",
-    "templates": "./templates"
+    "templates": "../templates"
   }
 });
