@@ -49,27 +49,25 @@ class JumpToDependencyThread(BaseThread):
         if not self.window.config:
             module = self.handleRelativePaths(module)
 
-        extension = os.path.splitext(module)[1]
+        p('Before cabinet lookup', module)
+
+        file_to_open = cabinet({
+            'filename': self.view.filename,
+            'directory': self.window.root,
+            'path': module,
+            'config': os.path.normpath(os.path.join(self.view.path, self.window.config))
+        });
+
+        p('After cabinet lookup', file_to_open)
+
+        extension = os.path.splitext(file_to_open)[1]
         p('Extension found in dependency name', extension)
 
         # TODO: Move this lookup logic into a node tool
         # Use the current file's extension if not supplied
         if not extension:
             extension = os.path.splitext(self.view.filename)[1]
-            module_with_extension = module + extension
-        else:
-            module_with_extension = module
-
-        p('Before cabinet lookup', module_with_extension)
-
-        file_to_open = cabinet({
-            'filename': self.view.filename,
-            'directory': self.window.styles_root,
-            'path': module_with_extension,
-            'config': os.path.normpath(os.path.join(self.view.path, self.window.config))
-        });
-
-        p('After cabinet lookup', module_with_extension)
+            file_to_open = file_to_open + extension
 
         # Assume the file is about the root
         # TODO: Does cabinet always return an absolute path?
@@ -78,13 +76,17 @@ class JumpToDependencyThread(BaseThread):
 
         file_exists = os.path.isfile(file_to_open)
         if not file_exists:
-            p('Now searching for a file like', module)
+            p('Module: ', module)
+            p('Now searching for a file like', file_to_open)
             # Is relative to the module
-            actual_file = find_file_like(module)
-            if actual_file:
-                extension = os.path.splitext(actual_file)[1]
-                module_with_extension = module + extension
-                file_to_open = self.get_absolute_path(module_with_extension)
+            extensionless = os.path.splitext(file_to_open)[0]
+            p('extensionless', extensionless)
+            actual_file = find_file_like(extensionless)
+            actual_file = os.path.join(os.path.dirname(file_to_open), actual_file)
+            p('attempt to find like: ', actual_file)
+            p('abs of find: ', os.path.join(os.path.dirname(file_to_open), actual_file))
+            if os.path.isfile(actual_file):
+                file_to_open = actual_file
 
         self.open_file(file_to_open)
 
