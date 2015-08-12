@@ -13,13 +13,8 @@ from .lib.find_file_like import find_file_like
 from .lib.track import track as t
 from .lib.printer import p
 from .lib.flatten import flatten
-from .lib.is_sass_file import is_sass_file
-from .lib.is_stylus_file import is_stylus_file
-from .lib.get_underscored_sass_path import get_underscored_sass_path
 
-from .node_module_lookup_amd import module_lookup_amd
-from .node_sass_lookup import sass_lookup
-from .node_stylus_lookup import stylus_lookup
+from .node_filing_cabinet import cabinet
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -54,57 +49,43 @@ class JumpToDependencyThread(BaseThread):
         if not self.window.config:
             module = self.handleRelativePaths(module)
 
-        # Lookup the module name, if aliased
-        if self.window.config and os.path.splitext(self.view.filename)[1] == '.js':
-            result = self.aliasLookup(module, self.window.config, self.view.filename)
+        p('Before cabinet lookup', module)
 
-            if result:
-                module = result
+        file_to_open = cabinet({
+            'filename': self.view.filename,
+            'directory': self.window.root,
+            'path': module,
+            'config': os.path.normpath(os.path.join(self.view.path, self.window.config))
+        });
 
-        extension = os.path.splitext(module)[1]
+        p('After cabinet lookup', file_to_open)
+
+        extension = os.path.splitext(file_to_open)[1]
         p('Extension found in dependency name', extension)
 
         # TODO: Move this lookup logic into a node tool
         # Use the current file's extension if not supplied
         if not extension:
             extension = os.path.splitext(self.view.filename)[1]
-            module_with_extension = module + extension
-        else:
-            module_with_extension = module
+            file_to_open = file_to_open + extension
 
-        if is_sass_file(module_with_extension):
-            p('Sass lookup for:', module_with_extension)
+        # Assume the file is about the root
+        # TODO: Does cabinet always return an absolute path?
+        file_to_open = self.get_absolute_path(file_to_open)
+        p('After abs path resolution', file_to_open)
 
-            file_to_open = sass_lookup({
-                'filename': self.view.filename,
-                'directory': self.window.styles_root,
-                'path': module_with_extension
-            })
-        elif is_stylus_file(module_with_extension):
-            p('Stylus lookup for:', module_with_extension)
-
-            file_to_open = stylus_lookup({
-                'filename': self.view.filename,
-                'directory': self.window.styles_root,
-                # We don't want the implicit extension to support index.styl lookups
-                'path': module
-            })
-        else:
-            p('Before abs path resolution', module_with_extension)
-
-            # Assume the file is about the root
-            file_to_open = self.get_absolute_path(module_with_extension)
-            p('After abs path resolution', file_to_open)
-
-            file_exists = os.path.isfile(file_to_open)
-            if not file_exists:
-                p('Now searching for a file like', module)
-                # Is relative to the module
-                actual_file = find_file_like(module)
-                if actual_file:
-                    extension = os.path.splitext(actual_file)[1]
-                    module_with_extension = module + extension
-                    file_to_open = self.get_absolute_path(module_with_extension)
+        file_exists = os.path.isfile(file_to_open)
+        if not file_exists:
+            p('Module: ', module)
+            p('Now searching for a file like', file_to_open)
+            extensionless = os.path.splitext(file_to_open)[0]
+            p('extensionless', extensionless)
+            actual_file = find_file_like(extensionless)
+            actual_file = os.path.join(os.path.dirname(file_to_open), actual_file)
+            p('attempt to find like: ', actual_file)
+            p('abs of find: ', os.path.join(os.path.dirname(file_to_open), actual_file))
+            if os.path.isfile(actual_file):
+                file_to_open = actual_file
 
         self.open_file(file_to_open)
 
@@ -216,24 +197,3 @@ class JumpToDependencyThread(BaseThread):
 
         filename = os.path.normpath(os.path.join(filename, module))
         return filename
-
-    def aliasLookup(self, module, config, filename):
-        """
-        Looks up the (possibly aliased) filename via the supplied config
-        """
-        lookup_start_time = time.time()
-
-        result =  module_lookup_amd({
-            'config': os.path.normpath(os.path.join(self.view.path, config)),
-            'module': module,
-            'filename': filename,
-            'directory': self.window.root
-        })
-
-        p('Alias Lookup', {
-            "module_result": module + ' => ' + result,
-            "config": self.window.config,
-            "etime": time.time() - lookup_start_time
-        })
-
-        return result
