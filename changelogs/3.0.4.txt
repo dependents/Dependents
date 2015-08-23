@@ -1,0 +1,3 @@
+Bug fix: CommonJS jump to node module
+
+You can now jump to installed node modules.
