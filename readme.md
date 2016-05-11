@@ -99,6 +99,7 @@ See below for all possible settings. At a minimum, you will need at last a `root
 {
   "root": "assets/js",
   "config": "assets/js/config.js",
+  "webpack_config": "assets/js/webpack.config.js",
   "exclude": ['jquery.js', 'require.js'],
   "build_config": "assets/js/build.json",
   "styles_root": "assets/sass",
@@ -117,6 +118,7 @@ file there too with the reduced/correct relative paths.
 **JavaScript Settings**
 * `root`: the ultimate/root path at which to limit js dependent searching.
 * `config`: (Optional) the path to your requirejs configuration file
+* `webpack_config`: (Optional) the path to your webpack configuration file
 * `exclude`: (Optional) a list of paths and/or folder names to exclude from the search for dependents
  * Omitting folders that contain 3rd party libraries can drastically speed up the search for a large codebase.
  * The following folders are excluded by default: `node_modules`, `bower_components`, `vendor`
@@ -148,7 +150,7 @@ Quickly jump to a file that the current file @imports (sass) or requires (js)
 1. Within a file, place your cursor over the dependency path you want to go to
 2. Then trigger the `Jump to dependency` command in one of the four ways noted above.
 
-*For javascript* if a dependency is aliased, you'll need to supply the path to your requirejs configuration
+*For javascript* if a dependency is aliased, you'll need to supply the path to your requirejs or webpack configuration
 
 #### Find the dependents of the current module
 

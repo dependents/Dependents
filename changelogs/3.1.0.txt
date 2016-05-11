@@ -1,0 +1,11 @@
+Webpack support!
+
+The JumpToDependency feature supports jumping to dependncies that are aliased via a webpack config.
+
+You can now add a webpack_config to your .deprc file that points to the location of your webpack config:
+
+{
+  "webpack_config": "path/to/my/webpack.config.js"
+}
+
+Additional Dependents features will support Webpack resolution in future updates.
