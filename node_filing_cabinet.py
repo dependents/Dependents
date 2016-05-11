@@ -10,6 +10,9 @@ def cabinet(options):
     if 'config' in options:
         args.append('--config=' + options['config'])
 
+    if 'webpack_config' in options:
+        args.append('--webpack-config=' + options['webpack_config'])
+
     if 'path' in options:
         args.append(options['path'])
 
