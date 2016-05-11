@@ -4,11 +4,11 @@
   "description": "Sublime Text plugin to navigate front-end codebases",
   "main": "index.js",
   "dependencies": {
-    "callers": "~1.0.3",
-    "dependency-tree": "^3.1.0",
-    "dependents": "~3.0.4",
-    "filing-cabinet": "~1.0.4",
-    "taxicab": "~2.0.4"
+    "callers": "1.0.3",
+    "dependency-tree": "5.1.0",
+    "dependents": "3.0.4",
+    "filing-cabinet": "1.2.1",
+    "taxicab": "2.0.4"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

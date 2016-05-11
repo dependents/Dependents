@@ -51,11 +51,22 @@ class JumpToDependencyThread(BaseThread):
 
         p('Before cabinet lookup', module)
 
+        if self.window.config:
+            config = os.path.normpath(os.path.join(self.view.path, self.window.config))
+        else:
+            config = ''
+
+        if self.window.webpack_config:
+            webpack_config = os.path.normpath(os.path.join(self.view.path, self.window.webpack_config))
+        else:
+            webpack_config = ''
+
         file_to_open = cabinet({
             'filename': self.view.filename,
             'directory': self.window.root,
             'path': module,
-            'config': os.path.normpath(os.path.join(self.view.path, self.window.config))
+            'config': config,
+            'webpack_config': webpack_config
         });
 
         p('After cabinet lookup', file_to_open)

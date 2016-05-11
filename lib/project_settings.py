@@ -15,8 +15,9 @@ def get_settings_from_source(source):
     settings['sass_root'] = normalize_trailing_slash(source.get('sass_root', ''))
     settings['styles_root'] = normalize_trailing_slash(source.get('styles_root', ''))
     settings['config'] = source.get('config', '')
-    settings['exclude'] = source.get('exclude', '')
     settings['build_config'] = source.get('build_config', '')
+    settings['webpack_config'] = source.get('webpack_config', '')
+    settings['exclude'] = source.get('exclude', '')
     settings['node_path'] = source.get('node_path', '')
 
     # Users shouldn't need to worry about the leading colon (if necessary #124)

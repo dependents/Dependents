@@ -43,6 +43,7 @@ def _init(self):
     self.window.root = settings['root']
     self.window.styles_root = settings['styles_root']
     self.window.config = settings['config']
+    self.window.webpack_config = settings['webpack_config']
     self.window.exclude = settings['exclude']
     self.window.build_config = settings['build_config']
 

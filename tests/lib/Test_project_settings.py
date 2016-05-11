@@ -6,6 +6,7 @@ source = {
     'root': 'public/assets/js',
     'styles_root': 'public/assets/sass',
     'config': 'public/assets/my/config.js',
+    'webpack_config': 'public/assets/my/webpack.config.js',
     'build_config': 'path/to/my/build.json',
     'node_path': '/usr/bin/local',
     'exclude': ['foo', 'bar']
@@ -15,6 +16,7 @@ expected = {
     'root': 'public/assets/js/',
     'styles_root': 'public/assets/sass/',
     'config': 'public/assets/my/config.js',
+    'webpack_config': 'public/assets/my/webpack.config.js',
     'build_config': 'path/to/my/build.json',
     # Auto adds a colon
     'node_path': ':/usr/bin/local',
@@ -30,6 +32,7 @@ class Test(object):
             'root': '',
             'styles_root': '',
             'config': '',
+            'webpack_config': '',
             'exclude': [],
             'build_config': '',
             'node_path': ''
