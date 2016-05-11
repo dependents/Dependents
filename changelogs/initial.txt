@@ -7,6 +7,7 @@ settings in the root directory of your codebase:
 {
   "root": "public/assets/js",
   "config": "public/assets/js/config.js",  # Optional
+  "webpack_config": "public/assets/js/webpack.config.js",  # Optional
   "styles_root": "public/assets/sass",       # Optional
   "exclude": ['jquery.js', 'require.js'],  # Optional
   "build_config": "public/assets/js/build.json", # Optional
@@ -15,6 +16,7 @@ settings in the root directory of your codebase:
 
 * "root": the location where your JS files reside
 * "config": the location of your RequireJS configuration for AMD codebases
+* "webpack_config": the location of your Webpack configuration
 * "styles_root": the location of your stylesheets (Sass, Stylus)
 * "exclude": a list of files and folder names to exclude in the search for dependents
 * "build_config": the location of your requirejs build configuration file
