@@ -6,7 +6,7 @@
   "dependencies": {
     "callers": "1.0.3",
     "dependency-tree": "5.1.0",
-    "dependents": "3.0.4",
+    "dependents": "3.1.0",
     "filing-cabinet": "1.2.1",
     "taxicab": "2.0.4"
   },

@@ -13,4 +13,4 @@ class Test(object):
 
         trimmed = trim_paths_of_root(files, root)
 
-        assert trimmed == ['/bar', '/baz', '/car']
+        assert trimmed == ['bar', 'baz', 'car']

@@ -6,7 +6,7 @@
 
 *Primarily built for use in [Sublime Dependents](https://github.com/mrjoelkemp/sublime-dependents).*
 
-* Supports JS module systems: AMD, CommonJS, and ES6 modules.
+* Supports JS module systems: AMD, CommonJS, and ES6 modules. Also supports RequireJS and Webpack loader configurations.
 * Supports SASS imports.
 * Support Stylus import/require
 
@@ -27,6 +27,7 @@ dependents({
   filename: './a.js',
   directory: './',
   config: 'path/to/my/config.js', // optional
+  webpackConfig: 'path/to/my/webpack.config.js', // optional
   exclude: ['my_vendor_files'],  // optional
 },
 function(err, dependents) {
@@ -62,6 +63,7 @@ function(err, dependents) {
 
 * `files`: list of files to search through (if you want to control the files processed). Useful in clustering.
 * `config`: path to your requirejs config. Used to look up path aliases.
+* `webpackConfig`: path to your webpack config. Used to look up path aliases.
 * `exclude`: a list of files and/or folders to exclude from the search.
  * The following 3rd party modules are excluded from the following folders by default: `node_modules`, `bower_components`, `vendor`
 

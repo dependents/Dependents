@@ -1,0 +1,1 @@
+import someModule from './someModule';
