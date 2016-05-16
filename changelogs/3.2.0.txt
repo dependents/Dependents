@@ -1,0 +1,11 @@
+Find Dependents: Webpack support
+
+The Find Dependents feature now supports processing modules that use Webpack aliasing.
+
+To use, you need a webpack_config entry in your .deprc file that points to the location of your webpack config:
+
+{
+  "webpack_config": "path/to/my/webpack.config.js"
+}
+
+Additional Dependents features will support Webpack resolution in future updates.

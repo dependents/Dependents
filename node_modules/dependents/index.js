@@ -33,10 +33,12 @@ module.exports = function(options, cb) {
 
   var exclusions = options.exclusions || [];
   var config = options.config;
+  var webpackConfig = options.webpackConfig;
 
   debug('filename: ' + filename);
   debug('directory: ' + directory);
   debug('config: ' + config);
+  debug('webpackConfig: ' + webpackConfig);
   debug('exclusions: ', exclusions);
 
   if (typeof exclusions === 'string') {
@@ -90,7 +92,8 @@ module.exports = function(options, cb) {
     var results = computeDependents({
       filename: filename,
       directory: directory,
-      config: config
+      config: config,
+      webpackConfig: webpackConfig
     });
 
     extend(true, dependents, results);

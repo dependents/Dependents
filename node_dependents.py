@@ -7,6 +7,9 @@ def get_dependents(options):
     if 'config' in options:
         args.append('--config=' + options['config'])
 
+    if 'webpack_config' in options:
+        args.append('--webpack-config=' + options['webpack_config'])
+
     if 'exclude' in options:
         args.append('--exclude=' + options['exclude'])
 

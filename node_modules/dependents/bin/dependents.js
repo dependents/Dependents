@@ -10,13 +10,12 @@ program
   .usage('[options] <filename>')
   .option('-d, --directory <path>', 'root of all files')
   .option('-c, --config [path]', 'location of a RequireJS config file for AMD')
+  .option('-w, --webpack-config [path]', 'location of a webpack config file')
   .option('-e, --exclude [path,...]',
     'comma-separated list of files and folder names to exclude')
   .parse(process.argv);
 
 var directory = program.directory;
-var config = program.config;
-var exclude = program.exclude;
 var filename = program.args[0];
 
 if (!directory) {
@@ -31,8 +30,9 @@ if (!filename) {
 
 dependents({
   directory: directory,
-  config: config,
-  exclude: exclude,
+  config: program.config,
+  webpackConfig: program.webpackConfig,
+  exclude: program.exclude,
   filename: filename
 }, function(err, dependents) {
   dependents.forEach(function(dependent) {

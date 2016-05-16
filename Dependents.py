@@ -69,6 +69,9 @@ class DependentsThread(BaseThread):
         if self.window.config:
             args['config'] = os.path.normpath(os.path.join(self.view.path, self.window.config))
 
+        if self.window.webpack_config:
+            args['webpack_config'] = os.path.normpath(os.path.join(self.view.path, self.window.webpack_config))
+
         if self.window.exclude:
             args['exclude'] = ','.join(self.window.exclude)
 

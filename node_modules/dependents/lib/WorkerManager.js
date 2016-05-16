@@ -8,6 +8,7 @@ module.exports = function(options) {
   this.directory = options.directory;
   this.config = options.config;
   this.files = options.files;
+  this.webpackConfig = options.webpackConfig;
 
   /**
    * The approximate number of times a worker should come back for more files to process.
@@ -141,7 +142,8 @@ module.exports.prototype._delegateWork = function(worker) {
   worker.send({
     directory: this.directory,
     files: files,
-    config: this.config
+    config: this.config,
+    webpackConfig: this.webpackConfig
   });
 };
 

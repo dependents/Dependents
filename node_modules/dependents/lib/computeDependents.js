@@ -1,11 +1,6 @@
 var precinct = require('precinct');
-var util = require('./util');
 var debug = require('debug')('dependents');
-
-var lookup = require('module-lookup-amd');
-var resolveDepPath = require('resolve-dependency-path');
-var sassLookup = require('sass-lookup');
-var stylusLookup = require('stylus-lookup');
+var cabinet = require('filing-cabinet');
 
 /**
  * Registers all dependencies of the given file as "used"
@@ -20,6 +15,7 @@ module.exports = function(options) {
   var filename = options.filename;
   var directory = options.directory;
   var config = options.config;
+  var webpackConfig = options.webpackConfig;
   var dependents = {};
 
   dependents[filename] = {};
@@ -30,25 +26,20 @@ module.exports = function(options) {
   debug('' + dependencies.length + ' dependencies for ' + filename.replace(directory, ''));
 
   dependencies.forEach(function(dep) {
-    // Look up the dep to see if it's aliased in the config
-    // TODO: Generate a precinct-like lookup factory
-    if (config && util.isJSFile(filename)) {
-      debug('pre-lookup path: ' + dep);
-      dep = lookup(config, dep, filename);
-      debug('post-lookup path: ' + dep);
-    }
+    debug('before cabinet lookup: ' + dep);
 
-    // TODO: Possibly a switch statement about the file extensions
-    if (util.isSassFile(filename)) {
-      dep = sassLookup(dep, filename, directory);
+    var result = cabinet({
+      partial: dep,
+      filename: filename,
+      directory: directory,
+      config: config,
+      webpackConfig: webpackConfig
+    });
 
-    } else if (util.isStylusFile(filename)) {
-      dep = stylusLookup(dep, filename, directory);
+    debug('after cabinet lookup: ' + result);
 
-    } else {
-      debug('pre path resolution: ' + dep);
-      dep = resolveDepPath(dep, filename, directory);
-      debug('post path resolution: ' + dep);
+    if (result) {
+      dep = result;
     }
 
     dependents[dep] = dependents[dep] || {};

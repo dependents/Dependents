@@ -21,7 +21,8 @@ process.on('message', function(args) {
     var results = computeDependents({
       filename: filename,
       directory: args.directory,
-      config: args.config
+      config: args.config,
+      webpackConfig: args.webpackConfig
     });
 
     extend(true, dependents, results);
