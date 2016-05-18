@@ -1,0 +1,4 @@
+{
+  "webpack_config": "webpack.config.js",
+  "root": "./"
+}
