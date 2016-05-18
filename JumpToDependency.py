@@ -9,12 +9,11 @@ from .BaseThread import BaseThread
 
 # TODO: Support Python 2 style imports
 from .lib.show_error import *
-from .lib.find_file_like import find_file_like
 from .lib.track import track as t
 from .lib.printer import p
 from .lib.flatten import flatten
 
-from .node_filing_cabinet import cabinet
+from .node_dependents_editor_backend import backend
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -44,59 +43,13 @@ class JumpToDependencyThread(BaseThread):
 
         p('Extracted Path', { 'path': module })
 
-        # Requirejs lookup handles this automatically
-        # Other lookups need a manual resolution
-        if not self.window.config:
-            module = self.handleRelativePaths(module)
-
-        p('Before cabinet lookup', module)
-
-        if self.window.config:
-            config = os.path.normpath(os.path.join(self.view.path, self.window.config))
-        else:
-            config = ''
-
-        if self.window.webpack_config:
-            webpack_config = os.path.normpath(os.path.join(self.view.path, self.window.webpack_config))
-        else:
-            webpack_config = ''
-
-        file_to_open = cabinet({
+        file_to_open = backend({
             'filename': self.view.filename,
-            'directory': self.window.root,
             'path': module,
-            'config': config,
-            'webpack_config': webpack_config
+            'command': 'lookup'
         });
 
         p('After cabinet lookup', file_to_open)
-
-        extension = os.path.splitext(file_to_open)[1]
-        p('Extension found in dependency name', extension)
-
-        # TODO: Move this lookup logic into a node tool
-        # Use the current file's extension if not supplied
-        if not extension:
-            extension = os.path.splitext(self.view.filename)[1]
-            file_to_open = file_to_open + extension
-
-        # Assume the file is about the root
-        # TODO: Does cabinet always return an absolute path?
-        file_to_open = self.get_absolute_path(file_to_open)
-        p('After abs path resolution', file_to_open)
-
-        file_exists = os.path.isfile(file_to_open)
-        if not file_exists:
-            p('Module: ', module)
-            p('Now searching for a file like', file_to_open)
-            extensionless = os.path.splitext(file_to_open)[0]
-            p('extensionless', extensionless)
-            actual_file = find_file_like(extensionless)
-            actual_file = os.path.join(os.path.dirname(file_to_open), actual_file)
-            p('attempt to find like: ', actual_file)
-            p('abs of find: ', os.path.join(os.path.dirname(file_to_open), actual_file))
-            if os.path.isfile(actual_file):
-                file_to_open = actual_file
 
         self.open_file(file_to_open)
 
@@ -177,34 +130,3 @@ class JumpToDependencyThread(BaseThread):
         module = re.sub('[\'",]', '', module)
 
         return module
-
-    def handleRelativePaths(self, module):
-        resolved = module
-
-        if (module.find('..') == 0 or module.find('.') == 0):
-            fileDir = os.path.dirname(self.view.filename)
-            resolved = os.path.normpath(os.path.join(fileDir, module))
-
-            p('Relative Path Resolved', {
-                'module_resolved': module + ' => ' + resolved
-            })
-
-        return resolved
-
-    def get_absolute_path(self, module):
-        """
-        Returns a version of module that has the absolute path
-        and root path baked in
-        """
-        filename = ''
-
-        root = self.window.root
-
-        # If it's an absolute path already, it was probably a module that uses plugin loader
-        if self.view.path not in module:
-            filename = os.path.normpath(os.path.join(filename, self.view.path))
-            if root not in module and self.view.path != root:
-                filename = os.path.normpath(os.path.join(filename, root))
-
-        filename = os.path.normpath(os.path.join(filename, module))
-        return filename

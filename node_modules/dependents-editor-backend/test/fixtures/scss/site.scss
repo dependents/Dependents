@@ -1,0 +1,33 @@
+/*************************/
+/*   This is the main scss file that pulls in all other sytlesheets into a single
+/*   site stytle sheet that can later be minified.
+/*   This is here as a scss testbed for Dependents
+/*************************/
+
+
+/*
+/*  VENDOR CUSTOM SETTINGS */
+// Load in any sass libraries and packages
+@import 'vendors/packages';
+/*  END - VENDOR CUSTOM SETTINGS */
+
+/* CUSTOM SASS CODES USED FOR THIS SITE.  */
+//  Commonly useful ones could later be put into a library for use in other sites
+@import 'utils/debug';  // comment out to turn off debugging.
+@import 'utils/functions';
+@import 'utils/mixins';
+@import 'utils/placeholders';
+/* END - CUSTOM SASS CODES USED FOR THIS SITE.  */
+
+/* BASE STYLING INCLUDING THE BASE(DEFAULT) THEME  */
+//  The base theme (like all themes) is a package made of a color, component, layout and typography theme
+//  Base styling structure can be overridden by loading  a theme 'package'
+@import 'base/reset.scss';
+
+// anything outside the base theme that needs to be reset or set before loading the base theme
+@import 'base/base-theme.scss';
+
+// THE base(default) theme package.  Look inside to see the various pieces
+/* END - BASE STYLING INCLUDING THE BASE(DEFAULT) THEME  */
+
+

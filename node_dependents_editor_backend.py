@@ -1,6 +1,6 @@
 from .node_bridge import exec_script
 
-def cabinet(options):
+def backend(options):
     if 'filename' in options:
         args = ['--filename=' + options['filename']]
 
@@ -13,7 +13,10 @@ def cabinet(options):
     if 'webpack_config' in options:
         args.append('--webpack-config=' + options['webpack_config'])
 
+    if 'command' in options:
+        args.append('--' + options['command'])
+
     if 'path' in options:
         args.append(options['path'])
 
-    return exec_script('filing-cabinet', 'cli.js', args).strip()
+    return exec_script('dependents-editor-backend', 'cli.js', args).strip()

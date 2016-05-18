@@ -1,0 +1,5 @@
+{
+  "root": "js",
+  "sass_root": "styles",
+  "config": "config.js"
+}
