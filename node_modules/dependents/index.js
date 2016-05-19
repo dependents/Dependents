@@ -76,7 +76,8 @@ module.exports = function(options, cb) {
     var workerManager = new WorkerManager({
       directory: directory,
       config: config,
-      files: files
+      files: files,
+      webpackConfig: webpackConfig
     });
 
     workerManager.computeAllDependents()
@@ -96,8 +97,15 @@ module.exports = function(options, cb) {
       webpackConfig: webpackConfig
     });
 
+    debug('computed dependents map', results);
+
     extend(true, dependents, results);
+
   });
+
+  debug('final dependents map', dependents);
+
+  debug('dependents for ' + filename + ': ', dependents[filename]);
 
   // Default to empty object if the given file isn't in the map
   cb(null, Object.keys(dependents[filename] || {}));
@@ -180,10 +188,9 @@ function getExtensionsToProcess(filename) {
   } else if (util.isStylusFile(filename)) {
     exts = ['.styl'];
 
-  // TODO: If we wanted to support mustache dependent lookup,
-  // we could add ['.js', '.mustache']
+  // Which extensions can possibly include the given file
   } else {
-    exts = ['.js'];
+    exts = ['.js', '.styl', '.sass', '.scss'];
   }
 
   return exts;

@@ -6,8 +6,7 @@
   "dependencies": {
     "callers": "1.0.3",
     "dependency-tree": "5.1.0",
-    "dependents": "3.1.0",
-    "dependents-editor-backend": "~1.1.0",
+    "dependents-editor-backend": "~1.2.0",
     "taxicab": "2.0.4"
   },
   "devDependencies": {

@@ -10,7 +10,7 @@ from .lib.trim_paths_of_root import trim_paths_of_root
 from .lib.track import track as t
 from .lib.printer import p
 
-from .node_dependents import get_dependents
+from .node_dependents_editor_backend import backend
 
 class DependentsCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
@@ -63,21 +63,13 @@ class DependentsThread(BaseThread):
 
         args = {
             'filename': self.view.filename,
-            'root': root
+            'root': root,
+            'command': 'find-dependents'
         }
-
-        if self.window.config:
-            args['config'] = os.path.normpath(os.path.join(self.view.path, self.window.config))
-
-        if self.window.webpack_config:
-            args['webpack_config'] = os.path.normpath(os.path.join(self.view.path, self.window.webpack_config))
-
-        if self.window.exclude:
-            args['exclude'] = ','.join(self.window.exclude)
 
         # Newline in output is an empty dependent
         # TODO: Something to fix from node-dependents?
-        dependents = [d for d in get_dependents(args) if d]
+        dependents = [d for d in backend(args).split('\n') if d]
 
         p(len(dependents), 'dependents found:\n' + '\n'.join(dependents))
 

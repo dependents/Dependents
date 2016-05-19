@@ -191,7 +191,7 @@ function normalizePath(name, parentModule, config) {
     //For each module name segment, see if there is a path
     //registered for it. Start with most specific name
     //and work up from it.
-    for (i = syms.length; i > 0; i -= 1) {
+    for (var i = syms.length; i > 0; i -= 1) {
         var parentModule = syms.slice(0, i).join('/');
         var parentPath = getOwn(paths, parentModule);
         if (parentPath) {

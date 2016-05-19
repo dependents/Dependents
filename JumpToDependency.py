@@ -47,7 +47,7 @@ class JumpToDependencyThread(BaseThread):
             'filename': self.view.filename,
             'path': module,
             'command': 'lookup'
-        });
+        }).strip();
 
         p('After cabinet lookup', file_to_open)
 
