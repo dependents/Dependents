@@ -23,7 +23,7 @@ module.exports = function(options) {
   // Register the current file as dependent on each dependency
   var dependencies = getDependencies(filename);
 
-  debug('' + dependencies.length + ' dependencies for ' + filename.replace(directory, ''));
+  debug('' + dependencies.length + ' dependencies for ' + filename.replace(new RegExp(directory + '/?'), ''));
 
   dependencies.forEach(function(dep) {
     debug('before cabinet lookup: ' + dep);

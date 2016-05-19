@@ -1,5 +1,7 @@
-var cabinet = require('filing-cabinet');
 var Config = require('./Config');
+
+var cabinet = require('filing-cabinet');
+var findDependents = require('dependents');
 var q = require('q');
 var path = require('path');
 var debug = require('debug')('backend');
@@ -24,16 +26,15 @@ module.exports = function(program) {
   var options = {
     directory: config.directory,
     filename: program.filename,
-    excludes: config.excludes,
+    exclude: config.exclude,
     config: config.requireConfig,
-    webpackConfig: config.webpackConfig,
-    target: program.args[0]
+    webpackConfig: config.webpackConfig
   };
 
   debug('command options', options);
 
   if (program.lookup) {
-    options.target = options.target.replace(/["|'|;]/g, '');
+    options.target = program.args[0].replace(/["|'|;]/g, '');
     debug('performing a lookup');
     var result = lookup(options);
 
@@ -55,6 +56,14 @@ module.exports = function(program) {
 
     debug('lookup result: ' + result);
     deferred.resolve(result);
+
+  } else if (program.findDependents) {
+    debug('finding the dependents of the given file: ' + options.filename);
+
+    findDependents(options, function(err, dependents) {
+      debug('found the following dependents: ', dependents);
+      deferred.resolve(dependents);
+    });
   }
 
   return deferred.promise;

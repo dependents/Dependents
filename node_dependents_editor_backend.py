@@ -19,4 +19,4 @@ def backend(options):
     if 'path' in options:
         args.append(options['path'])
 
-    return exec_script('dependents-editor-backend', 'cli.js', args).strip()
+    return exec_script('dependents-editor-backend', 'cli.js', args)
