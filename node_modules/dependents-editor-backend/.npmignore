@@ -3,4 +3,5 @@ test
 .jscsrc
 .jshintrc
 .travis.yml
+.deprc
 readme.md
