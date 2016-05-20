@@ -1,5 +1,4 @@
 import sublime, sublime_plugin
-import subprocess
 import threading
 import os
 import re
@@ -13,7 +12,7 @@ from .lib.trim_paths_of_root import trim_paths_of_root
 from .lib.track import track as t
 from .lib.printer import p
 
-from .node_callers import find_callers
+from .node_dependents_editor_backend import backend
 
 class FindCallersCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
@@ -67,28 +66,15 @@ class FindCallersThread(BaseThread):
         """
         Asks the node tool for the drivers of the current module
         """
-        root = self.view.path
-
-        # In case the user supplied the base path as the root
-        # TODO: Consider moving this to command_setup
-        if self.window.root != self.view.path:
-            root = os.path.join(root, self.window.root)
-
         args = {
             'filename': self.view.filename,
-            'function_name': function_name,
-            'root': root
+            'path': function_name,
+            'command': 'find-callers'
         }
-
-        if self.window.config:
-            args['config'] = os.path.join(self.view.path, self.window.config)
-
-        if self.window.exclude:
-            args['exclude'] = ','.join(self.window.exclude)
 
         fetch_time = time.time()
 
-        callers = [c for c in find_callers(args) if c]
+        callers = [c for c in backend(args) if c]
 
         p('Fetch time:', time.time() - fetch_time)
         p(len(callers), 'callers found:\n' + '\n'.join(callers))

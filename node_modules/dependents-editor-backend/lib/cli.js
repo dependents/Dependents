@@ -3,6 +3,8 @@ var getPath = require('./getPath');
 
 var cabinet = require('filing-cabinet');
 var findDependents = require('dependents');
+var callers = require('callers');
+
 var q = require('q');
 var path = require('path');
 var debug = require('debug')('backend');
@@ -74,6 +76,21 @@ module.exports = function(program) {
       directory: options.directory,
       stylesDirectory: config.stylesRoot
     }));
+
+  } else if (program.findCallers) {
+    options.functionName = program.args[0].replace(/["|'|;]/g, '');
+
+    options.success = function(err, callers) {
+      if (err) {
+        deferred.reject(err.message || err);
+      } else {
+        deferred.resolve(callers);
+      }
+    };
+
+    debug('finding the callers of "' + options.functionName + '" with options: ', options);
+
+    callers(options);
   }
 
   return deferred.promise;
