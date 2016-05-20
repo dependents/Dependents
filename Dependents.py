@@ -63,7 +63,6 @@ class DependentsThread(BaseThread):
 
         args = {
             'filename': self.view.filename,
-            'root': root,
             'command': 'find-dependents'
         }
 

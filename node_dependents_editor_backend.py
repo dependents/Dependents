@@ -4,15 +4,6 @@ def backend(options):
     if 'filename' in options:
         args = ['--filename=' + options['filename']]
 
-    if 'directory' in options:
-        args.append('--directory=' + options['directory'])
-
-    if 'config' in options:
-        args.append('--config=' + options['config'])
-
-    if 'webpack_config' in options:
-        args.append('--webpack-config=' + options['webpack_config'])
-
     if 'command' in options:
         args.append('--' + options['command'])
 

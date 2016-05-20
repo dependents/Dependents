@@ -22,7 +22,7 @@ program
   .option('--find-drivers', 'get the driver scripts relevant to current file')
   .option('--find-callers', 'get the scripts calling the given function name')
   .option('--get-tree', 'get the dependency tree of the current file')
-  .option('--get-path', 'get the trimmed path of the current file')
+  .option('--get-path', 'get the import form of the current filename')
 
   // Modifiers
   .option('--open-all', 'modifier to open all results')

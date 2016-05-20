@@ -2,11 +2,9 @@ import sublime, sublime_plugin
 import os
 
 from .BaseCommand import BaseCommand
-from .BaseThread import BaseThread
 
-from .lib.normalize_trailing_slash import normalize_trailing_slash
 from .lib.printer import p
-from .node_dependency_tree import get_tree
+from .node_dependents_editor_backend import backend
 
 class GetPathCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -15,17 +13,10 @@ class GetPathCommand(BaseCommand, sublime_plugin.WindowCommand):
 
         self.start_timer()
 
-        root = normalize_trailing_slash(self.window.root)
-        p('Root:', root)
-
-        filename_no_ext = os.path.splitext(self.view.filename)[0]
-        p('File w/o ext:', filename_no_ext)
-
-        path = filename_no_ext.replace(root, '')
-        path = path.replace(self.view.path, '')
-
-        if path and path[0] == '/':
-            path = path[1:]
+        path = backend({
+            'filename': self.view.filename,
+            'command': 'get-path'
+        }).strip()
 
         p('Path:', path)
 
