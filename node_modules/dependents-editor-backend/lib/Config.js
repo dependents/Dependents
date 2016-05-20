@@ -19,6 +19,8 @@ Config.NAME = '.deprc';
  * @return {String} The directory containing the .deprc file
  */
 Config.prototype.find = function(directory) {
+  debug('searching for deprc in ' + directory);
+
   if (!directory || directory === '/') {
     throw new Error('.deprc file could not be found');
   }
@@ -48,25 +50,18 @@ Config.prototype.load = function(configPath) {
 
   debug('loaded config: ', config);
 
-  this.stylesRoot = config.styles_root || config.sass_root;
-  this.buildConfig = config.build_config;
-  this.webpackConfig = config.webpack_config;
-  this.requireConfig = config.config || config.require_config;
-  this.directory = config.root || this.stylesRoot;
-
-  if (this.requireConfig) {
-    this.requireConfig = path.resolve(path.dirname(configPath), this.requireConfig);
-  }
-
-  if (this.webpackConfig) {
-    this.webpackConfig = path.resolve(path.dirname(configPath), this.webpackConfig);
-  }
-
-  // CSS users shouldn't need to supply a JS root
-  this.directory = path.resolve(path.dirname(configPath), this.directory);
+  this.stylesRoot = getAbsolute(config.styles_root || config.sass_root, configPath);
+  this.buildConfig = getAbsolute(config.build_config, configPath);
+  this.webpackConfig = getAbsolute(config.webpack_config, configPath);
+  this.requireConfig = getAbsolute(config.config || config.require_config, configPath);
+  this.directory = getAbsolute(config.root || this.stylesRoot, configPath);
 
   this.exclude = config.exclude ? config.exclude.split(',') : [];
 };
+
+function getAbsolute(filepath, base) {
+  return filepath ? path.resolve(path.dirname(base), filepath) : '';
+}
 
 /**
  * @private

@@ -1,4 +1,5 @@
 var Config = require('./Config');
+var getPath = require('./getPath');
 
 var cabinet = require('filing-cabinet');
 var findDependents = require('dependents');
@@ -11,7 +12,7 @@ var fileExists = require('file-exists');
 module.exports = function(program) {
   var deferred = q.defer();
 
-  debug('given values', program);
+  debug('given program options', program);
 
   var config;
   try {
@@ -20,7 +21,9 @@ module.exports = function(program) {
     debug('loaded config', config);
 
   } catch (e) {
+    debug('error when searching for deprc file: ' + e.message);
     deferred.reject(e.message);
+    return deferred.promise;
   }
 
   var options = {
@@ -64,6 +67,13 @@ module.exports = function(program) {
       debug('found the following dependents: ', dependents);
       deferred.resolve(dependents);
     });
+
+  } else if (program.getPath) {
+    deferred.resolve(getPath({
+      filename: options.filename,
+      directory: options.directory,
+      stylesDirectory: config.stylesRoot
+    }));
   }
 
   return deferred.promise;
