@@ -56,7 +56,11 @@ Config.prototype.load = function(configPath) {
   this.requireConfig = getAbsolute(config.config || config.require_config, configPath);
   this.directory = getAbsolute(config.root || this.stylesRoot, configPath);
 
-  this.exclude = config.exclude ? config.exclude.split(',') : [];
+  this.exclude = config.exclude || [];
+
+  if (typeof this.exclude === 'string') {
+    this.exclude = this.exclude.split(',');
+  }
 };
 
 function getAbsolute(filepath, base) {
@@ -76,6 +80,7 @@ Config.prototype._read = function(configPath) {
   try {
     config = JSON.parse(content);
   } catch (e) {
+    debug('json load error: ' + e.message);
     throw new Error('.deprc config is not valid json');
   }
 

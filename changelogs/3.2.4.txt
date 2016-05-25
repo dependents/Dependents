@@ -1,0 +1,7 @@
+Fix regression: Exclude handling
+
+If you had an exclude array in your .deprc file, you might have seen `undefined is not a function` in the most recent update of Dependents.
+
+Recently, a lot of work is going on under the hood to make Dependents easier to integrate with other editors.
+
+Feel free to yell at me if you experience any regressions: @mrjoelkemp on Twitter
