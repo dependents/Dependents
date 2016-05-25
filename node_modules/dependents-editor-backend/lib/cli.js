@@ -4,6 +4,7 @@ var getPath = require('./getPath');
 var cabinet = require('filing-cabinet');
 var findDependents = require('dependents');
 var callers = require('callers');
+var tree = require('dependency-tree');
 
 var q = require('q');
 var path = require('path');
@@ -41,7 +42,14 @@ module.exports = function(program) {
   if (program.lookup) {
     options.target = program.args[0].replace(/["|'|;]/g, '');
     debug('performing a lookup');
-    var result = lookup(options);
+
+    var result = cabinet({
+      partial: options.target,
+      filename: options.filename,
+      directory: options.directory,
+      config: options.config,
+      webpackConfig: options.webpackConfig
+    });
 
     if (!fileExists(result)) {
       var fileDir = path.dirname(result);
@@ -91,17 +99,18 @@ module.exports = function(program) {
     debug('finding the callers of "' + options.functionName + '" with options: ', options);
 
     callers(options);
+
+  } else if (program.getTree) {
+    options.root = options.directory;
+
+    var results = tree(options);
+
+    try {
+      deferred.resolve(results);
+    } catch (e) {
+      deferred.reject(e.message);
+    }
   }
 
   return deferred.promise;
-};
-
-function lookup(options) {
-  return cabinet({
-    partial: options.target,
-    filename: options.filename,
-    directory: options.directory,
-    config: options.config,
-    webpackConfig: options.webpackConfig
-  });
 };
