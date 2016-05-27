@@ -48,16 +48,13 @@ class FindCallersThread(BaseThread):
         self.stop_timer('Run_Find_Callers')
 
     def get_function_name(self):
-        """
-        TODO: Get the clicked word
-        """
         selections = self.view.sel()
         if selections:
             region = selections[0]
             if region.a == region.b:
                 selected_word = self.view.substr(self.view.word(region))
 
-                print('selected word: ', selected_word)
+                p('selected word: ', selected_word)
                 return selected_word
 
         return None

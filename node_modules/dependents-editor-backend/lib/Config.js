@@ -56,6 +56,10 @@ Config.prototype.load = function(configPath) {
   this.requireConfig = getAbsolute(config.config || config.require_config, configPath);
   this.directory = getAbsolute(config.root || this.stylesRoot, configPath);
 
+  if (!this.directory) {
+    throw new Error('Either a root or styles_root must be defined in your .deprc file');
+  }
+
   this.exclude = config.exclude || [];
 
   if (typeof this.exclude === 'string') {
