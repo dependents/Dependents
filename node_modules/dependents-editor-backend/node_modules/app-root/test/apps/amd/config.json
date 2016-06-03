@@ -1,0 +1,7 @@
+require.config({
+  "baseUrl": "js",
+
+  "paths": {
+    "backbone": "bower_components/backbone/backbone"
+  }
+});

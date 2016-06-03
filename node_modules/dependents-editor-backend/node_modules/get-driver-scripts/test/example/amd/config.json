@@ -1,0 +1,6 @@
+require.config({
+  "baseUrl": "src",
+  "paths": {
+    "b": "src/amdB"
+  }
+});

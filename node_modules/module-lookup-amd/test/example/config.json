@@ -1,15 +1,17 @@
 require.config({
-  "baseUrl": "/js",
+  "baseUrl": "js",
 
   "paths": {
-    "a": "foo/a",
-    "foobar": "foo/bar/b",
-    "templates": "../templates"
+    "abra": "a",
+    "foobar": "b",
+    "templates": "../templates",
+    "jquery": "vendor/jquery.min",
+    "styles": "../styles"
   },
 
   "map": {
-    "poet": {
-      "poet/templates": "templates/poet"
+    "*": {
+      "inner/templates": "templates/inner"
     }
   }
 });

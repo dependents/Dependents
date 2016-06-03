@@ -1,2 +1,5 @@
 // Dependent: a.js
-define({});
+define([
+  'jquery'
+], function($) {});
+

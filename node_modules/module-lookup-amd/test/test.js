@@ -12,26 +12,35 @@ var config;
 
 describe('lookup', function() {
   beforeEach(function() {
-    directory = '/path/from/my/machine/js';
-    filename = directory + '/poet/Remote.js';
+    directory = __dirname + '/example/js';
+    filename = directory + '/a.js';
     config = __dirname + '/example/config.json';
   });
 
   it('returns the real path of an aliased module given a path to a requirejs config file', function() {
     assert.equal(lookup({
       config,
-      partial: 'a',
+      partial: 'b',
       filename
-    }), path.join(directory, 'foo/a'));
+    }), path.join(directory, 'b.js'));
+  });
+
+  it('resolves relative paths about the baseUrl, not the module', function() {
+    assert.equal(lookup({
+      config,
+      partial: './c',
+      filename: `${directory}/subdir/a.js`,
+    }), path.join(directory, 'c.js'));
   });
 
   it('returns the looked up path given a loaded requirejs config object', function() {
     var configObject = new ConfigFile(config).read();
     assert.equal(lookup({
       config: configObject,
+      configPath: config,
       partial: 'foobar',
       filename
-    }), path.join(directory, 'foo/bar/b'));
+    }), path.join(directory, 'b.js'));
   });
 
   it('supports paths that use plugin loaders', function() {
@@ -39,7 +48,7 @@ describe('lookup', function() {
       config,
       partial: 'hgn!templates/a',
       filename
-    }), path.join(directory, '../templates/a'));
+    }), path.join(directory, '../templates/a.mustache'));
   });
 
   it('supports relative plugin loader paths', function() {
@@ -48,46 +57,56 @@ describe('lookup', function() {
       config,
       partial: 'hgn!./templates/a',
       filename
-    }), path.join(directory, '../templates/poet/a'));
+    }), path.join(directory, '../templates/a.mustache'));
+  });
 
+  it('supports plugin loader usage with the full extension', function() {
     assert.equal(lookup({
       config,
       partial: 'text!./templates/a.mustache',
       filename
-    }), path.join(directory, '../templates/poet/a.mustache'));
+    }), path.join(directory, '../templates/a.mustache'));
   });
 
   it('supports map aliasing', function() {
     assert.equal(lookup({
       config,
-      partial: 'hgn!./templates/_icons/_embed',
+      partial: 'hgn!inner/templates/b',
       filename
-    }), path.join(directory, '../templates/poet/_icons/_embed'));
-  });
-
-  it('supports relative pathing', function() {
-    assert.equal(lookup({
-      config,
-      partial: 'hgn!./templates/_icons/_embed',
-      filename
-    }), path.join(directory, '../templates/poet/_icons/_embed'));
-  });
-
-  it('returns the same dependency if not aliased', function() {
-    assert.equal(lookup({
-      config,
-      partial: 'my/sweet/path',
-      filename
-    }), path.join(directory, 'my/sweet/path'));
+    }), path.join(directory, '../templates/inner/b.mustache'));
   });
 
   it('does not throw if the config is missing', function() {
     assert.doesNotThrow(function() {
       lookup({
-        partial: 'foobar',
+        partial: 'b',
         filename
       });
     });
+  });
+
+  it('properly resolves files with the .min.js extension', function() {
+    assert.equal(lookup({
+      config,
+      partial: 'jquery',
+      filename: `${directory}/subdir/a.js`,
+    }), path.join(directory, 'vendor/jquery.min.js'));
+  });
+
+  it('does not confuse minified and unminified files in the same dir', function() {
+    assert.notEqual(lookup({
+      config,
+      partial: 'jquery',
+      filename: `${directory}/subdir/a.js`,
+    }), path.join(directory, 'vendor/jquery.js'));
+  });
+
+  it('resolves style imports', function() {
+    assert.equal(lookup({
+      config,
+      partial: 'css!styles/myStyles',
+      filename: `${directory}/subdir/a.js`,
+    }), path.join(directory, '../styles/myStyles.css'));
   });
 
   it('does not throw if the baseUrl is missing', function() {
@@ -97,6 +116,7 @@ describe('lookup', function() {
     assert.doesNotThrow(function() {
       lookup({
         config: configObject,
+        configPath: config,
         partial: 'foobar',
         filename
       });
@@ -110,6 +130,7 @@ describe('lookup', function() {
     assert.doesNotThrow(function() {
       lookup({
         config: configObject,
+        configPath: config,
         partial: 'foobar',
         filename
       });
@@ -123,6 +144,7 @@ describe('lookup', function() {
     assert.doesNotThrow(function() {
       lookup({
         config: configObject,
+        configPath: config,
         partial: 'foobar',
         filename
       });
@@ -130,68 +152,41 @@ describe('lookup', function() {
   });
 
   describe('when no baseUrl is in the config', function() {
-    it('defaults the baseUrl to the directory of the config file', function() {
-      var stub = sinon.stub().returns('');
-      var revert = lookup.__set__('normalize', stub);
+    describe('and a configPath is supplied', function() {
+      it('defaults the directory containing the config file', function() {
+        var configObject = new ConfigFile(config).read();
+        delete configObject.baseUrl;
 
-      sinon.stub(lookup, '_readConfig').returns({baseUrl: undefined});
-
-      lookup({
-        config,
-        partial: 'foobar',
-        filename
+        assert.equal(lookup({
+          config: configObject,
+          configPath: config,
+          partial: 'forNoBaseUrl',
+          filename
+        }), path.join(directory, '../forNoBaseUrl.js'));
       });
-
-      // Add the slash since we normalize the slash during the lookup
-      assert.equal(stub.args[0][2].baseUrl, path.dirname(config) + '/');
-      revert();
     });
 
-    it('defaults to ./ if the config was a reused object', function() {
-      var configObject = new ConfigFile(config).read();
-      delete configObject.baseUrl;
+    describe('and the configPath was not supplied', function() {
+      it('defaults to the directory containing the given file', function() {
+        var configObject = new ConfigFile(config).read();
+        delete configObject.baseUrl;
 
-      var stub = sinon.stub().returns('');
-
-      var revert = lookup.__set__('normalize', stub);
-
-      lookup({
-        config: configObject,
-        partial: 'foobar',
-        filename
+        assert.equal(lookup({
+          config: configObject,
+          partial: 'b',
+          filename
+        }), path.join(directory, 'b.js'));
       });
-
-      assert.equal(stub.args[0][2].baseUrl, './');
-      revert();
     });
   });
 
-  describe('when a filepath is not within the base url', function() {
-    it('does not throw', function() {
-      assert.doesNotThrow(function() {
-        lookup({
-          config,
-          partial: 'my/sweet/path',
-          filename: '/some/random/folder/foo.js'
-        });
-      });
-    });
-
-    it('returns an empty string if a directory is not given', function() {
+  describe('when a filename is not within the base url', function() {
+    it('still resolves the partial', function() {
       assert.equal(lookup({
         config,
-        partial: 'my/sweet/path',
-        filename: '/some/random/folder/foo.js'
-      }), '');
-    });
-
-    it('returns the normalized path about the given directory and the base url', function() {
-      assert.equal(lookup({
-        config,
-        partial: 'my/sweet/path',
-        filename: '/some/random/folder/foo.js',
-        directory: '/some/random/folder/'
-      }), '/some/random/folder/my/sweet/path');
+        partial: 'b',
+        filename: __dirname + '/test.js'
+      }), path.join(directory, 'b.js'));
     });
   });
 });

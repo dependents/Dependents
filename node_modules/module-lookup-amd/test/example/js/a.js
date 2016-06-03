@@ -1,7 +1,7 @@
 // Dependent: no one
 define([
-  './b',
-  './c',
+  'b',
+  'c',
   'hgn!templates/a'
 ], function(B, C) {
 

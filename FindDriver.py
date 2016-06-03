@@ -10,7 +10,7 @@ from .lib.trim_paths_of_root import trim_paths_of_root
 from .lib.track import track as t
 from .lib.printer import p
 
-from .node_taxicab import find_driver
+from .node_dependents_editor_backend import backend
 
 class FindDriverCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
@@ -48,28 +48,13 @@ class FindDriverThread(BaseThread):
         """
         Asks the node tool for the drivers of the current module
         """
-        root = self.view.path
-
-        # In case the user supplied the base path as the root
-        # TODO: Consider moving this to command_setup
-        if self.window.root != self.view.path:
-            root = os.path.join(root, self.window.root)
 
         args = {
             'filename': self.view.filename,
-            'root': root
+            'command': 'find-drivers'
         }
 
-        if self.window.config:
-            args['config'] = os.path.join(self.view.path, self.window.config)
-
-        if self.window.build_config:
-            args['build_config'] = os.path.join(self.view.path, self.window.build_config)
-
-        if self.window.exclude:
-            args['exclude'] = ','.join(self.window.exclude)
-
-        drivers = [d for d in find_driver(args) if d]
+        drivers = [d for d in backend(args).split('\n') if d]
 
         p(len(drivers), 'drivers found:\n' + '\n'.join(drivers))
 
