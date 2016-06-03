@@ -7,6 +7,7 @@ var debug = require('debug')('dependents');
 module.exports = function(options) {
   this.directory = options.directory;
   this.config = options.config;
+  this.configPath = options.configPath;
   this.files = options.files;
   this.webpackConfig = options.webpackConfig;
 
@@ -143,6 +144,7 @@ module.exports.prototype._delegateWork = function(worker) {
     directory: this.directory,
     files: files,
     config: this.config,
+    configPath: this.configPath,
     webpackConfig: this.webpackConfig
   });
 };

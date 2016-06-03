@@ -1,6 +1,6 @@
 require([
   'jquery',
-  './b'
+  'b'
 ], function($, b) {
 
 });

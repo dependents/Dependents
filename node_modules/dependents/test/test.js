@@ -75,8 +75,9 @@ describe('dependents', function() {
 
     it('does not throw on esprima errors', function(done) {
       dependents({
-        filename: __dirname + '/example/amd/a.js',
-        directory: __dirname + '/example/amd/'
+        filename: __dirname + '/example/amd/js/a.js',
+        config: __dirname + '/example/amd/config.json',
+        directory: __dirname + '/example/amd/js'
       },
       function(err, dependents) {
         assert(!err);
@@ -170,18 +171,6 @@ describe('dependents', function() {
   });
 
   describe('amd', function() {
-    it('returns the (non-aliased) dependents', function(done) {
-      dependents({
-        filename: __dirname + '/example/amd/js/b.js',
-        directory: __dirname + '/example/amd/js'
-      },
-      function(err, dependents) {
-        assert.equal(dependents.length, 1);
-        assert(listHasFile(dependents, 'a.js'));
-        done();
-      });
-    });
-
     it('resolves aliased modules if given a requirejs config', function(done) {
       dependents({
         filename: __dirname + '/example/amd/js/b.js',
@@ -192,6 +181,19 @@ describe('dependents', function() {
         assert.equal(dependents.length, 2);
         assert(listHasFile(dependents, 'a.js'));
         assert(listHasFile(dependents, 'c.js'));
+        done();
+      });
+    });
+
+    it('resolves the dependents of a minified file', function(done) {
+      dependents({
+        filename: __dirname + '/example/amd/js/vendor/jquery.min.js',
+        directory: __dirname + '/example/amd/js',
+        config: __dirname + '/example/amd/config.json'
+      },
+      function(err, dependents) {
+        assert.equal(dependents.length, 1);
+        assert(listHasFile(dependents, 'b.js'));
         done();
       });
     });

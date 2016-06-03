@@ -5,12 +5,11 @@ var cabinet = require('filing-cabinet');
 var findDependents = require('dependents');
 var callers = require('callers');
 var tree = require('dependency-tree');
+var findDrivers = require('taxicab');
 
 var q = require('q');
 var path = require('path');
 var debug = require('debug')('backend');
-var find = require('find');
-var fileExists = require('file-exists');
 
 module.exports = function(program) {
   var deferred = q.defer();
@@ -50,22 +49,6 @@ module.exports = function(program) {
       config: options.config,
       webpackConfig: options.webpackConfig
     });
-
-    if (!fileExists(result)) {
-      var fileDir = path.dirname(result);
-
-      debug('the file ' + result + ' does not exist');
-      var extensionlessFilename = path.basename(result, path.extname(result));
-
-      debug('looking for file like ' + extensionlessFilename + ' within ' + fileDir);
-      var results = find.fileSync(new RegExp(extensionlessFilename), fileDir);
-
-      debug('found the following matches: ', results.join('\n'));
-
-      // TODO: Find a smarter way of figuring out the match or
-      // return all of the files as a result since we don't know which one is valid
-      result = results[0];
-    }
 
     debug('lookup result: ' + result);
     deferred.resolve(result);
@@ -110,6 +93,20 @@ module.exports = function(program) {
     } catch (e) {
       deferred.reject(e.message);
     }
+
+  } else if (program.findDrivers) {
+    options.buildConfig = config.buildConfig;
+    debug('build config: ' + options.buildConfig);
+
+    options.success = function(err, drivers) {
+      if (err) {
+        deferred.reject(err.message || err);
+      } else {
+        deferred.resolve(drivers);
+      }
+    };
+
+    findDrivers(options);
   }
 
   return deferred.promise;

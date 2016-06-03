@@ -72,13 +72,18 @@ module.exports = function(options, cb) {
     debug('Grabbed ' + files.length + ' files');
   }
 
+  var configuration = {
+    directory: directory,
+    config: config,
+    configPath: options.config,
+    webpackConfig: webpackConfig
+  };
+
+  debug('configuration: \n', configuration);
+
   if (module.exports._shouldParallelize(files)) {
-    var workerManager = new WorkerManager({
-      directory: directory,
-      config: config,
-      files: files,
-      webpackConfig: webpackConfig
-    });
+    configuration.files = files;
+    var workerManager = new WorkerManager(configuration);
 
     workerManager.computeAllDependents()
     .then(function(allDependents) {
@@ -90,21 +95,14 @@ module.exports = function(options, cb) {
   }
 
   files.forEach(function(filename) {
-    var results = computeDependents({
-      filename: filename,
-      directory: directory,
-      config: config,
-      webpackConfig: webpackConfig
-    });
+    configuration.filename = filename;
+    var results = computeDependents(configuration);
 
     debug('computed dependents map', results);
-
     extend(true, dependents, results);
-
   });
 
   debug('final dependents map', dependents);
-
   debug('dependents for ' + filename + ': ', dependents[filename]);
 
   // Default to empty object if the given file isn't in the map

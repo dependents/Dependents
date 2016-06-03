@@ -22,6 +22,7 @@ process.on('message', function(args) {
       filename: filename,
       directory: args.directory,
       config: args.config,
+      configPath: args.configPath,
       webpackConfig: args.webpackConfig
     });
 

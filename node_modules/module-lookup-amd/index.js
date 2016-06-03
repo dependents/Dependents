@@ -1,83 +1,108 @@
 var ConfigFile = require('requirejs-config-file').ConfigFile;
 var path = require('path');
-var normalize = require('./lib/normalize');
 var debug = require('debug')('lookup');
+var find = require('find');
+var fileExists = require('file-exists');
+var requirejs = require('requirejs');
 
 /**
  * Determines the real path of a potentially aliased dependency path
  * via the paths section of a require config
  *
  * @param  {Object} options - Pass a loaded config object if you'd like to avoid rereading the config
- * @param  {String|Object} [options.config] - Pass a loaded config object if you'd like to avoid rereading the config
  * @param  {String} options.partial - the dependency name
  * @param  {String} options.filename - the file containing the dependency
- * @param  {String} [options.directory] - location of all files
+ * @param  {String|Object} [options.config] - Pass a loaded config object if you'd like to avoid rereading the config
+ * @param  {String|Object} [options.configPath] - The location of the config file used to create the preparsed config object
  *
  * @return {String}
  */
 module.exports = function(options) {
-  var configPath;
+  // If you want to supply a preparsed config object without a configPath, then
+  // we have no way of knowing what the baseUrl should be.
+  var configPath = options.configPath || options.filename;
   var config = options.config || {};
   var depPath = options.partial;
-  var filepath = options.filename;
-  var directory = options.directory;
+  var filename = options.filename;
 
-  debug('given config: ', config);
-  debug('given partial: ', depPath);
-  debug('given filename: ', filepath);
-  debug('given directory: ', directory);
+  debug('config: ', config);
+  debug('partial: ', depPath);
+  debug('filename: ', filename);
 
   if (typeof config === 'string') {
-    configPath = path.dirname(config);
+    configPath = config;
     config = module.exports._readConfig(config);
-    debug('converting given config file to an object');
+    debug('converting given config file ' + configPath + ' to an object:\n', config);
   }
+
+  debug('configPath: ', configPath);
 
   if (!config.baseUrl) {
-    config.baseUrl = configPath || './';
-    debug('no baseUrl found in config. Defaulting to ' + config.baseUrl);
+    config.baseUrl = './';
+    debug('set baseUrl to ' + config.baseUrl);
   }
 
-  if (config.baseUrl[config.baseUrl.length - 1] !== '/') {
-    config.baseUrl = config.baseUrl + '/';
-    debug('normalized the trailing slash');
+  requirejs.config(config);
+
+  depPath = stripLoader(depPath);
+
+  var normalizedModuleId = requirejs.toUrl(depPath);
+
+  var resolved = path.join(path.dirname(configPath), normalizedModuleId);
+
+  debug('normalized module id: ' + normalizedModuleId);
+  debug('resolved url: ' + resolved);
+
+  // No need to search for a file that already has an extension
+  // Need to guard against jquery.min being treated as a real file
+  if (path.extname(resolved) && fileExists(resolved)) {
+    debug(resolved + ' already has an extension and is a real file');
+    return resolved;
   }
 
-  debug('baseUrl: ', config.baseUrl);
+  var foundFile = findFileLike(normalizedModuleId, resolved) || '';
 
-  var filepathWithoutBase = filepath.split(config.baseUrl)[0];
-  debug('filepath without base ' + filepathWithoutBase);
-
-  // Uses a plugin loader
-  var exclamationLocation = depPath.indexOf('!');
-  if (exclamationLocation !== -1) {
-    debug('stripping off the plugin loader');
-    depPath = depPath.slice(exclamationLocation + 1);
-    debug('depPath is now ' + depPath);
-  }
-
-  var normalized = normalize(depPath, filepath, config);
-  debug('normalized path is ' + normalized);
-
-  // A file containing the dependency that's not within the baseurl
-  // Example: a test file importing the dependency
-  if (filepath.indexOf(config.baseUrl) === -1) {
-    debug('filepath was not within baseUrl');
-
-    if (!directory) {
-      debug('did not know how to resolve the path');
-      return '';
-    }
-
-    normalized = path.join(directory, normalized);
+  if (foundFile) {
+    debug('found file like ' + resolved + ': ' + foundFile);
   } else {
-    normalized = path.join(filepathWithoutBase, normalized);
+    debug('could not find any file like ' + resolved);
   }
 
-  debug('final normalized path is ' + normalized);
-
-  return normalized;
+  return foundFile;
 };
+
+function findFileLike(partial, resolved) {
+  var fileDir = path.dirname(resolved);
+
+  var pattern = escapeRegExp(resolved + '.');
+
+  debug('looking for file like ' + pattern);
+  debug('within ' + fileDir);
+
+  var results = find.fileSync(new RegExp(pattern), fileDir);
+
+  debug('found the following matches: ', results.join('\n'));
+
+  // Not great if there are multiple matches, but the pattern should be
+  // specific enough to prevent multiple results
+  return results[0];
+}
+
+function stripLoader(partial) {
+  var exclamationLocation = partial.indexOf('!');
+
+  if (exclamationLocation !== -1) {
+    debug('stripping off the plugin loader from ' + partial);
+    partial = partial.slice(exclamationLocation + 1);
+    debug('partial is now ' + partial);
+  }
+
+  return partial;
+}
+
+function escapeRegExp(str) {
+  return str.replace(/[\-\[\]\/\{\}\(\)\*\+\?\.\\\^\$\|]/g, '\\$&');
+}
 
 /**
  * Exposed for testing

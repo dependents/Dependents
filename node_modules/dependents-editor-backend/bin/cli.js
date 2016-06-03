@@ -26,8 +26,8 @@ program
   .option('--get-tree', 'get the dependency tree of the current file')
   .option('--get-path', 'get the import form of the current filename')
 
-  // Modifiers
-  .option('--open-all', 'modifier to open all results')
+  // Editor tracking
+  .option('--editor', 'the editor being used')
 
   // Target extraction
   .parse(process.argv);

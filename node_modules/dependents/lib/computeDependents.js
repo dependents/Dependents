@@ -33,6 +33,7 @@ module.exports = function(options) {
       filename: filename,
       directory: directory,
       config: config,
+      configPath: options.configPath,
       webpackConfig: webpackConfig
     });
 
