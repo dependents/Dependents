@@ -1,0 +1,5 @@
+Bug fixes and enhancements:
+
+* Lots of AMD partial resolution bugs were fixed with the Jump To Dependency feature.
+* Find Dependents: you can now find the dependents of any templates or styles that are imported by AMD modules
+* Get Tree: imported templates and styles will now show up as part of the dependency tree
