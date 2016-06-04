@@ -1,0 +1,1 @@
+define(['./c'], function(c) {});
