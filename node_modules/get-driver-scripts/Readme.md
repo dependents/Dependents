@@ -1,4 +1,4 @@
-#### get-driver-scripts
+#### get-driver-scripts [![npm](http://img.shields.io/npm/v/get-driver-scripts.svg)](https://npmjs.org/package/get-driver-scripts) [![npm](http://img.shields.io/npm/dm/get-driver-scripts.svg)](https://npmjs.org/package/get-driver-scripts)
 
 Gets the entry point filepaths to an application from a build configuration
 or by finding them about a directory.

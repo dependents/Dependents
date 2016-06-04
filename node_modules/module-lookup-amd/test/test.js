@@ -151,6 +151,16 @@ describe('lookup', function() {
     });
   });
 
+  it('does not throw if the partial doesn\'t resolve to a file', function() {
+    assert.doesNotThrow(() => {
+      lookup({
+        config,
+        partial: 'foo/bar',
+        filename: `${directory}/subdir/a.js`,
+      });
+    });
+  });
+
   describe('when no baseUrl is in the config', function() {
     describe('and a configPath is supplied', function() {
       it('defaults the directory containing the config file', function() {
