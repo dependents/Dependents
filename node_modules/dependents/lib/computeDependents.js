@@ -57,7 +57,9 @@ module.exports = function(options) {
  */
 function getDependencies(filename) {
   try {
-    return precinct.paperwork(filename);
+    return precinct.paperwork(filename, {
+      includeCore: false
+    });
   } catch (e) {
     return [];
   }

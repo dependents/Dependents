@@ -79,13 +79,19 @@ function findFileLike(partial, resolved) {
   debug('looking for file like ' + pattern);
   debug('within ' + fileDir);
 
-  var results = find.fileSync(new RegExp(pattern), fileDir);
+  try {
+    var results = find.fileSync(new RegExp(pattern), fileDir);
 
-  debug('found the following matches: ', results.join('\n'));
+    debug('found the following matches: ', results.join('\n'));
 
-  // Not great if there are multiple matches, but the pattern should be
-  // specific enough to prevent multiple results
-  return results[0];
+    // Not great if there are multiple matches, but the pattern should be
+    // specific enough to prevent multiple results
+    return results[0];
+
+  } catch (e) {
+    debug('error when looking for a match: ' + e.message);
+    return '';
+  }
 }
 
 function stripLoader(partial) {

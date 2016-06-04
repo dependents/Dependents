@@ -3,8 +3,8 @@ var path = require('path');
 var q = require('q');
 var dir = require('node-dir');
 var gmt = require('module-definition');
-var lookup = require('module-lookup-amd');
-var resolveDep = require('resolve-dependency-path');
+var cabinet = require('filing-cabinet');
+var debug = require('debug')('app-root');
 
 /**
  * Calls the given callback with a list of candidate root filenames
@@ -14,6 +14,7 @@ var resolveDep = require('resolve-dependency-path');
  * @param {Function} options.success - Executed with the list of roots
  *
  * @param {String} [options.config] - Module loader configuration for aliased path resolution
+ * @param {String} [options.webpackConfig] - Module loader configuration for aliased path resolution
  *
  * @param {String[]} [options.ignoreDirectories] - List of directory names to ignore in the root search
  * @param {String[]} [options.ignoreFiles] - List of filenames to ignore in the root search
@@ -28,24 +29,28 @@ module.exports = function(options) {
   options.directory = path.resolve(options.directory);
   options.includeNoDependencyModules = !!options.includeNoDependencyModules;
 
+  debug('given directory' + options.directory);
+  debug('include no dep modules? ' + options.includeNoDependencyModules);
+
   getAllFiles(options)
   .then(function(files) {
-    return files
-    // Types are used to determine if lookups are necessary
-    .map(function(file) {
+    debug('grabbed ' + files.length + ' files to sift through');
+
+    var actualModules = files.map(function(file) {
       return fileObj = {
         path: file,
         type: path.extname(file) === '.js' ? gmt.sync(file) : ''
       };
     })
-    // Remove non-modules
     .filter(function(fileObj) {
       return fileObj.type !== 'none';
     });
+
+    debug('number of actual modules to process: ' + actualModules.length);
+    return actualModules;
   })
   .then(function(files) {
-    // Get all files that are not depended on
-    return getIndependentFiles(files, options);
+    return getFilesNotDependedOn(files, options);
   })
   .done(function(files) {
     options.success(files);
@@ -95,7 +100,7 @@ function getAllFiles(options) {
  * @param  {String}   options.directory
  * @return {Promise}  Resolves with the list of independent filenames
  */
-function getIndependentFiles(files, options) {
+function getFilesNotDependedOn(files, options) {
   // A look up table of all files used as dependencies within the directory
   var dependencies = {};
 
@@ -105,6 +110,7 @@ function getIndependentFiles(files, options) {
     // If a file cannot be parsed, it shouldn't be considered a root
     try {
       deps = getNonCoreDependencies(file.path);
+      debug('deps for ' + file.path + ':\n', deps);
     } catch (e) {
       dependencies[file.path] = true;
       return;
@@ -118,18 +124,21 @@ function getIndependentFiles(files, options) {
     }
 
     deps.forEach(function(dep) {
-      if (file.type === 'amd' && options.config) {
-        dep = lookup(options.config, dep, file.path);
-      }
+      dep = cabinet({
+        partial: dep,
+        filename: file.path,
+        directory: options.directory,
+        config: options.config,
+        webpackConfig: options.webpackConfig
+      });
 
-      dep = resolveDep(dep, file.path, options.directory);
       dependencies[dep] = true;
     });
   });
 
-  // Files that haven't been depended on
-  return files
-  .filter(function(file) {
+  debug('used dependencies: \n', dependencies);
+
+  return files.filter(function(file) {
     return typeof dependencies[file.path] === 'undefined';
   })
   .map(function(file) {
@@ -139,6 +148,7 @@ function getIndependentFiles(files, options) {
 
 /**
  * Get a list of non-core dependencies for the given file
+ *
  * @param  {String} file
  * @return {String[]}
  */
