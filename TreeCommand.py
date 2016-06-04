@@ -1,16 +1,12 @@
 import sublime, sublime_plugin
 import threading
-import os
-import time
 import json
 
 from .BaseCommand import BaseCommand
 from .BaseThread import BaseThread
 
-from .lib.show_error import *
 from .lib.track import track as t
 from .lib.printer import p
-from .lib.normalize_trailing_slash import normalize_trailing_slash
 from .node_dependents_editor_backend import backend
 
 class TreeCommand(BaseCommand, sublime_plugin.WindowCommand):
@@ -44,19 +40,21 @@ class TreeThread(BaseThread):
         Asks the node tool for the dependents of the current module
         """
 
-        # TODO: Remove this
-        root = self.view.path
-        # In case the user supplied the base path as the root
-        if self.window.root != self.view.path:
-            root = os.path.normpath(os.path.join(root, self.window.root))
+        config = backend({
+            'filename': self.view.filename,
+            'command': 'get-config'
+        })
+
+        config = json.loads(config)
+
+        p('fetch parsed config from backend: ', config)
 
         tree = backend({
             'filename': self.view.filename,
             'command': 'get-tree'
         })
 
-        # TODO: Move this into the backend
-        tree = tree.replace(normalize_trailing_slash(root), '')
+        tree = tree.replace(config['directory'] + '/', '')
 
         data = json.loads(tree)
         return json.dumps(data, indent=4)

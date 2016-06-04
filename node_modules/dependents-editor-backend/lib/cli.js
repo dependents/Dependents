@@ -107,6 +107,9 @@ module.exports = function(program) {
     };
 
     findDrivers(options);
+
+  } else if (program.getConfig) {
+    deferred.resolve(config.toJSON());
   }
 
   return deferred.promise;

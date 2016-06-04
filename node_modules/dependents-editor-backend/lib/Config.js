@@ -67,6 +67,17 @@ Config.prototype.load = function(configPath) {
   }
 };
 
+Config.prototype.toJSON = function() {
+  return {
+    stylesRoot: this.stylesRoot,
+    buildConfig: this.buildConfig,
+    webpackConfig: this.webpackConfig,
+    requireConfig: this.requireConfig,
+    directory: this.directory,
+    exclude: this.exclude
+  };
+};
+
 function getAbsolute(filepath, base) {
   return filepath ? path.resolve(path.dirname(base), filepath) : '';
 }
