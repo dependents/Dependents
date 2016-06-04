@@ -26,6 +26,8 @@ program
   .option('--get-tree', 'get the dependency tree of the current file')
   .option('--get-path', 'get the import form of the current filename')
 
+  .option('--get-config', 'get the contents of the parsed deprc config')
+
   // Editor tracking
   .option('--editor', 'the editor being used')
 
