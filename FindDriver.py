@@ -30,7 +30,7 @@ class FindDriverThread(BaseThread):
         """
         self.start_timer()
 
-        self.drivers = trim_paths_of_root(self.get_drivers(), self.window.root)
+        self.drivers = trim_paths_of_root(self.get_drivers(), self.window.config['directory'])
 
         if self.view.modifier and self.view.modifier == 'OPEN_ALL':
             for driver in self.drivers:
@@ -75,13 +75,5 @@ class FindDriverThread(BaseThread):
         self.open_file(driver)
 
     def open_file(self, driver):
-        path = self.view.path
-
-        # In case the root is the directory root (path)
-        if path != self.window.root:
-            path = os.path.join(path, self.window.root)
-
-        # We removed the root originally when populating the dependents list
-        filename = path + driver
-
+        filename = os.path.normpath(os.path.join(self.window.config['directory'], driver))
         super(FindDriverThread, self).open_file(filename)

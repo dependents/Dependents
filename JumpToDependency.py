@@ -7,11 +7,9 @@ import time
 from .BaseCommand import BaseCommand
 from .BaseThread import BaseThread
 
-# TODO: Support Python 2 style imports
 from .lib.show_error import *
 from .lib.track import track as t
 from .lib.printer import p
-from .lib.flatten import flatten
 
 from .node_dependents_editor_backend import backend
 
@@ -130,3 +128,9 @@ class JumpToDependencyThread(BaseThread):
         module = re.sub('[\'",]', '', module)
 
         return module
+
+def flatten(nested):
+    """
+    Flattens a 2d array into a 1d array
+    """
+    return [item for sublist in nested for item in sublist]

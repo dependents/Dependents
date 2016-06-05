@@ -32,7 +32,10 @@ class DependentsThread(BaseThread):
         """
         self.start_timer()
 
-        self.dependents = trim_paths_of_root(self.get_dependents(), self.window.root)
+        dependents = self.get_dependents()
+        p('fetched dependents: ', dependents)
+
+        self.dependents = trim_paths_of_root(dependents, self.window.config['directory'])
 
         if self.view.modifier == 'OPEN_ALL':
             for dep in self.dependents:
@@ -55,19 +58,11 @@ class DependentsThread(BaseThread):
         """
         Asks the node tool for the dependents of the current module
         """
-        root = self.view.path
-
-        # In case the user supplied the base path as the root
-        if self.window.root != self.view.path:
-            root = os.path.normpath(os.path.join(root, self.window.root))
-
         args = {
             'filename': self.view.filename,
             'command': 'find-dependents'
         }
 
-        # Newline in output is an empty dependent
-        # TODO: Something to fix from node-dependents?
         dependents = [d for d in backend(args).split('\n') if d]
 
         p(len(dependents), 'dependents found:\n' + '\n'.join(dependents))
@@ -89,12 +84,6 @@ class DependentsThread(BaseThread):
         self.open_file(dependent)
 
     def open_file(self, dependent):
-        path = self.view.path
-
-        # In case the root is the directory root (path)
-        if path != self.window.root:
-            path = os.path.join(path, self.window.root)
-
         # We removed the root originally when populating the dependents list
-        filename = os.path.normpath(os.path.join(path, dependent))
+        filename = os.path.normpath(os.path.join(self.window.config['directory'], dependent))
         super(DependentsThread, self).open_file(filename)

@@ -39,22 +39,12 @@ class TreeThread(BaseThread):
         """
         Asks the node tool for the dependents of the current module
         """
-
-        config = backend({
-            'filename': self.view.filename,
-            'command': 'get-config'
-        })
-
-        config = json.loads(config)
-
-        p('fetch parsed config from backend: ', config)
-
         tree = backend({
             'filename': self.view.filename,
             'command': 'get-tree'
         })
 
-        tree = tree.replace(config['directory'] + '/', '')
+        tree = tree.replace(self.window.config['directory'] + '/', '')
 
         data = json.loads(tree)
         return json.dumps(data, indent=4)
