@@ -56,6 +56,9 @@ Config.prototype.load = function(configPath) {
   this.requireConfig = getAbsolute(config.config || config.require_config, configPath);
   this.directory = getAbsolute(config.root || this.stylesRoot, configPath);
 
+  // Used by consumers to know where to find the node executable
+  this.nodePath = config.node_path || '';
+
   if (!this.directory) {
     throw new Error('Either a root or styles_root must be defined in your .deprc file');
   }
@@ -69,6 +72,7 @@ Config.prototype.load = function(configPath) {
 
 Config.prototype.toJSON = function() {
   return {
+    nodePath: this.nodePath,
     stylesRoot: this.stylesRoot,
     buildConfig: this.buildConfig,
     webpackConfig: this.webpackConfig,
@@ -100,16 +104,6 @@ Config.prototype._read = function(configPath) {
   }
 
   return config;
-};
-
-/**
- * Convenience function to load up the config by recursively searching
- * for it starting with the given directory
- *
- * @param  {String} directory
- */
-Config.prototype.init = function(directory) {
-  this.load(this.find(directory));
 };
 
 module.exports = Config;

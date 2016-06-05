@@ -33,7 +33,7 @@ class FindCallersThread(BaseThread):
 
         function_name = self.get_function_name()
 
-        self.callers = trim_paths_of_root(self.get_callers(function_name), self.window.root)
+        self.callers = trim_paths_of_root(self.get_callers(function_name), self.window.config['directory'])
 
         if self.view.modifier and self.view.modifier == 'OPEN_ALL':
             for driver in self.callers:
@@ -93,14 +93,6 @@ class FindCallersThread(BaseThread):
         self.open_file(caller)
 
     def open_file(self, caller):
-        # TODO: Duplicative of logic in get_callers
-        path = self.view.path
-
-        # In case the root is the directory root (path)
-        if path != self.window.root:
-            path = os.path.join(path, self.window.root)
-
         # We removed the root originally when populating the dependents list
-        filename = path + caller
-
+        filename = os.path.normpath(os.path.join(self.window.config['directory'], caller))
         super(FindCallersThread, self).open_file(filename)
