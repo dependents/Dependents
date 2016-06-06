@@ -1,9 +1,15 @@
 import json
+import sys
+import traceback
 
-from .track import track as t
-from .printer import p
-
-from ..node_dependents_editor_backend import backend
+if sys.version_info < (3,):
+    from track import t
+    from printer import p
+    from node_dependents_editor_backend import backend
+else:
+    from .track import t
+    from .printer import p
+    from ..node_dependents_editor_backend import backend
 
 def command_setup(self):
     """
@@ -24,12 +30,13 @@ def command_setup(self):
             'filename': self.view.filename,
             'command': 'get-config'
         })
-
+        
         self.window.config = json.loads(config)
         p('parsed config from backend', self.window.config)
         return success
     except Exception as e:
         p(e)
+        traceback.print_exc()
 
         t("Setup Exception", {
             "message": e

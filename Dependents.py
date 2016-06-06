@@ -1,16 +1,24 @@
 import sublime, sublime_plugin
 import threading
 import os
+import sys
 
-from .BaseCommand import BaseCommand
-from .BaseThread import BaseThread
-
-from .lib.show_error import *
-from .lib.trim_paths_of_root import trim_paths_of_root
-from .lib.track import track as t
-from .lib.printer import p
-
-from .node_dependents_editor_backend import backend
+if sys.version_info < (3,):
+    from BaseCommand import BaseCommand
+    from BaseThread import BaseThread
+    from lib.show_error import *
+    from lib.trim_paths_of_root import trim_paths_of_root
+    from lib.track import t
+    from lib.printer import p
+    from node_dependents_editor_backend import backend
+else:
+    from .BaseCommand import BaseCommand
+    from .BaseThread import BaseThread
+    from .lib.show_error import *
+    from .lib.trim_paths_of_root import trim_paths_of_root
+    from .lib.track import t
+    from .lib.printer import p
+    from .node_dependents_editor_backend import backend
 
 class DependentsCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
@@ -43,7 +51,7 @@ class DependentsThread(BaseThread):
 
         elif self.view.modifier == 'COPY_ALL':
             extLess = map(lambda d: os.path.splitext(d)[0], self.dependents)
-            sublime.set_clipboard('\n'.join(extLess))
+            sublime.set_timeout(lambda: sublime.set_clipboard('\n'.join(extLess)), 100)
 
         elif len(self.dependents) == 1:
             p('Opening the only dependent: ', self.dependents[0])

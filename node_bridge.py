@@ -1,14 +1,12 @@
 import os
 import platform
-
-import sublime
+import sys
 from subprocess import Popen, PIPE
-from os.path import dirname, realpath, join
 
-from .lib.track import track as t
-from .lib.printer import p
-from .lib.show_error import show_error
-from .lib.project_settings import get_project_settings
+if sys.version_info < (3,):
+    from lib.printer import p
+else:
+    from .lib.printer import p
 
 """
 Modified version of node_bridge from sublime-fixmyjs
@@ -17,34 +15,30 @@ Modified version of node_bridge from sublime-fixmyjs
 IS_OSX = platform.system() == 'Darwin'
 IS_WINDOWS = platform.system() == 'Windows'
 
-def node_bridge(bin, args=[], data=''):
+def node_bridge(bin, args, node_path=None):
     env = None
     if IS_OSX:
-        # GUI apps in OS X doesn't contain .bashrc/.zshrc set paths
+        # GUI apps in OS X don't contain .bashrc/.zshrc set paths
         env = os.environ.copy()
-
-        node_path = get_project_settings().get('node_path')
 
         if not node_path:
             node_path = ':/usr/local/bin'
-
-        p('Node path: ', node_path)
+            
+        p('Node path: ' + node_path)
 
         env['PATH'] += node_path
 
     try:
         cmd = ['node', bin] + args
 
-        print('Executing: ', ' '.join(cmd))
+        p('Executing: ', ' '.join(cmd))
 
-        proc = Popen(cmd,
-            stdout=PIPE, stdin=PIPE, stderr=PIPE,
-            env=env, shell=IS_WINDOWS)
+        proc = Popen(cmd, stdout=PIPE, stdin=PIPE, stderr=PIPE, env=env, shell=IS_WINDOWS)
 
     except OSError:
         raise Exception('Couldn\'t find Node.js. Make sure it\'s in your $PATH by running `node -v` in your command-line.')
 
-    stdout, stderr = proc.communicate(input=data.encode('utf-8'))
+    stdout, stderr = proc.communicate(input=''.encode('utf-8'))
     stdout = stdout.decode('utf-8')
     stderr = stderr.decode('utf-8')
 
@@ -52,22 +46,3 @@ def node_bridge(bin, args=[], data=''):
         raise Exception('Error: %s' % stderr)
     else:
         return stdout
-
-def exec_script(module, script, args):
-    """
-    Executes the cli-script for the given node module with the given args
-    Returns the stdout result of that command
-    """
-    try:
-        bin_path = join(sublime.packages_path(), dirname(realpath(__file__)), 'node_modules/' + module + '/bin/' + script)
-
-        return node_bridge(bin_path, args)
-
-    except Exception as e:
-        show_error('An error occurred. Please file an issue with the following:\n\n' + str(e), True)
-
-        t('Bridge_Error', {
-            "message": str(e)
-        })
-
-    return ''

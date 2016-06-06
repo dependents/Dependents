@@ -1,57 +1,30 @@
-import sublime, sublime_plugin
+import sublime_plugin
 import threading
-import os
 import re
-import time
+import sys
 
-from .BaseCommand import BaseCommand
-from .BaseThread import BaseThread
-
-from .lib.show_error import *
-from .lib.track import track as t
-from .lib.printer import p
-
-from .node_dependents_editor_backend import backend
+if sys.version_info < (3,):
+    from BaseCommand import BaseCommand
+    from BaseThread import BaseThread
+    from lib.show_error import *
+    from lib.track import t
+    from lib.printer import p
+    from node_dependents_editor_backend import backend
+else:
+    from .BaseCommand import BaseCommand
+    from .BaseThread import BaseThread
+    from .lib.show_error import *
+    from .lib.track import t
+    from .lib.printer import p
+    from .node_dependents_editor_backend import backend
 
 class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
         if super(JumpToDependencyCommand, self).run():
+            # Done on main thread due to ST2
+            # TODO: Move this out to the node backend
+            self.view.selectedModuleName = self.get_selected_module_name()
             self.init_thread(JumpToDependencyThread, 'Jumping to dependency')
-
-class JumpToDependencyThread(BaseThread):
-    """
-    A thread to prevent the jump to dependency from freezing the UI
-    """
-    def __init__(self, command):
-        self.window = command.window
-        self.view = command.view
-        threading.Thread.__init__(self)
-
-    def run(self):
-        """
-        Jumps to the file identified by the string under the cursor
-        """
-
-        self.start_timer()
-
-        module = self.get_selected_module_name()
-
-        if not module:
-            return
-
-        p('Extracted Path', { 'path': module })
-
-        file_to_open = backend({
-            'filename': self.view.filename,
-            'path': module,
-            'command': 'lookup'
-        }).strip();
-
-        p('After cabinet lookup', file_to_open)
-
-        self.open_file(file_to_open)
-
-        self.stop_timer('Run_JumpToDependency')
 
     def get_selected_module_region(self):
         """
@@ -69,9 +42,6 @@ class JumpToDependencyThread(BaseThread):
 
         selected_region = self.view.word(region)
         selected_line = self.view.line(region)
-
-        p('region', selected_region)
-        p('line', selected_line)
 
         line = self.view.substr(selected_line)
         pattern = '[\'"]{1}([^"\']*)[\'"]{1}'
@@ -97,7 +67,7 @@ class JumpToDependencyThread(BaseThread):
         # Get the locations of the strings within the buffer
         regions = map(lambda string: self.view.find_all(string), strings_on_line)
         regions = flatten(list(regions))
-        p('regions', regions)
+
         # Get the regions that intersect with the clicked region
         region = list(filter(lambda r: r.contains(selected_region), regions))
 
@@ -119,7 +89,7 @@ class JumpToDependencyThread(BaseThread):
 
         if not region:
             t('Misc_Error', {
-               'type': 'list index out of range'
+                'type': 'list index out of range'
             })
             show_error('You need to click within the quoted path')
             return
@@ -128,6 +98,41 @@ class JumpToDependencyThread(BaseThread):
         module = re.sub('[\'",]', '', module)
 
         return module
+
+class JumpToDependencyThread(BaseThread):
+    """
+    A thread to prevent the jump to dependency from freezing the UI
+    """
+    def __init__(self, command):
+        self.window = command.window
+        self.view = command.view
+        threading.Thread.__init__(self)
+
+    def run(self):
+        """
+        Jumps to the file identified by the string under the cursor
+        """
+
+        self.start_timer()
+
+        module = self.view.selectedModuleName
+
+        if not module:
+            return
+
+        p('Extracted Path', { 'path': module })
+
+        file_to_open = backend({
+            'filename': self.view.filename,
+            'path': module,
+            'command': 'lookup'
+        }).strip();
+
+        p('After cabinet lookup', file_to_open)
+
+        self.open_file(file_to_open)
+
+        self.stop_timer('Run_JumpToDependency')
 
 def flatten(nested):
     """

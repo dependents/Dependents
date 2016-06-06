@@ -1,5 +1,11 @@
-from .printer import p
-from .normalize_trailing_slash import normalize_trailing_slash
+import sys 
+
+if sys.version_info < (3,):
+    from printer import p
+    from normalize_trailing_slash import normalize_trailing_slash
+else:
+    from .printer import p
+    from .normalize_trailing_slash import normalize_trailing_slash
 
 def trim_paths_of_root(files, root):
     """

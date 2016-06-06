@@ -2,27 +2,19 @@ import sublime
 import os
 import json
 import platform
+import sys
 
-from .normalize_trailing_slash import normalize_trailing_slash
-from .printer import p
+if sys.version_info < (3,):
+    from printer import p
+else:
+    from .printer import p
 
-def get_settings_from_source(source):
-    settings = {}
-
-    settings['node_path'] = source.get('node_path', '')
-
-    # Users shouldn't need to worry about the leading colon (if necessary #124)
-    if settings['node_path'] and not settings['node_path'].startswith(':') and platform.system() != 'Windows':
-        settings['node_path'] = ':' + settings['node_path']
-
-    return settings
-
-def get_project_settings():
+def get_project_settings(filename):
     """
     Returns a settings map that contains project settings
     either from a .deprc file or the plugin's sublime-settings file
     """
-    project_settings_path = os.path.join(find_base_path(), '.deprc')
+    project_settings_path = os.path.join(find_base_path(filename), '.deprc')
 
     settings = {}
 
@@ -40,23 +32,32 @@ def get_project_settings():
 
     return settings
 
-def find_base_path():
+def get_settings_from_source(source):
+    settings = {}
+
+    settings['node_path'] = source.get('node_path')
+
+    # Users shouldn't need to worry about the leading colon (if necessary #124)
+    if settings['node_path'] and not settings['node_path'].startswith(':') and platform.system() != 'Windows':
+        settings['node_path'] = ':' + settings['node_path']
+
+    return settings
+
+def find_base_path(filename):
     """
     Finds the most relevant folder to the currently active filename
     to serve as the base path of the current
     """
-    window = sublime.active_window()
-    view = window.active_view()
-    filename = view.file_name()
+    starting_dir = os.path.dirname(filename)
+    p('starting search for .deprc in: ', starting_dir)
 
-    # The base path is the folder with the closest deprc file
-    folder_with_deprc = get_folder_with_deprc(os.path.dirname(filename));
+    folder_with_deprc = get_folder_with_deprc(starting_dir)
     p('Closest folder with a deprc:', folder_with_deprc)
 
     return folder_with_deprc
 
 def get_folder_with_deprc(baseFolder):
-    if not baseFolder:
+    if not baseFolder or baseFolder == '/':
         return ''
 
     deprc_file = os.path.join(baseFolder, '.deprc')

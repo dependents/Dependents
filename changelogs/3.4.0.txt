@@ -1,0 +1,5 @@
+Sublime Text 2 Support is here!
+
+This involved a bit of internal shuffling. 
+
+Please yell at me on twitter if anything breaks: @mrjoelkemp

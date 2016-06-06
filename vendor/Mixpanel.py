@@ -1,9 +1,13 @@
 import base64
 import json
 import time
-import urllib.request
-import urllib.parse
-import urllib.error
+
+try:
+    import urllib.request
+    import urllib.parse
+    import urllib.error
+except ImportError:
+    import urllib
 
 # The mixpanel package allows you to easily track events and
 # update people properties from your python application.
