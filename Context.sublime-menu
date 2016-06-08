@@ -9,7 +9,7 @@
             { "command": "find_driver", "caption": "Find relevant app entry points" },
             { "command": "find_driver", "caption": "Open all relevant app entry points", "args": { "modifier": "OPEN_ALL"}},
             { "command": "tree", "caption": "View this file's dependency tree" },
-            { "command": "get_path", "caption": "Copy path to the clipboard" },
+            { "command": "get_path", "caption": "Copy path to the clipboard" }
             // { "command": "find_callers", "caption": "Find callers of that function" },
             // { "command": "find_callers", "caption": "Open all callers of that function", "args": { "modifier": "OPEN_ALL"}}
         ]

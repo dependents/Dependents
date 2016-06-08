@@ -19,7 +19,7 @@
     },
     {
         "caption": "Dependents: Find relevant app entry points",
-        "command": "find_driver",
+        "command": "find_driver"
     },
     {
         "caption": "Dependents: Open all relevant app entry points",

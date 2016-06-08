@@ -1,16 +1,24 @@
 import sublime, sublime_plugin
 import threading
 import os
+import sys
 
-from .BaseCommand import BaseCommand
-from .BaseThread import BaseThread
-
-from .lib.show_error import *
-from .lib.trim_paths_of_root import trim_paths_of_root
-from .lib.track import track as t
-from .lib.printer import p
-
-from .node_dependents_editor_backend import backend
+if sys.version_info < (3,):
+    from BaseCommand import BaseCommand
+    from BaseThread import BaseThread
+    from lib.show_error import *
+    from lib.trim_paths_of_root import trim_paths_of_root
+    from lib.track import t
+    from lib.printer import p
+    from node_dependents_editor_backend import backend
+else:
+    from .BaseCommand import BaseCommand
+    from .BaseThread import BaseThread
+    from .lib.show_error import *
+    from .lib.trim_paths_of_root import trim_paths_of_root
+    from .lib.track import t
+    from .lib.printer import p
+    from .node_dependents_editor_backend import backend
 
 class FindDriverCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):

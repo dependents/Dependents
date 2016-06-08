@@ -33,13 +33,12 @@
                         "args": { "modifier": "OPEN_ALL"}
                     },
                     {
-                        "caption": "Find callers of that function",
-                        "command": "find_callers"
+                        "command": "tree", 
+                        "caption": "View this file's dependency tree" 
                     },
-                    {
-                        "caption": "Open all callers of that function",
-                        "command": "find_callers",
-                        "args": { "modifier": "OPEN_ALL"}
+                    { 
+                        "command": "get_path", 
+                        "caption": "Copy path to the clipboard" 
                     }
                 ]
             }

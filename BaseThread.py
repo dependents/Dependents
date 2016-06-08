@@ -2,10 +2,16 @@ import sublime
 import threading
 import os
 import time
+import sys
 
-from .lib.printer import p
-from .lib.track import track as t
-from .lib.show_error import *
+if sys.version_info < (3,):
+    from lib.printer import p
+    from lib.track import t
+    from lib.show_error import *
+else:
+    from .lib.printer import p
+    from .lib.track import t
+    from .lib.show_error import *
 
 class BaseThread(threading.Thread):
     """

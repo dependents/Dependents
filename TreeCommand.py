@@ -1,13 +1,20 @@
 import sublime, sublime_plugin
 import threading
 import json
+import sys
 
-from .BaseCommand import BaseCommand
-from .BaseThread import BaseThread
-
-from .lib.track import track as t
-from .lib.printer import p
-from .node_dependents_editor_backend import backend
+if sys.version_info < (3,):
+    from BaseCommand import BaseCommand
+    from BaseThread import BaseThread
+    from lib.track import t
+    from lib.printer import p
+    from node_dependents_editor_backend import backend
+else:
+    from .BaseCommand import BaseCommand
+    from .BaseThread import BaseThread
+    from .lib.track import t
+    from .lib.printer import p
+    from .node_dependents_editor_backend import backend
 
 class TreeCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
@@ -28,12 +35,15 @@ class TreeThread(BaseThread):
 
         tree = self.get_results()
 
-        v = self.window.new_file()
-        v.set_syntax_file('Packages/JavaScript/JSON.tmLanguage')
-        v.set_name('Tree for ' + self.view.file_name())
-        v.run_command('insert_snippet', {'contents': tree})
-
+        sublime.set_timeout(lambda: self.open_new_file_with_results(tree), 100)
+        
         self.stop_timer('Run_Tree')
+
+    def open_new_file_with_results(self, tree):
+        new_file = self.window.new_file()
+        new_file.set_syntax_file('Packages/JavaScript/JSON.tmLanguage')
+        new_file.set_name('Tree for ' + self.view.file_name())
+        new_file.run_command('insert_snippet', {'contents': tree})
 
     def get_results(self):
         """

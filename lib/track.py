@@ -1,9 +1,15 @@
-from ..vendor.Mixpanel import *
 import inspect
 import os
 import sys
+import traceback
 
-def track(event, data = {}):
+if sys.version_info < (3,):
+  from vendor.Mixpanel import *
+
+else:
+  from ..vendor.Mixpanel import *
+
+def t(event, data = {}):
   """
   Handles logging to the console and Mixpanel
 
@@ -34,9 +40,8 @@ def track(event, data = {}):
     print('Tracking not possible: ', e);
 
   # Prevents an exception from underlying request libs of mixpanel
-  except:
-    print('Probably no internet: ', str(sys.exc_info()[0]));
+  except Exception as e:
+    print('Probably no internet: ', e);
 
   finally:
     print(event, data)
-
