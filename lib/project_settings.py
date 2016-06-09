@@ -35,7 +35,7 @@ def get_project_settings(filename):
 def get_settings_from_source(source):
     settings = {}
 
-    settings['node_path'] = source.get('node_path')
+    settings['node_path'] = source.get('node_path', '')
 
     # Users shouldn't need to worry about the leading colon (if necessary #124)
     if settings['node_path'] and not settings['node_path'].startswith(':') and platform.system() != 'Windows':
