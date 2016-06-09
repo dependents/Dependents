@@ -14,7 +14,7 @@ else:
     from .lib.command_setup import command_setup
     from .lib.track import t
     from .lib.printer import p
-    
+
 class BaseCommand():
     def run(self, modifier='', edit=None):
         setup_was_successful = command_setup(self)
