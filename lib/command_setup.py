@@ -1,6 +1,5 @@
 import json
 import sys
-import traceback
 
 if sys.version_info < (3,):
     from track import t
@@ -30,13 +29,12 @@ def command_setup(self):
             'filename': self.view.filename,
             'command': 'get-config'
         })
-        
+
         self.window.config = json.loads(config)
         p('parsed config from backend', self.window.config)
         return success
     except Exception as e:
         p(e)
-        traceback.print_exc()
 
         t("Setup Exception", {
             "message": e
