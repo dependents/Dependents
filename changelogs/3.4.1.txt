@@ -1,0 +1,3 @@
+AMD Fix: properly support a baseUrl with a leading slash
+
+ES6 Fix: Properly parse files that contain JSX and ES7

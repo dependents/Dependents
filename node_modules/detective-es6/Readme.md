@@ -16,7 +16,7 @@ var dependencies = detective(mySourceCode);
 
 ```
 
-* Supports JSX and any other features that [node-source-walk](https://github.com/mrjoelkemp/node-source-walk) supports.
+* Supports JSX, Flow, and any other features that [node-source-walk](https://github.com/mrjoelkemp/node-source-walk) supports.
 
 #### License
 
