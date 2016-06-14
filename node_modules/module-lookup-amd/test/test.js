@@ -199,4 +199,18 @@ describe('lookup', function() {
       }), path.join(directory, 'b.js'));
     });
   });
+
+  describe('when the baseUrl has a leading slash', function() {
+    beforeEach(function() {
+      this._config = __dirname + '/example/js/innerConfig.json';
+    });
+
+    it('does not duplicate the baseUrl in the resolved file', function() {
+      assert.equal(lookup({
+        config: this._config,
+        partial: 'a',
+        filename
+      }), path.join(directory, 'a.js'));
+    });
+  });
 });

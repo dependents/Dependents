@@ -51,4 +51,10 @@ describe('detective-es6', function() {
       detective('var foo = require("foo"); var templ = <jsx />;');
     });
   });
+
+  it('does not throw on an async ES7 function', function() {
+    assert.doesNotThrow(function() {
+      detective('async function foo() {}');
+    });
+  });
 });

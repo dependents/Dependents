@@ -42,13 +42,22 @@ module.exports = function(options) {
     debug('set baseUrl to ' + config.baseUrl);
   }
 
+  var resolutionDirectory = path.dirname(configPath);
+  debug('module resolution directory: ' + resolutionDirectory);
+
+  if (config.baseUrl[0] === '/') {
+    debug('baseUrl with a leading slash detected');
+    resolutionDirectory = resolutionDirectory.replace(config.baseUrl, '');
+    debug('new resolution directory: ' + resolutionDirectory);
+  }
+
   requirejs.config(config);
 
   depPath = stripLoader(depPath);
 
   var normalizedModuleId = requirejs.toUrl(depPath);
 
-  var resolved = path.join(path.dirname(configPath), normalizedModuleId);
+  var resolved = path.join(resolutionDirectory, normalizedModuleId);
 
   debug('normalized module id: ' + normalizedModuleId);
   debug('resolved url: ' + resolved);
