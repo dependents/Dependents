@@ -4,7 +4,7 @@
 
 `npm install detective-cjs`
 
-But brah, substack already built this: node-detective. Yes, but I needed the capability to reuse an AST
+But dude, substack already built this: node-detective. Yes, but I needed the capability to reuse an AST
 and this was unlikely to be merged timely. I can also support jsx and other syntactic constructs faster.
 
 ### Usage
@@ -19,7 +19,7 @@ var dependencies = detective(mySourceCode);
 
 ```
 
-* Supports JSX and any other features that [node-source-walk](https://github.com/mrjoelkemp/node-source-walk) supports.
+* Supports JSX, ES7, and any other features that [node-source-walk](https://github.com/mrjoelkemp/node-source-walk) supports.
 
 #### License
 

@@ -69,10 +69,6 @@ module.exports.prototype._processedAllFiles = function() {
 
 /**
  * Forks separate node processes to find dependents for the filename in parallel
- *
- * @param  {String}   filename  - File to find the dependents for
- * @param  {Array}    files     - List of JS files to process
- * @param  {Function} cb        - Executed with String[] of dependent filenames
  */
 module.exports.prototype._spawnWorkers = function() {
   return q.all(this._getWorkers().map(this._assignWork, this));
@@ -96,6 +92,7 @@ module.exports.prototype._getWorkers = function() {
 
 /**
  * Exposed for testing
+ *
  * @private
  */
 module.exports.prototype._createWorker = function() {
@@ -153,8 +150,6 @@ module.exports.prototype._delegateWork = function(worker) {
  * Gets the next chunk of files to process
  *
  * @private
- * @param  {String[]} files
- * @param  {Number} chunkSize
  * @return {String[]}
  */
 module.exports.prototype._getMoreFiles = function() {

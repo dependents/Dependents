@@ -71,8 +71,9 @@ module.exports.processExcludes = function(excludes, directory) {
         exclude = path.basename(exclude);
         files.push(exclude);
       }
-    // Ignore files that don't exist
-    } catch (e) {}
+    } catch (e) {
+      // Ignore files that don't exist
+    }
   }, this);
 
   if (dirs.length) {

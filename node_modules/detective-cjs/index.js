@@ -1,15 +1,12 @@
 var Walker = require('node-source-walk');
 var types = require('ast-module-types');
-var escodegen = require('escodegen');
 
 /**
  * @param  {String|Object} content - A file's string content or its AST
  * @return {String[]} The file's dependencies
  */
 module.exports = function(content) {
-  var walker = new Walker({
-    ecmaVersion: 6
-  });
+  var walker = new Walker();
 
   var dependencies = [];
 
@@ -22,14 +19,10 @@ module.exports = function(content) {
       return;
     }
 
-    if (node.arguments[0].type === 'Literal') {
+    if (node.arguments[0].type === 'Literal' || node.arguments[0].type === 'StringLiteral') {
       dependency = node.arguments[0].value;
-
-    } else {
-      dependency = escodegen.generate(node.arguments[0]);
+      dependencies.push(dependency);
     }
-
-    dependencies.push(dependency);
   });
 
   return dependencies;

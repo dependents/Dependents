@@ -36,7 +36,7 @@ module.exports = function(program) {
       config = new Config();
       config.findAndLoad(path.dirname(program.filename));
     }
-    debug('loaded config', config);
+    debug('processed config', config);
 
   } catch (e) {
     mixpanel.track('Setup Exception', {message: e.message});

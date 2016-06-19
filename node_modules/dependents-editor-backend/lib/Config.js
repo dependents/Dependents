@@ -48,7 +48,7 @@ Config.prototype.findAndLoad = function(directory) {
 Config.prototype.load = function(configPath) {
   var config = this._read(configPath);
 
-  debug('loaded config: ', config);
+  debug('raw config: ', config);
 
   this.stylesRoot = getAbsolute(config.styles_root || config.sass_root, configPath);
   this.buildConfig = getAbsolute(config.build_config, configPath);
