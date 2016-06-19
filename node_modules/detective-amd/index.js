@@ -34,7 +34,7 @@ module.exports = function(src) {
 
 /** @returns {String[]} A list of file dependencies or an empty list if there are no dependencies */
 function getDependencies(node) {
-  var type = getModuleType(node);
+  var type = getModuleType.fromAST(node);
   var dependencies;
 
   // Note: No need to handle nodeps since there won't be any dependencies
@@ -122,7 +122,6 @@ function getElementValues(nodeArguments) {
  * @returns {String} the statement represented by AST node
  */
 function getEvaluatedValue(node) {
-  if (node.type === 'Literal') { return node.value; }
-
+  if (node.type === 'Literal' || node.type === 'StringLiteral') { return node.value; }
   return escodegen.generate(node);
 }

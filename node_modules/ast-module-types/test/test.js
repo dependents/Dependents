@@ -68,6 +68,10 @@ describe('module-types', function() {
       assert(check('require(["a"], function(a){});', types.isAMDDriverScriptRequire));
     });
 
+    it('does not get confused with a commonjs require', function() {
+      assert(!check('require("foo");', types.isAMDDriverScriptRequire));
+    });
+
     it('detects named form', function() {
       assert(check('define("foobar", ["a"], function(a){});', types.isNamedForm));
     });

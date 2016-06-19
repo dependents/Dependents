@@ -1,7 +1,7 @@
 require.config({
-  "baseUrl": "js/",
+  "baseUrl": "js",
   "paths": {
-    "foobar": "./b",
+    "foobar": "b",
     "templates": "../templates",
     "jquery": "vendor/jquery.min",
     "styles": "../styles"
