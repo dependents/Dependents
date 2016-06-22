@@ -31,7 +31,7 @@ program
   .option('--get-config', 'get the contents of the parsed deprc config')
 
   // Editor tracking
-  .option('--editor', 'the editor being used')
+  .option('--editor <name>', 'the editor being used')
 
   // Target extraction
   .parse(process.argv);
