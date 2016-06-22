@@ -1,5 +1,5 @@
 var Walker = require('node-source-walk');
-var sass = require('sass-thematic');
+var sass = require('dependents-sass-thematic');
 
 /**
  * Extract the @import statements from a given sass file's content

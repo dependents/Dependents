@@ -1,0 +1,3 @@
+Jump to Dependency
+
+CommonJS fix: if the partial is a directory, it resolves to its index.js file
