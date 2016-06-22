@@ -32,6 +32,9 @@ def backend(options):
     if 'command' in options:
         args.append('--' + options['command'])
 
+    if 'lookup_position' in options:
+        args.append('--lookup-position=' + str(options['lookup_position']))
+
     if 'path' in options:
         args.append(options['path'])
 
