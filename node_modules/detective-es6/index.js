@@ -14,14 +14,21 @@ module.exports = function(src) {
   if (!src) { throw new Error('src not given'); }
 
   walker.walk(src, function(node) {
-    // If it's not an import, skip it
-    if (node.type !== 'ImportDeclaration' ||
-        !node.source ||
-        !node.source.value) {
-      return;
+    switch (node.type) {
+      case 'ImportDeclaration':
+        if (node.source && node.source.value) {
+          dependencies.push(node.source.value);
+        }
+        break;
+      case 'ExportNamedDeclaration':
+      case 'ExportAllDeclaration':
+        if (node.source && node.source.value) {
+          dependencies.push(node.source.value);
+        }
+        break;
+      default:
+        return;
     }
-
-    dependencies.push(node.source.value);
   });
 
   return dependencies;
