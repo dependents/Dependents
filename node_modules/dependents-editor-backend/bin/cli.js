@@ -20,7 +20,7 @@ program
 
   // Feature flags
   .option('--lookup', 'perform a partial lookup for the jump to dependency feature')
-  .option('--lookup-position', 'jump to dependency: location of the clicked character of the target')
+  .option('--lookup-position <value>', 'jump to dependency: location of the clicked character of the target')
 
   .option('--find-dependents', 'get the dependents of the current file')
   .option('--find-drivers', 'get the driver scripts relevant to current file')
