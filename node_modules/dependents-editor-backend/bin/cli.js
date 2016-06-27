@@ -26,6 +26,7 @@ program
   .option('--find-drivers', 'get the driver scripts relevant to current file')
   .option('--find-callers', 'get the scripts calling the given function name')
   .option('--get-tree', 'get the dependency tree of the current file')
+  .option('--get-tree-pic [imagePath]', 'get the dependency tree of the current file as a picture')
   .option('--get-path', 'get the import form of the current filename')
 
   .option('--get-config', 'get the contents of the parsed deprc config')

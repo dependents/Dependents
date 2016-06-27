@@ -8,6 +8,7 @@ var findDependents = require('dependents');
 var callers = require('callers');
 var tree = require('dependency-tree');
 var findDrivers = require('taxicab');
+var treePic = require('tree-pic');
 
 var q = require('q');
 var path = require('path');
@@ -126,8 +127,7 @@ module.exports = function(program) {
     mixpanel.track('Run_Tree');
 
     try {
-      var results = tree(options);
-      deferred.resolve(results);
+      deferred.resolve(tree(options));
     } catch (e) {
       mixpanel.track('Tree_Error', {message: e.message || e});
       deferred.reject(e.message);
@@ -151,7 +151,30 @@ module.exports = function(program) {
     findDrivers(options);
 
   } else if (program.getConfig) {
+    debug('running getConfig');
     deferred.resolve(config.toJSON());
+
+  } else if (program.getTreePic) {
+    debug('running getTreePic');
+    mixpanel.track('Run_Tree_PIc');
+
+    options.requireConfig = options.config;
+
+    if (typeof program.getTreePic === 'string') {
+      options.imagePath = program.getTreePic;
+    }
+
+    treePic(options)
+    .then(function(imagePath) {
+      debug('treePic image path: ' + imagePath);
+      deferred.resolve(imagePath);
+    })
+    .catch(function(error) {
+      debug('treePic error: ' + error.message);
+      mixpanel.track('Tree_Pic_Error', {message: error.message});
+
+      deferred.reject(error);
+    });
 
   } else {
     deferred.reject('No valid command given');
