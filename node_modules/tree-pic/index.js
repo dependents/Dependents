@@ -61,7 +61,10 @@ function generateTree(options) {
       root: options.directory,
       filename: options.filename,
       config: options.requireConfig,
-      webpackConfig: options.webpackConfig
+      webpackConfig: options.webpackConfig,
+      filter: function(path) {
+        return path.indexOf('node_modules') === -1;
+      }
     });
   });
 

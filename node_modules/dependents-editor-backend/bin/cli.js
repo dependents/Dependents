@@ -5,7 +5,6 @@
 var cli = require('../lib/cli');
 
 var program = require('commander');
-var isPlainObject = require('is-plain-object');
 
 program
   .version(require('../package.json').version)
@@ -38,20 +37,7 @@ program
   .parse(process.argv);
 
 cli(program)
-// TODO: consider moving into a cli.print method for testing
-.then(function(result) {
-  if (!(result instanceof Array)) {
-    result = [result];
-  }
-
-  result.forEach(function(r) {
-    if (isPlainObject(r)) {
-      r = JSON.stringify(r);
-    }
-
-    console.log(r);
-  });
-})
+.then(cli.print)
 .catch(function(message) {
   console.error(message);
   process.exit(1);
