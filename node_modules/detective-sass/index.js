@@ -1,5 +1,5 @@
 var Walker = require('node-source-walk');
-var sass = require('dependents-sass-thematic');
+var sass = require('gonzales-pe');
 
 /**
  * Extract the @import statements from a given sass file's content
@@ -15,9 +15,7 @@ module.exports = function(fileContent) {
 
   var walker = new Walker();
 
-  var ast = sass.parseASTSync({
-    data: fileContent
-  });
+  var ast = sass.parse(fileContent);
 
   walker.walk(ast, function(node) {
     if (!isImportStatement(node)) { return; }
@@ -29,7 +27,7 @@ module.exports = function(fileContent) {
 };
 
 function isImportStatement(node) {
-  if (!node || node.type !== 'atrules') { return false; }
+  if (!node || node.type !== 'atrule') { return false; }
   if (!node.content.length || node.content[0].type !== 'atkeyword') { return false; }
 
   var atKeyword = node.content[0];
