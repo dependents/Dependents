@@ -14,6 +14,7 @@ var WorkerManager = require('./lib/WorkerManager');
  * @param  {Object}       options
  * @param  {String}       options.filename  - The file whose dependents to compute
  * @param  {String|Array} options.directory - Directory name or list of filenames to process
+ * @param  {Number}       [options.parallelThreshold=500] - The number of files that triggers multi-core processing
  * @param  {String}       [options.config]  - Path to the shim config
  * @param  {String[]}     [options.exclusions] - List of files and directories to exclude
  * @param  {String[]}     [options.files] - Allows workers to process predetermined sets of files
@@ -81,7 +82,7 @@ module.exports = function(options, cb) {
 
   debug('configuration: \n', configuration);
 
-  if (module.exports._shouldParallelize(files)) {
+  if (module.exports._shouldParallelize(files, Number(options.parallelThreshold))) {
     configuration.files = files;
     var workerManager = new WorkerManager(configuration);
 
@@ -126,8 +127,8 @@ module.exports._readConfig = function(configPath) {
  * @param  {String[]} files
  * @return {Boolean}
  */
-module.exports._shouldParallelize = function(files) {
-  var minimumNumberOfFiles = 500;
+module.exports._shouldParallelize = function(files, minimumNumberOfFiles) {
+  minimumNumberOfFiles = typeof minimumNumberOfFiles === 'undefined' ? 500 : minimumNumberOfFiles;
   return files.length >= minimumNumberOfFiles;
 };
 

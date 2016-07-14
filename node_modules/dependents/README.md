@@ -13,7 +13,8 @@
 Note: this library *will utilize multi-core processing* if the number of files to process
 within the supplied directory is >= 500.
 
-* That empirical threshold was found to be when the tool started to naturally slow down.
+- You can supply your own `parallelThreshold` option to lower/raise that threshold
+- The value 500 was empirically found to be when the tool started to naturally slow down.
 
 ### Usage
 
