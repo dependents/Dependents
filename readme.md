@@ -1,4 +1,4 @@
-### Dependents [![Gitter](https://img.shields.io/badge/gitter-join%20chat-green.svg?style=flat)](https://gitter.im/mrjoelkemp/Dependents?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+### Dependents [![Gitter](https://img.shields.io/badge/gitter-join%20chat-green.svg?style=flat)](https://gitter.im/mrjoelkemp/Dependents?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Package Control](https://img.shields.io/packagecontrol/dt/Dependents.svg?maxAge=2592000)](https://packagecontrol.io/packages/Dependents)
 
 > Navigate front-end codebases in Sublime Text 2/3
 
@@ -34,17 +34,17 @@ You **must** have [Node.js](https://nodejs.org/) installed on your system. Anyth
 * Note: The Node.js windows installer will add the install directory to the `PATH` variable but you must reboot to reload it.
 
 If you have issues with running Node.js from within the package see the `node_path` setting under [configuring settings](#configuring-settings) below.
- 
+
 * nvm users will need to supply their `node_path`
 
-* For a .deprc shared with a team, consider not commiting `node_path` changes (as it's only for your machine). 
- * Run `git update-index --assume-unchanged .deprc` to ignore changes 
+* For a .deprc shared with a team, consider not commiting `node_path` changes (as it's only for your machine).
+ * Run `git update-index --assume-unchanged .deprc` to ignore changes
  * Run `git update-index --no-assume-unchanged .deprc` to track changes again
- * This is currently a workaround. 
+ * This is currently a workaround.
 
 ### Configuring settings
 
-Put a `.deprc` file in the root directory of your project. See below for all possible settings. 
+Put a `.deprc` file in the root directory of your project. See below for all possible settings.
 
 At a minimum, you must specify a `root` or `styles_root`.
 
