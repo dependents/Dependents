@@ -7,9 +7,9 @@ describe('stylus-lookup', function() {
     mock({
       example: {
         // jscs: disable maximumLineLength
-        'main.styl': '@import blueprint; @require another; @require "styles.styl"',
+        'main.styl': '@import "blueprint"; @require "another"; @require "styles.styl"',
         // jscs: enable maximumLineLength
-        'another.styl': '@import nested/foo',
+        'another.styl': '@import "nested/foo"',
         'styles.styl': '@import "styles2.css"',
         'styles2.css': '',
         blueprint: {
