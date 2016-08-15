@@ -13,7 +13,8 @@
     "grunt-touch": "~0.1.0"
   },
   "scripts": {
-    "test": "nosetests"
+    "test": "nosetests",
+    "build": "rm -rf node_modules && npm i --production && git add . -A && git commit -m 'Build'"
   },
   "repository": {
     "type": "git",
