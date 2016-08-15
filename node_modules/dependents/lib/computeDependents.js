@@ -21,15 +21,16 @@ module.exports = function(options) {
   dependents[filename] = {};
 
   // Register the current file as dependent on each dependency
-  var dependencies = getDependencies(filename);
+  var data = getDependencies(filename);
 
-  debug('' + dependencies.length + ' dependencies for ' + filename.replace(new RegExp(directory + '/?'), ''));
+  debug('' + data.dependencies.length + ' dependencies for ' + filename.replace(new RegExp(directory + '/?'), ''));
 
-  dependencies.forEach(function(dep) {
+  data.dependencies.forEach(function(dep) {
     debug('before cabinet lookup: ' + dep);
 
     var result = cabinet({
       partial: dep,
+      ast: data.ast,
       filename: filename,
       directory: directory,
       config: config,
@@ -56,11 +57,20 @@ module.exports = function(options) {
  * @return {String[]}
  */
 function getDependencies(filename) {
+  var result = {
+    ast: null,
+    dependencies: [],
+  };
+
   try {
-    return precinct.paperwork(filename, {
+    result.dependencies = precinct.paperwork(filename, {
       includeCore: false
     });
+
+    result.ast = precinct.ast;
+
+    return result;
   } catch (e) {
-    return [];
+    return result;
   }
 }
