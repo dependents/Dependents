@@ -1,4 +1,5 @@
 var ConfigFile = require('requirejs-config-file').ConfigFile;
+var fs = require('fs');
 var path = require('path');
 var debug = require('debug')('lookup');
 var find = require('find');
@@ -10,17 +11,16 @@ var requirejs = require('requirejs');
  * via the paths section of a require config
  *
  * @param  {Object} options - Pass a loaded config object if you'd like to avoid rereading the config
- * @param  {String} options.partial - the dependency name
- * @param  {String} options.filename - the file containing the dependency
+ * @param  {String} options.partial - The dependency name
+ * @param  {String} options.filename - The file containing the dependency
+ * @param  {String} [options.directory] - The directory to use for resolving absolute paths (when no config is used)
  * @param  {String|Object} [options.config] - Pass a loaded config object if you'd like to avoid rereading the config
  * @param  {String|Object} [options.configPath] - The location of the config file used to create the preparsed config object
  *
  * @return {String}
  */
 module.exports = function(options) {
-  // If you want to supply a preparsed config object without a configPath, then
-  // we have no way of knowing what the baseUrl should be.
-  var configPath = options.configPath || options.filename;
+  var configPath = options.configPath;
   var config = options.config || {};
   var depPath = options.partial;
   var filename = options.filename;
@@ -30,9 +30,13 @@ module.exports = function(options) {
   debug('filename: ', filename);
 
   if (typeof config === 'string') {
-    configPath = config;
+    configPath = path.dirname(config);
     config = module.exports._readConfig(config);
     debug('converting given config file ' + configPath + ' to an object:\n', config);
+  }
+
+  if (configPath && !fs.statSync(configPath).isDirectory()) {
+    configPath = path.dirname(configPath);
   }
 
   debug('configPath: ', configPath);
@@ -42,8 +46,20 @@ module.exports = function(options) {
     debug('set baseUrl to ' + config.baseUrl);
   }
 
-  var resolutionDirectory = path.dirname(configPath);
-  debug('module resolution directory: ' + resolutionDirectory);
+  var resolutionDirectory;
+
+  if (configPath) {
+    resolutionDirectory = configPath;
+    debug('module resolution directory (based on configPath): ' + resolutionDirectory);
+
+  } else if (options.directory && depPath[0] !== '.') {
+    resolutionDirectory = options.directory;
+    debug('module resolution directory (based on directory): ' + resolutionDirectory);
+
+  } else {
+    resolutionDirectory = path.dirname(options.filename);
+    debug('module resolution directory (based on filename): ' + resolutionDirectory);
+  }
 
   if (config.baseUrl[0] === '/') {
     debug('baseUrl with a leading slash detected');
