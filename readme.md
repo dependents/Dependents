@@ -204,3 +204,9 @@ You can get console logs via `View -> Show Console`.
 Paste those logs into the body of your issue.
 
 Feel free to chat with me on [Gitter](https://gitter.im/mrjoelkemp/Dependents) if you need help or ping me [@mrjoelkemp](https://twitter.com/mrjoelkemp).
+
+### License
+
+(Creative Commons Attribution NoDerivs (CC-ND)](https://tldrlegal.com/license/creative-commons-attribution-noderivs-(cc-nd))
+
+The no derivatives creative commons license is straightforward; you can take a work released under this license and re-distribute it but you can’t change it.
