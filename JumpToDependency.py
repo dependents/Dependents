@@ -34,18 +34,18 @@ class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
 
         region = selections[0]
 
-        clicked_position = region.a
+        row, col = self.view.rowcol(region.a)
 
-        p('selections: ', selections)
+        p('clicked row: ', row)
+        p('clicked col: ', col)
         p('region: ', region)
-        p('clicked char position: ', clicked_position)
 
         line = self.view.substr(self.view.line(region))
         p('line: ', line)
         p('line length: ', len(line))
 
         return {
-            "clicked_position": clicked_position,
+            "clicked_position": col,
             "line": line
         }
 
