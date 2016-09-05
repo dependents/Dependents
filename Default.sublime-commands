@@ -33,5 +33,18 @@
     {
         "caption": "Dependents: Copy path to the clipboard",
         "command": "get_path"
+    },
+    {
+        "caption": "Dependents: Jump to definition (experimental)",
+        "command": "jump_to_definition"
+    },
+    {
+        "caption": "Dependents: Find usages (experimental)",
+        "command": "find_callers"
+    },
+    {
+        "caption": "Dependents: Open all usages",
+        "command": "find_callers",
+        "args": { "modifier": "OPEN_ALL" }
     }
 ]

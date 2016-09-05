@@ -49,8 +49,7 @@ Sublime Text plugins are written in Python since the Sublime Text Api is python-
 To bind to the node tools, there are several key files:
 
 * node_bridge.py: A cross-platform way of shelling out to node commands and collecting/decoding the output
-* node_dependents.py: A set of bindings specifically for node-dependents functionality
-* node_taxicab.py: A set of bindings for node-taxicab functionality
+* node_dependents_editor_backend.py: Used for issuing commands to the dependents backend
 
 ##### Command files
 
@@ -63,11 +62,6 @@ To bind to the node tools, there are several key files:
 Common helpers shared across the commands are placed in the `lib/` directory.
 
 All of the helpers have tests in `tests/lib`.
-
-##### Vendor files
-
-Any 3rd party libraries are included in `vendor`. The main vendor lib used
-is Mixpanel for tracking errors and the frequency of command usage.
 
 ##### Tests
 

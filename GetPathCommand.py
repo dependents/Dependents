@@ -1,5 +1,5 @@
-import sublime, sublime_plugin
-import os
+import sublime
+import sublime_plugin
 import sys
 
 if sys.version_info < (3,):
@@ -11,12 +11,11 @@ else:
     from .lib.printer import p
     from .node_dependents_editor_backend import backend
 
+
 class GetPathCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
         if not super(GetPathCommand, self).run():
             return
-
-        self.start_timer()
 
         path = backend({
             'filename': self.view.filename,
@@ -25,7 +24,4 @@ class GetPathCommand(BaseCommand, sublime_plugin.WindowCommand):
 
         p('Path:', path)
 
-        sublime.set_clipboard(path);
-
-        self.stop_timer('Get_Path')
-
+        sublime.set_clipboard(path)

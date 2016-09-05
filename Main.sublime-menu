@@ -1,50 +1,5 @@
 [
     {
-        "id": "file",
-        "children":
-        [
-            {
-                "caption": "-",
-                "id": "dependents"
-            },
-            {
-                "caption": "Dependents",
-                "children": [
-                    {
-                        "caption": "Find Dependents of Current File",
-                        "command": "dependents"
-                    },
-                    {
-                        "caption": "Jump to dependency",
-                        "command": "jump_to_dependency"
-                    },
-                    {
-                        "caption": "Open All Dependents",
-                        "command": "dependents",
-                        "args": { "modifier": "OPEN_ALL"}
-                    },
-                    {
-                        "caption": "Find relevant app entry points",
-                        "command": "find_driver"
-                    },
-                    {
-                        "caption": "Open all relevent entry points",
-                        "command": "find_driver",
-                        "args": { "modifier": "OPEN_ALL"}
-                    },
-                    {
-                        "command": "tree", 
-                        "caption": "View this file's dependency tree" 
-                    },
-                    { 
-                        "command": "get_path", 
-                        "caption": "Copy path to the clipboard" 
-                    }
-                ]
-            }
-        ]
-    },
-    {
         "id": "preferences",
         "children":
         [
@@ -55,14 +10,45 @@
                 "children":
                 [
                     {
-                        "caption": "Copy all dependents to clipboard",
-                        "command": "dependents",
-                        "args": { "modifier": "COPY_ALL"}
-                    },
-                    { "command": "find_driver", "caption": "Find relevant app entry points" },
-                    { "command": "find_driver", "caption": "Open all relevant app entry points", "args": { "modifier": "OPEN_ALL"}},
-                    { "command": "tree", "caption": "View this file's dependency tree" },
-                    { "command": "get_path", "caption": "Copy path to the clipboard" }
+                        "caption": "Dependents",
+                        "children":
+                        [
+                            {
+                                "caption": "Readme",
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/Dependents/readme.md"
+                                }
+                            },
+                            {
+                                "caption": "-"
+                            },
+                            {
+                                "caption": "Settings – Default",
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/Dependents/Dependents.sublime-settings"
+                                }
+                            },
+                            {
+                                "caption": "Settings – User",
+                                "command": "open_file", "args":
+                                {
+                                    "file": "${packages}/User/Dependents.sublime-settings"
+                                }
+                            },
+                            {
+                                "caption": "-"
+                            },
+                            {
+                                "caption": "LICENSE",
+                                "command": "open_file",
+                                "args": {
+                                    "file": "${packages}/Dependents/LICENSE.txt"
+                                }
+                            }
+                        ]
+                    }
                 ]
             }
         ]

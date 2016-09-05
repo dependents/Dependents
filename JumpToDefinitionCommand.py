@@ -1,3 +1,4 @@
+import sublime
 import sublime_plugin
 import threading
 import sys
@@ -14,17 +15,14 @@ else:
     from .node_dependents_editor_backend import backend
 
 
-class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
+class JumpToDefinitionCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
-        if super(JumpToDependencyCommand, self).run():
+        if super(JumpToDefinitionCommand, self).run():
             # Done on main thread due to ST2
-            self.view.selection = self.get_selection()
-            self.init_thread(JumpToDependencyThread, 'Jumping to dependency')
+            self.view.click_position = self.get_selection()
+            self.init_thread(JumpToDefinitionThread, 'Jumping to definition')
 
     def get_selection(self):
-        """
-        Returns the sublime region corresponding to the selected module path
-        """
         selections = self.view.sel()
 
         if not selections:
@@ -38,41 +36,25 @@ class JumpToDependencyCommand(BaseCommand, sublime_plugin.WindowCommand):
         p('clicked col: ', col)
         p('region: ', region)
 
-        line = self.view.substr(self.view.line(region))
-        p('line: ', line)
-        p('line length: ', len(line))
-
-        return {
-            "clicked_position": col,
-            "line": line
-        }
+        # +1s to go from 0-based to 1-based line info
+        return str(row + 1) + ',' + str(col + 1)
 
 
-class JumpToDependencyThread(BaseThread):
-    """
-    A thread to prevent the jump to dependency from freezing the UI
-    """
+class JumpToDefinitionThread(BaseThread):
     def __init__(self, command):
         self.window = command.window
         self.view = command.view
         threading.Thread.__init__(self)
 
     def run(self):
-        """
-        Jumps to the file identified by the string under the cursor
-        """
-
-        selection = self.view.selection
-
-        p('Extracted Selection', selection)
+        p('Extracted click position', self.view.click_position)
 
         file_to_open = backend({
             'filename': self.view.filename,
-            'path': selection.get('line'),
-            'lookup_position': selection.get('clicked_position'),
-            'command': 'lookup'
+            'click_position': self.view.click_position,
+            'command': 'jump-to-definition'
         }).strip()
 
-        p('After cabinet lookup', file_to_open)
+        p('After jump to definition lookup', file_to_open)
 
         self.open_file(file_to_open)

@@ -1,4 +1,5 @@
-import sublime, sublime_plugin
+import sublime
+import sublime_plugin
 import threading
 import json
 import sys
@@ -6,20 +7,18 @@ import sys
 if sys.version_info < (3,):
     from BaseCommand import BaseCommand
     from BaseThread import BaseThread
-    from lib.track import t
-    from lib.printer import p
     from node_dependents_editor_backend import backend
 else:
     from .BaseCommand import BaseCommand
     from .BaseThread import BaseThread
-    from .lib.track import t
-    from .lib.printer import p
     from .node_dependents_editor_backend import backend
+
 
 class TreeCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self):
         if super(TreeCommand, self).run():
             self.init_thread(TreeThread, 'Generating Tree')
+
 
 class TreeThread(BaseThread):
     def __init__(self, command):
@@ -31,13 +30,9 @@ class TreeThread(BaseThread):
         """
         Finds the dependents of the current file and jumps to that file or shows a panel of dependent files
         """
-        self.start_timer()
-
         tree = self.get_results()
 
         sublime.set_timeout(lambda: self.open_new_file_with_results(tree), 100)
-        
-        self.stop_timer('Run_Tree')
 
     def open_new_file_with_results(self, tree):
         new_file = self.window.new_file()

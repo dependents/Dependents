@@ -2,12 +2,10 @@ import json
 import sys
 
 if sys.version_info < (3,):
-    from track import t
     from show_error import show_error
     from printer import p
     from node_dependents_editor_backend import backend
 else:
-    from .track import t
     from .printer import p
     from .show_error import show_error
     from ..node_dependents_editor_backend import backend
@@ -38,11 +36,6 @@ def command_setup(self):
         return success
     except Exception as e:
         p(e)
-
         show_error(e, True)
-
-        t("Setup Exception", {
-            "message": e
-        })
 
     return False

@@ -1,8 +1,8 @@
 var Config = require('./Config');
 var getPath = require('./getPath');
-var getClickedImport = require('./getClickedImport');
 var mixpanel = require('./mixpanel');
-
+var getClickedImport = require('./getClickedImport');
+var jumpToDefinition = require('./jumpToDefinition');
 var cabinet = require('filing-cabinet');
 var findDependents = require('dependents');
 var callers = require('callers');
@@ -12,7 +12,7 @@ var treePic = require('tree-pic');
 
 var q = require('q');
 var path = require('path');
-var debug = require('debug')('backend');
+var debug = require('./debug');
 var isPlainObject = require('is-plain-object');
 var timer = require('node-tictoc');
 timer.log = debug;
@@ -72,6 +72,27 @@ module.exports = function(program) {
     debug('lookup result: ' + result);
     mixpanel.track('Run_JumpToDependency');
     deferred.resolve(result);
+
+  } else if (program.jumpToDefinition) {
+    debug('performing a jump to definition');
+
+    if (!program.clickPosition) {
+      throw new Error('a clickPosition must be provided');
+    }
+
+    debug('given click position: ', program.clickPosition);
+    options.clickPosition = program.clickPosition;
+
+    try {
+      var result = jumpToDefinition(options);
+      debug('jumpToDefinition result: ' + result);
+      deferred.resolve(result);
+    } catch (e) {
+      deferred.reject(e);
+      debug('jumpToDefinition error: ', e);
+    }
+
+    mixpanel.track('Run_JumpToDefinition');
 
   } else if (program.findDependents) {
     debug('finding the dependents of the given file: ' + options.filename);
