@@ -1,9 +1,8 @@
-import sublime, sublime_plugin
+import sublime
+import sublime_plugin
 import threading
 import os
-import re
 import time
-
 import sys
 
 if sys.version_info < (3,):
@@ -11,7 +10,6 @@ if sys.version_info < (3,):
     from BaseThread import BaseThread
     from lib.show_error import *
     from lib.trim_paths_of_root import trim_paths_of_root
-    from lib.track import t
     from lib.printer import p
     from node_dependents_editor_backend import backend
 else:
@@ -19,14 +17,15 @@ else:
     from .BaseThread import BaseThread
     from .lib.show_error import *
     from .lib.trim_paths_of_root import trim_paths_of_root
-    from .lib.track import t
     from .lib.printer import p
     from .node_dependents_editor_backend import backend
+
 
 class FindCallersCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
         if super(FindCallersCommand, self).run(modifier):
             self.init_thread(FindCallersThread, 'Finding callers')
+
 
 class FindCallersThread(BaseThread):
     def __init__(self, command):
@@ -38,8 +37,6 @@ class FindCallersThread(BaseThread):
         """
         Finds the files that call the current file
         """
-        self.start_timer()
-
         function_name = self.get_function_name()
 
         self.callers = trim_paths_of_root(self.get_callers(function_name), self.window.config['directory'])
@@ -53,8 +50,6 @@ class FindCallersThread(BaseThread):
             self.open_file(self.callers[0])
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
-
-        self.stop_timer('Run_Find_Callers')
 
     def get_function_name(self):
         selections = self.view.sel()

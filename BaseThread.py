@@ -1,17 +1,15 @@
 import sublime
 import threading
 import os
-import time
 import sys
 
 if sys.version_info < (3,):
     from lib.printer import p
-    from lib.track import t
     from lib.show_error import *
 else:
     from .lib.printer import p
-    from .lib.track import t
     from .lib.show_error import *
+
 
 class BaseThread(threading.Thread):
     """
@@ -30,32 +28,21 @@ class BaseThread(threading.Thread):
         Opens the passed file or shows an error error message
         if the file cannot be found
         """
-
         p('Opening:', filename)
 
-        if not filename or not os.path.isfile(filename):
-            t('Missing file', {
-                'filename': filename
-            })
+        location_less = filename
+        location_colon_index = filename.find(':')
+
+        if location_colon_index != -1:
+            location_less = filename[:location_colon_index]
+
+        p('Location-less filename: ' + location_less)
+
+        if not filename or not os.path.isfile(location_less):
             cant_find_file()
             return
 
         def open():
-            self.window.open_file(filename)
+            self.window.open_file(filename, sublime.ENCODED_POSITION)
 
         sublime.set_timeout(open, 10)
-
-    def start_timer(self):
-        self.total_start_time = time.time()
-
-    def stop_timer(self, command_name):
-        tracking_data = {
-            'etime': time.time() - self.total_start_time,
-        }
-
-        try:
-            tracking_data['modifier'] = self.view.modifier
-        except Exception:
-            pass
-
-        t(command_name, tracking_data)

@@ -1,4 +1,5 @@
-import sublime, sublime_plugin
+import sublime
+import sublime_plugin
 import threading
 import os
 import sys
@@ -8,7 +9,6 @@ if sys.version_info < (3,):
     from BaseThread import BaseThread
     from lib.show_error import *
     from lib.trim_paths_of_root import trim_paths_of_root
-    from lib.track import t
     from lib.printer import p
     from node_dependents_editor_backend import backend
 else:
@@ -16,14 +16,15 @@ else:
     from .BaseThread import BaseThread
     from .lib.show_error import *
     from .lib.trim_paths_of_root import trim_paths_of_root
-    from .lib.track import t
     from .lib.printer import p
     from .node_dependents_editor_backend import backend
+
 
 class DependentsCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
         if super(DependentsCommand, self).run(modifier):
             self.init_thread(DependentsThread, 'Finding dependents')
+
 
 class DependentsThread(BaseThread):
     """
@@ -38,8 +39,6 @@ class DependentsThread(BaseThread):
         """
         Finds the dependents of the current file and jumps to that file or shows a panel of dependent files
         """
-        self.start_timer()
-
         dependents = self.get_dependents()
         p('fetched dependents: ', dependents)
 
@@ -59,8 +58,6 @@ class DependentsThread(BaseThread):
 
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
-
-        self.stop_timer('Run_Dependents')
 
     def get_dependents(self):
         """

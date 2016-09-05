@@ -4,7 +4,7 @@
   "description": "Sublime Text plugin to navigate front-end codebases",
   "main": "index.js",
   "dependencies": {
-    "dependents-editor-backend": "~1.15.1"
+    "dependents-editor-backend": "~1.16.1"
   },
   "devDependencies": {
     "grunt": "~0.4.5",

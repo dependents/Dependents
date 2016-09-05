@@ -21,6 +21,9 @@ program
   .option('--lookup', 'perform a partial lookup for the jump to dependency feature')
   .option('--lookup-position <value>', 'jump to dependency: location of the clicked character of the target')
 
+  .option('--jump-to-definition', 'find the file to jump to based on the clicked element of a module')
+  .option('--click-position <value>', 'jump to definition location of the click: row,col')
+
   .option('--find-dependents', 'get the dependents of the current file')
   .option('--find-drivers', 'get the driver scripts relevant to current file')
   .option('--find-callers', 'get the scripts calling the given function name')

@@ -15,6 +15,7 @@ Modified version of node_bridge from sublime-fixmyjs
 IS_OSX = platform.system() == 'Darwin'
 IS_WINDOWS = platform.system() == 'Windows'
 
+
 def node_bridge(bin, args, node_path=None):
     env = None
     if IS_OSX:
@@ -23,7 +24,7 @@ def node_bridge(bin, args, node_path=None):
 
         if not node_path:
             node_path = ':/usr/local/bin'
-            
+
         p('Node path: ' + node_path)
 
         env['PATH'] += node_path

@@ -1,25 +1,13 @@
 {
-  // The base directory that contains all of your
-  // JavaScript files
+  // NOTE: Settings should be supplied on a per-project basis through
+  // a .deprc file located in the top-level directory of your codebase.
   //
-  // Example: 'public/assets/js'
-  "root": "",
+  // Only user-specific (codebase agnostic) settings should be set here.
 
-  // The location of your requirejs or browserify config
+  // Set the path to your Nodejs executable
+  // This is only necessary if you get an error where your Node installation can't be found
   //
-  // Example: 'path/to/my/config.js'
-  "config": "",
-
-  // The location of your style files
-  //
-  // Example: 'public/assets/sass'
-  "styles_root": "",
-
-  // File and folder names to exclude from dependents search
-  "exclude": [],
-
-  // The path to your RequireJS Build Configuration
-  //
-  // Example: 'public/assets/js/build.json'
-  "build_config": ""
+  // Note: nvm users will need to supply their `node_path` since it's outside of the normal
+  // installation path. This also allows per-user node_paths – outside of the main .deprc file.
+  "node_path": "':/usr/local/bin"
 }

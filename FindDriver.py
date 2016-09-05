@@ -1,4 +1,5 @@
-import sublime, sublime_plugin
+import sublime
+import sublime_plugin
 import threading
 import os
 import sys
@@ -8,7 +9,6 @@ if sys.version_info < (3,):
     from BaseThread import BaseThread
     from lib.show_error import *
     from lib.trim_paths_of_root import trim_paths_of_root
-    from lib.track import t
     from lib.printer import p
     from node_dependents_editor_backend import backend
 else:
@@ -16,14 +16,15 @@ else:
     from .BaseThread import BaseThread
     from .lib.show_error import *
     from .lib.trim_paths_of_root import trim_paths_of_root
-    from .lib.track import t
     from .lib.printer import p
     from .node_dependents_editor_backend import backend
+
 
 class FindDriverCommand(BaseCommand, sublime_plugin.WindowCommand):
     def run(self, modifier=''):
         if super(FindDriverCommand, self).run(modifier):
             self.init_thread(FindDriverThread, 'Finding relevant entry points')
+
 
 class FindDriverThread(BaseThread):
     def __init__(self, command):
@@ -36,8 +37,6 @@ class FindDriverThread(BaseThread):
         Finds the driver scripts that depend on the current file and
         jumps to that driver file or shows a panel of relevant driver scripts
         """
-        self.start_timer()
-
         self.drivers = trim_paths_of_root(self.get_drivers(), self.window.config['directory'])
 
         if self.view.modifier and self.view.modifier == 'OPEN_ALL':
@@ -50,13 +49,10 @@ class FindDriverThread(BaseThread):
         else:
             sublime.set_timeout(self.show_quick_panel, 10)
 
-        self.stop_timer('Run_Find_Driver')
-
     def get_drivers(self):
         """
         Asks the node tool for the drivers of the current module
         """
-
         args = {
             'filename': self.view.filename,
             'command': 'find-drivers'
