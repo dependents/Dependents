@@ -16,6 +16,10 @@ program
 
 var config = program.config;
 var filename = program.filename;
-var path = program.args[0];
+var partial = program.args[0];
 
-console.log(lookup(config, path, filename));
+console.log(lookup({
+  config: config,
+  filename: filename,
+  partial: partial
+}));

@@ -4,7 +4,7 @@ Returns a list of dependencies for a given JavaScript file or AST using any of t
 
 *Inspired by substack/node-detective but built for AMD.*
 
-`npm install detective-amd`
+`npm install --save detective-amd`
 
 * Supports JSX code via [node-source-walk](https://github.com/mrjoelkemp/node-source-walk).
 
@@ -34,18 +34,20 @@ define(function () {
 Here's how you can grab the list of dependencies of `a.js` **synchronously**.
 
 ```javascript
-var getDependencies = require('detective-amd');
+var detective = require('detective-amd');
 
 var srca = fs.readFileSync('a.js', 'utf8');
-var srcb = fs.readFileSync('b.js', 'utf8');
-var srcc = fs.readFileSync('c.js', 'utf8');
 
 // Pass in the source code or an AST (if you've already parsed the file)
-console.log(getDependencies(srca)); // prints ['./b', './c']
-console.log(getDependencies(srcb)); // prints []
-console.log(getDependencies(srcc)); // prints []
+console.log(detective(srca)); // prints ['./b', './c']
 
 ```
+
+You may also (optionally) configure the detective via a second object argument `detective(src, options)` that supports the following options:
+
+* `skipLazyLoaded`: (Boolean) whether or not to omit inner requires in the list of extracted dependencies.
+ - Note: this does not affect the REM form since those inner requires are not "lazily" fetched.
+
 ### Syntax Support
 
 **Supports the 4 forms of AMD module syntax:**
@@ -55,9 +57,10 @@ console.log(getDependencies(srcc)); // prints []
 * "factory": `define(func(require))`
 * "no dependencies": `define({})`
 
-Also supports "driver script" syntax: `require([deps], func)`
+**Extra forms:**
 
-Also handles REM form: `define(function(require, exports, module) {})`.
+* "driver script" (or entry-point) syntax: `require([deps], func)`
+* "REM" (or CommonJS-like) form: `define(function(require, exports, module) {})`.
 
 Also handles dynamically loaded dependencies (ex: inner requires).
 
