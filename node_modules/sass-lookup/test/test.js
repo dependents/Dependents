@@ -73,4 +73,30 @@ describe('sass-lookup', function() {
         process.cwd() + '/example/nested/a/b/_b3.scss');
     });
   });
+
+  describe('multiple directories', function() {
+    it('handles partials in middle directory', function() {
+      var directories = ['example', 'example/nested/a/b', 'example/a'];
+      assert.equal(lookup('b', 'b2.scss', directories),
+        process.cwd() + '/example/nested/a/b/b.scss');
+    });
+
+    it('partial in last directory of list', function() {
+      var directories = ['example', 'example/nested/a/b'];
+      assert.equal(lookup('b', 'b2.scss', directories),
+        process.cwd() + '/example/nested/a/b/b.scss');
+    });
+
+    it('non-partial in last directory when given list', function() {
+      var directories = ['example', 'example/nested/a/b'];
+      assert.equal(lookup('b2', 'b3.scss', directories),
+        process.cwd() + '/example/nested/a/b/b2.scss');
+    });
+
+    it('handles underscored partials', function() {
+      var directories = ['example', 'example/nested/a/b'];
+      assert.equal(lookup('b2', 'b3.scss', directories),
+        process.cwd() + '/example/nested/a/b/b2.scss');
+    });
+  })
 });

@@ -17,7 +17,8 @@ partials with the `.scss` in the name, all of it.
 * `dependencyName`: The partial's name
   * If your sass file had `@import "foo";`, then `"foo"` would be the dependency name
 * `filename`: The file importing the dependency
-* `directory`: The location of all sass files
+* `directory`: The location(s) of all sass files
+  * A list of multiple directories is also supported for this argument.
 
 Example:
 

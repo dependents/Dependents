@@ -26,6 +26,7 @@ the action that the user is requesting.
 
 ### License
 
-Dependents is free while in beta.
+You may not use this code outside of the supported editor clients for Dependents.
 
-Eventually it will remain free for use in open source projects. Commercial use will be possible via purchasing a license.
+If you wish to use this code for your own projects, please email joel@mrjoelkemp.com
+to discuss licensing options.

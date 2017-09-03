@@ -19,4 +19,15 @@ describe('is-relative-path', function () {
     assert.ok(!isRelative('foo'));
     assert.ok(!isRelative('foo/bar/car/baz.js'));
   });
+
+  it('throws TypeError if the given path is not a string', function () {
+    assert.throws(isRelative.bind(null, undefined), TypeError);
+    assert.throws(isRelative.bind(null, null), TypeError);
+    assert.throws(isRelative.bind(null, false), TypeError);
+    assert.throws(isRelative.bind(null, true), TypeError);
+    assert.throws(isRelative.bind(null, 0), TypeError);
+    assert.throws(isRelative.bind(null, 1), TypeError);
+    assert.throws(isRelative.bind(null, []), TypeError);
+    assert.throws(isRelative.bind(null, {}), TypeError);
+  });
 });

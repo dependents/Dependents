@@ -2,6 +2,18 @@ var path = require('path');
 var fs = require('fs');
 var isRelativePath = require('is-relative-path');
 
+function findDependency(searchDir, depName) {
+  var nonPartialPath = path.resolve(searchDir, depName);
+  if (fs.existsSync(nonPartialPath)) {
+    return nonPartialPath;
+  }
+
+  var partialsPath = path.resolve(searchDir, '_' + depName);
+  if (fs.existsSync(partialsPath)) {
+    return partialsPath;
+  }
+}
+
 /**
  * Determines the resolved dependency path according to
  * the Sass compiler's dependency lookup behavior
@@ -26,17 +38,27 @@ module.exports = function(dep, filename, directory) {
 
   // path.basename in case the dep is slashed: a/b/c should be a/b/_c.scss
   var isSlashed = dep.indexOf('/') !== -1;
-  var _dep = isSlashed ?
-            path.dirname(dep) + '/_' + path.basename(dep) :
-            '_' + dep;
+  var depDir = isSlashed ? path.dirname(dep) : '';
+  var depName = (isSlashed ? path.basename(dep) : dep) + ext;
 
-  var underscored = path.resolve(fileDir, _dep) + ext;
+  var relativeToFile = findDependency(path.resolve(fileDir, depDir), depName);
+  if (relativeToFile) {
+    return relativeToFile;
+  }
 
-  if (fs.existsSync(underscored)) { return underscored; }
+  var directories = typeof directory === 'string' ? [directory] : directory;
 
-  var samedir = path.resolve(fileDir, dep) + ext;
+  for (i in directories) {
+    var dir = directories[i];
+    var relativeToDir = findDependency(path.resolve(dir, depDir), depName);
+    if (relativeToDir) {
+      return relativeToDir;
+    }
+  }
 
-  if (fs.existsSync(samedir)) { return samedir; }
-
-  return path.resolve(directory, dep) + ext;
-}
+  // old versions returned a static path, if one could not be found
+  // do the same, if `directory` is not an array
+  if (typeof directory === 'string') {
+    return path.resolve(directory, depDir, depName);
+  }
+};
