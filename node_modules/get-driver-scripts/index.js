@@ -26,6 +26,7 @@ module.exports = function(options) {
 
   debug('directory: ' + options.directory);
   debug('config: ' + options.config);
+  debug('build config: ' + options.buildConfig);
   debug('webpack config: ' + options.webpackConfig);
   debug('exclusions: ' + options.exclusions);
 
@@ -42,12 +43,14 @@ module.exports = function(options) {
     }
 
   } else {
+    debug('no build config, so looking for roots');
     appRoots({
       directory: options.directory,
       config: options.config,
       webpackConfig: options.webpackConfig,
       ignoreDirectories: defaultExclusions.concat(options.exclusions),
       success: function(roots) {
+        debug('found the following roots: ', roots);
         options.success(null, roots);
       }
     });
