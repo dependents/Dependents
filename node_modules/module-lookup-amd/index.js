@@ -72,10 +72,16 @@ module.exports = function(options) {
   depPath = stripLoader(depPath);
 
   var normalizedModuleId = requirejs.toUrl(depPath);
+  debug('requirejs normalized module id: ' + normalizedModuleId);
+
+  if (normalizedModuleId.indexOf('...') != -1) {
+    debug('detected a nested subdirectory resolution that needs to be expanded');
+    normalizedModuleId = normalizedModuleId.replace('.../', '../../');
+    debug('expanded module id: ' + normalizedModuleId);
+  }
 
   var resolved = path.join(resolutionDirectory, normalizedModuleId);
 
-  debug('normalized module id: ' + normalizedModuleId);
   debug('resolved url: ' + resolved);
 
   // No need to search for a file that already has an extension
