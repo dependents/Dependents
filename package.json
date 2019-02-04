@@ -1,5 +1,5 @@
 {
-  "name": "dependents",
+  "name": "sublime-dependents",
   "version": "3.7.3",
   "description": "Sublime Text plugin to navigate front-end codebases",
   "main": "index.js",
