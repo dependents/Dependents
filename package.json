@@ -1,6 +1,6 @@
 {
   "name": "sublime-dependents",
-  "version": "3.7.3",
+  "version": "3.7.4",
   "description": "Sublime Text plugin to navigate front-end codebases",
   "main": "index.js",
   "dependencies": {
