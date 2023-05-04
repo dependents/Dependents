@@ -1,8 +1,11 @@
-### Dependents [![Gitter](https://img.shields.io/badge/gitter-join%20chat-green.svg?style=flat)](https://gitter.im/mrjoelkemp/Dependents?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![Package Control](https://img.shields.io/packagecontrol/dt/Dependents.svg?maxAge=2592000)](https://packagecontrol.io/packages/Dependents)
+### Dependents
+
+[![Gitter](https://img.shields.io/badge/gitter-join%20chat-green)](https://gitter.im/mrjoelkemp/Dependents)
+[![Package Control](https://img.shields.io/packagecontrol/dt/Dependents?maxAge=2592000)](https://packagecontrol.io/packages/Dependents)
 
 > Navigate front-end codebases in Sublime Text 2/3
 
-[www.getdependents.com](http://getdependents.com). For updates, follow [@getDependents](https://twitter.com/getdependents).
+For updates, follow [@getDependents](https://twitter.com/getdependents).
 
 Currently supports JavaScript (AMD, CommonJS, and ES6) and CSS Preprocessor (Sass and Stylus) codebases.
 
